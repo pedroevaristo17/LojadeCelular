@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<!--
+  Classes usadas neste HTML que precisam de CSS:
+  .skip-link       -> escondido até receber foco; ao focar, aparece no topo (critério 2.4.1)
+  .sr-only         -> oculto visualmente mas lido por leitores de tela (NUNCA usar display:none)
+  .mensagem-erro   -> área de erros do formulário; erro deve ter ícone + texto, não só cor
+  .cabecalho       -> header do site (logo + navegação principal)
+  .logo            -> link/imagem da marca no cabeçalho
+  .nav-principal    -> nav com os links do menu principal
+  .rodape          -> footer do site
+  .nav-rodape      -> nav com os links do rodapé
+  .formulario      -> formulário de login/cadastro
+  .campo           -> wrapper de um par label+input
+  .dica-campo      -> texto de dica associado via aria-describedby
+  .preferencias    -> wrapper dos checkboxes de preferências
+  .links-auxiliares -> lista de links auxiliares abaixo do formulário
+  Lembretes WCAG para o CSS: nunca usar outline:none sem substituto (use :focus-visible);
+  contraste mínimo 4.5:1 (texto normal) e 3:1 (texto >= 24px); unidades relativas (rem/em/%)
+  para suportar zoom de 200%; respeitar @media (prefers-reduced-motion: reduce).
+-->
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cadastro | CelStore</title>
+</head>
+<body>
+<a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
+
+<header class="cabecalho">
+  <a href="index.html" class="logo">
+    <img src="img/logo-celstore.png" alt="CelStore - página inicial" width="160" height="40">
+  </a>
+  <nav class="nav-principal" aria-label="Principal">
+    <ul>
+      <li><a href="index.html">Início</a></li>
+      <li><a href="login.html">Login</a></li>
+      <li><a href="cadastro.html" aria-current="page">Cadastro</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="conteudo">
+  <h1>Criar conta</h1>
+
+  <form class="formulario" action="#" method="post">
+    <!-- Container para mensagens de erro de validação exibidas dinamicamente -->
+    <div role="alert" class="mensagem-erro"></div>
+
+    <fieldset>
+      <legend>Dados pessoais</legend>
+
+      <div class="campo">
+        <label for="nome">Nome completo (obrigatório)</label>
+        <input type="text" id="nome" name="nome" required autocomplete="name">
+      </div>
+
+      <div class="campo">
+        <label for="cpf">CPF (obrigatório)</label>
+        <input type="text" id="cpf" name="cpf" required autocomplete="off" aria-describedby="dica-cpf">
+        <p id="dica-cpf" class="dica-campo">Formato: 000.000.000-00</p>
+      </div>
+
+      <div class="campo">
+        <label for="nascimento">Data de nascimento (obrigatório)</label>
+        <input type="date" id="nascimento" name="nascimento" required autocomplete="bday">
+      </div>
+
+      <div class="campo">
+        <label for="telefone">Telefone (obrigatório)</label>
+        <input type="tel" id="telefone" name="telefone" required autocomplete="tel" aria-describedby="dica-telefone">
+        <p id="dica-telefone" class="dica-campo">Formato: (00) 00000-0000</p>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Dados de acesso</legend>
+
+      <div class="campo">
+        <label for="email">E-mail (obrigatório)</label>
+        <input type="email" id="email" name="email" required autocomplete="email">
+      </div>
+
+      <div class="campo">
+        <label for="senha">Senha (obrigatório)</label>
+        <input type="password" id="senha" name="senha" required autocomplete="new-password" aria-describedby="dica-senha">
+        <p id="dica-senha" class="dica-campo">Mínimo de 8 caracteres, incluindo letras e números.</p>
+      </div>
+
+      <div class="campo">
+        <label for="confirmar-senha">Confirmar senha (obrigatório)</label>
+        <input type="password" id="confirmar-senha" name="confirmar-senha" required autocomplete="new-password">
+      </div>
+    </fieldset>
+
+    <fieldset class="preferencias">
+      <legend>Preferências</legend>
+
+      <div class="campo">
+        <input type="checkbox" id="ofertas" name="ofertas">
+        <label for="ofertas">Quero receber ofertas por e-mail</label>
+      </div>
+
+      <div class="campo">
+        <input type="checkbox" id="termos" name="termos" required>
+        <label for="termos">Li e aceito os <a href="#">termos de uso</a> (obrigatório)</label>
+      </div>
+    </fieldset>
+
+    <button type="submit">Criar conta</button>
+  </form>
+
+  <ul class="links-auxiliares">
+    <li><a href="login.html">Já tem conta? Entrar</a></li>
+  </ul>
+</main>
+
+<footer class="rodape">
+  <nav class="nav-rodape" aria-label="Rodapé">
+    <ul>
+      <li><a href="#">Sobre</a></li>
+      <li><a href="#">Contato</a></li>
+      <li><a href="#">Política de privacidade</a></li>
+      <li><a href="#">Acessibilidade</a></li>
+    </ul>
+  </nav>
+  <p>&copy; 2026 CelStore. Todos os direitos reservados.</p>
+</footer>
+
+</body>
+</html>

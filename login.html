@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<!--
+  Classes usadas neste HTML que precisam de CSS:
+  .skip-link       -> escondido até receber foco; ao focar, aparece no topo (critério 2.4.1)
+  .sr-only         -> oculto visualmente mas lido por leitores de tela (NUNCA usar display:none)
+  .mensagem-erro   -> área de erros do formulário; erro deve ter ícone + texto, não só cor
+  .cabecalho       -> header do site (logo + navegação principal + busca quando houver)
+  .logo            -> link/imagem da marca no cabeçalho
+  .nav-principal    -> nav com os links do menu principal
+  .rodape          -> footer do site
+  .nav-rodape      -> nav com os links do rodapé
+  .formulario      -> formulário de login/cadastro
+  .campo           -> wrapper de um par label+input
+  .dica-campo      -> texto de dica associado via aria-describedby
+  .lembrete        -> wrapper do checkbox "lembrar de mim"
+  .links-auxiliares -> lista de links auxiliares abaixo do formulário (esqueci senha, cadastro)
+  Lembretes WCAG para o CSS: nunca usar outline:none sem substituto (use :focus-visible);
+  contraste mínimo 4.5:1 (texto normal) e 3:1 (texto >= 24px); unidades relativas (rem/em/%)
+  para suportar zoom de 200%; respeitar @media (prefers-reduced-motion: reduce).
+-->
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Login | CelStore</title>
+</head>
+<body>
+<a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
+
+<header class="cabecalho">
+  <a href="index.html" class="logo">
+    <img src="img/logo-celstore.png" alt="CelStore - página inicial" width="160" height="40">
+  </a>
+  <nav class="nav-principal" aria-label="Principal">
+    <ul>
+      <li><a href="index.html">Início</a></li>
+      <li><a href="login.html" aria-current="page">Login</a></li>
+      <li><a href="cadastro.html">Cadastro</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="conteudo">
+  <h1>Entrar na sua conta</h1>
+
+  <form class="formulario" action="#" method="post">
+    <!-- Container para mensagens de erro de validação exibidas dinamicamente -->
+    <div role="alert" class="mensagem-erro"></div>
+
+    <div class="campo">
+      <label for="email">E-mail (obrigatório)</label>
+      <input type="email" id="email" name="email" required autocomplete="email">
+    </div>
+
+    <div class="campo">
+      <label for="senha">Senha (obrigatório)</label>
+      <input type="password" id="senha" name="senha" required autocomplete="current-password" aria-describedby="dica-senha">
+      <p id="dica-senha" class="dica-campo">Mínimo de 8 caracteres, incluindo letras e números.</p>
+    </div>
+
+    <div class="campo lembrete">
+      <input type="checkbox" id="lembrar" name="lembrar">
+      <label for="lembrar">Lembrar de mim</label>
+    </div>
+
+    <button type="submit">Entrar</button>
+  </form>
+
+  <ul class="links-auxiliares">
+    <li><a href="#">Esqueci minha senha</a></li>
+    <li><a href="cadastro.html">Ainda não tem conta? Cadastre-se</a></li>
+  </ul>
+</main>
+
+<footer class="rodape">
+  <nav class="nav-rodape" aria-label="Rodapé">
+    <ul>
+      <li><a href="#">Sobre</a></li>
+      <li><a href="#">Contato</a></li>
+      <li><a href="#">Política de privacidade</a></li>
+      <li><a href="#">Acessibilidade</a></li>
+    </ul>
+  </nav>
+  <p>&copy; 2026 CelStore. Todos os direitos reservados.</p>
+</footer>
+
+</body>
+</html>
