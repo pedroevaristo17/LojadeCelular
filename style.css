@@ -355,3 +355,262 @@ legend {
     color: var(--cor-primaria-hover);
     text-decoration: none;
 }
+
+/* =========================================
+   AJUSTE DE LARGURA PARA A PÁGINA INICIAL
+========================================= */
+#conteudo {
+    /* Substitui a largura antiga de 35rem para acomodar a grade de produtos */
+    max-width: 75rem; 
+}
+
+.formulario, .links-auxiliares {
+    /* Mantém os formulários de login/cadastro estreitos e centralizados */
+    max-width: 35rem; 
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* =========================================
+   CABEÇALHO: BUSCA
+========================================= */
+.busca {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    width: 100%;
+    max-width: 20rem;
+}
+
+.busca input[type="search"] {
+    width: 100%;
+    padding: 0.5rem;
+    border: 2px solid var(--cor-borda);
+    border-radius: 0.25rem;
+    font-size: 1rem;
+}
+
+.busca button {
+    background-color: var(--cor-primaria);
+    color: #ffffff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.busca button:hover {
+    background-color: var(--cor-primaria-hover);
+}
+
+/* =========================================
+   DESTAQUES (BANNER)
+========================================= */
+.destaques {
+    margin-bottom: 4rem;
+    text-align: center;
+}
+
+.banner {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* =========================================
+   TÍTULOS DAS SEÇÕES
+========================================= */
+.ofertas h2, .vantagens h2, .newsletter h2 {
+    font-size: 1.75rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    color: var(--cor-texto);
+    grid-column: 1 / -1; /* Garante que o título ocupe toda a linha nas grades */
+}
+
+/* =========================================
+   OFERTAS (GRADE DE PRODUTOS)
+========================================= */
+.ofertas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
+}
+
+.produto {
+    background-color: var(--cor-fundo);
+    border: 1px solid #e0e0e0;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.produto:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+}
+
+.produto img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 1rem;
+}
+
+.produto h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.preco {
+    margin-bottom: 1rem;
+}
+
+.preco del {
+    color: #555555;
+    font-size: 0.875rem;
+    margin-right: 0.5rem;
+}
+
+.preco ins {
+    color: var(--cor-primaria);
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.especificacoes {
+    list-style: inside disc;
+    text-align: left;
+    color: #444444;
+    font-size: 0.875rem;
+    margin-bottom: 1.5rem;
+    flex-grow: 1; /* Empurra os botões perfeitamente para a parte inferior do card */
+}
+
+.produto button {
+    background-color: var(--cor-primaria);
+    color: #ffffff;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 0.25rem;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 0.75rem;
+    transition: background-color 0.2s;
+}
+
+.produto button:hover {
+    background-color: var(--cor-primaria-hover);
+}
+
+.produto a {
+    color: var(--cor-primaria);
+    font-weight: 500;
+    text-decoration: underline;
+}
+
+.produto a:hover {
+    text-decoration: none;
+}
+
+/* =========================================
+   VANTAGENS (POR QUE COMPRAR)
+========================================= */
+.vantagens {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 2rem;
+    background-color: #f9f9f9;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    margin-bottom: 4rem;
+    border: 1px solid #e0e0e0;
+}
+
+.vantagem {
+    text-align: center;
+}
+
+.icone {
+    margin-bottom: 1rem;
+}
+
+.vantagem h3 {
+    font-size: 1.125rem;
+    color: var(--cor-primaria);
+    margin-bottom: 0.5rem;
+}
+
+.vantagem p {
+    font-size: 0.875rem;
+    color: #444444;
+}
+
+/* =========================================
+   NEWSLETTER
+========================================= */
+.newsletter {
+    background-color: var(--cor-fundo-cabecalho);
+    color: var(--cor-texto-cabecalho);
+    padding: 3rem 2rem;
+    border-radius: 0.5rem;
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.newsletter h2 {
+    color: var(--cor-texto-cabecalho);
+}
+
+.newsletter p {
+    margin-bottom: 1.5rem;
+    font-size: 1.125rem;
+}
+
+.newsletter form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.newsletter label {
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+
+.newsletter input[type="email"] {
+    padding: 0.75rem;
+    border: none;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    width: 100%;
+    max-width: 20rem;
+}
+
+.newsletter button {
+    background-color: var(--cor-primaria);
+    color: #ffffff;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.25rem;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.newsletter button:hover {
+    background-color: var(--cor-primaria-hover);
+}
