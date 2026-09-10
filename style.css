@@ -304,3 +304,54 @@ body {
         scroll-behavior: auto !important;
     }
 }
+
+/* =========================================
+   CADASTRO: FIELDSETS E PREFERÊNCIAS
+========================================= */
+fieldset {
+    border: 2px solid var(--cor-borda);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    background-color: var(--cor-fundo);
+}
+
+legend {
+    font-size: 1.125rem;
+    font-weight: bold;
+    color: var(--cor-texto);
+    padding: 0 0.5rem;
+}
+
+/* Estrutura flexível para alinhar os checkboxes com os textos */
+.preferencias .campo {
+    display: flex;
+    align-items: center; /* Alinha o quadrado do checkbox com o meio do texto */
+    gap: 0.5rem;
+}
+
+.preferencias input[type="checkbox"] {
+    width: 1.25rem;
+    height: 1.25rem;
+    accent-color: var(--cor-primaria); /* Deixa o "check" com a cor azul primária */
+    cursor: pointer;
+    flex-shrink: 0; /* Impede que o checkbox diminua em telas muito pequenas */
+}
+
+.preferencias label {
+    margin-bottom: 0; /* Sobrescreve a margem que colocamos nos campos de texto */
+    font-weight: normal;
+    cursor: pointer;
+}
+
+/* Links dentro das preferências (ex: "termos de uso") */
+.preferencias a {
+    color: var(--cor-primaria);
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.preferencias a:hover {
+    color: var(--cor-primaria-hover);
+    text-decoration: none;
+}
