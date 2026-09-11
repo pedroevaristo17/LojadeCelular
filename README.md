@@ -95,6 +95,3 @@ A classe `.sr-only` esconde visualmente um texto sem removê-lo da árvore de ac
 
 ---
 
-## 🎓 Referência
-
-Conteúdo baseado no material da disciplina *"Acessibilidade Web com HTML + CSS (WCAG 2 AA)"* (Profª Esp. Tacy Batista), que também contextualiza a obrigatoriedade legal: a Lei Brasileira de Inclusão (**Lei 13.146/2015**) exige que sites sejam acessíveis — não é uma opção técnica, é uma exigência legal.
