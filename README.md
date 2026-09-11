@@ -1,6 +1,8 @@
 # CelStore 📱
 
 Projeto acadêmico de front-end para o desenvolvimento de uma loja virtual de smartphones, com foco especial em **acessibilidade web** seguindo as diretrizes WCAG 2, nível AA.
+CESMAC - Sistemas de Informação
+Alunos: João Danilo, Pedro Evaristo e Vinícius Vianna
 
 ## 🎯 Critérios Atendidos
 
