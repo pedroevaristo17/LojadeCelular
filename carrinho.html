@@ -8,8 +8,9 @@
 <script src="js/produtos.js" defer></script>
 <script src="js/carrinho.js" defer></script>
 <script src="js/loja.js" defer></script>
+<script src="js/pagina-carrinho.js" defer></script>
 </head>
-<body>
+<body data-pagina="carrinho">
 <a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
 
 <header class="cabecalho">
@@ -37,43 +38,17 @@
     </ol>
   </nav>
 
-  <div class="layout-compra">
+  <noscript>
+    <p class="mensagem-erro">O carrinho precisa de JavaScript para funcionar. Ative o JavaScript no seu navegador e recarregue a página.</p>
+  </noscript>
+
+  <!-- Os itens e os valores são desenhados por js/pagina-carrinho.js a partir do que está no localStorage.
+       Este bloco começa escondido (hidden) e o JS mostra ele quando existem itens. -->
+  <div class="layout-compra" data-carrinho-conteudo hidden>
     <section aria-labelledby="titulo-itens">
-      <h2 id="titulo-itens" class="titulo-secao">Itens (2)</h2>
+      <h2 id="titulo-itens" class="titulo-secao" tabindex="-1">Itens (<span data-titulo-qtd>0</span>)</h2>
 
-      <ul class="lista-carrinho">
-        <li class="item-carrinho">
-          <img src="img/galaxy-s26.webp" alt="Galaxy S26 na cor azul-clara" width="668" height="808">
-          <div class="item-info">
-            <h3>Galaxy S26</h3>
-            <p class="item-preco">R$ 3.499 cada</p>
-            <div class="item-acoes">
-              <div class="campo campo-quantidade">
-                <label for="qtd-galaxy-s26">Quantidade<span class="sr-only"> de Galaxy S26</span></label>
-                <input type="number" id="qtd-galaxy-s26" name="qtd-galaxy-s26" value="1" min="1" max="10">
-              </div>
-              <button type="button" class="btn btn-link">Remover<span class="sr-only"> Galaxy S26 do carrinho</span></button>
-            </div>
-          </div>
-          <p class="item-subtotal"><span class="sr-only">Subtotal: </span>R$ 3.499</p>
-        </li>
-
-        <li class="item-carrinho">
-          <img src="img/moto-edge-60.webp" alt="Moto Edge 60 na cor dourada" width="1000" height="1000">
-          <div class="item-info">
-            <h3>Moto Edge 60</h3>
-            <p class="item-preco">R$ 2.299 cada</p>
-            <div class="item-acoes">
-              <div class="campo campo-quantidade">
-                <label for="qtd-moto-edge-60">Quantidade<span class="sr-only"> de Moto Edge 60</span></label>
-                <input type="number" id="qtd-moto-edge-60" name="qtd-moto-edge-60" value="1" min="1" max="10">
-              </div>
-              <button type="button" class="btn btn-link">Remover<span class="sr-only"> Moto Edge 60 do carrinho</span></button>
-            </div>
-          </div>
-          <p class="item-subtotal"><span class="sr-only">Subtotal: </span>R$ 2.299</p>
-        </li>
-      </ul>
+      <ul class="lista-carrinho" data-lista-carrinho></ul>
     </section>
 
     <section class="resumo" aria-labelledby="titulo-resumo">
@@ -81,8 +56,8 @@
 
       <dl class="resumo-valores">
         <div>
-          <dt>Subtotal (2 itens)</dt>
-          <dd>R$ 5.798</dd>
+          <dt data-resumo-rotulo>Subtotal</dt>
+          <dd data-resumo-subtotal>R$ 0</dd>
         </div>
         <div>
           <dt>Frete</dt>
@@ -90,16 +65,25 @@
         </div>
         <div class="resumo-total">
           <dt>Total</dt>
-          <dd>R$ 5.798</dd>
+          <!-- aria-live: o leitor de tela avisa o novo total quando ele muda -->
+          <dd data-resumo-total aria-live="polite">R$ 0</dd>
         </div>
       </dl>
 
-      <p class="resumo-parcelas">Ou em até 12x de R$ 483,17 sem juros no cartão de crédito.</p>
+      <p class="resumo-parcelas" data-resumo-parcelas></p>
 
       <a href="checkout.html" class="btn btn-bloco">Finalizar compra</a>
       <a href="index.html" class="btn btn-secundario btn-bloco">Continuar comprando</a>
     </section>
   </div>
+
+  <!-- Estado "carrinho vazio": aparece quando não há nenhum item -->
+  <section class="estado-vazio" data-carrinho-vazio hidden aria-labelledby="titulo-vazio">
+    <span class="icone-vazio" aria-hidden="true">🛒</span>
+    <h2 id="titulo-vazio" tabindex="-1">Seu carrinho está vazio</h2>
+    <p>Que tal dar uma olhada nos celulares da loja?</p>
+    <a href="index.html" class="btn">Ver celulares</a>
+  </section>
 </main>
 
 <footer class="rodape">

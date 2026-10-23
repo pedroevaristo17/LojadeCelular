@@ -45,7 +45,8 @@
       <p class="preco">De <del>R$ 3.999</del> por <ins>R$ 3.499</ins></p>
       <p class="parcelamento">Em até 12x de R$ 291,58 sem juros no cartão de crédito.</p>
 
-      <form class="form-compra" action="carrinho.html" method="get">
+      <!-- O envio é tratado por js/loja.js (data-form-compra): adiciona ao carrinho e mostra o aviso. -->
+      <form class="form-compra" data-form-compra data-produto="galaxy-s26">
         <div class="campo campo-quantidade">
           <label for="quantidade">Quantidade</label>
           <input type="number" id="quantidade" name="quantidade" value="1" min="1" max="10">

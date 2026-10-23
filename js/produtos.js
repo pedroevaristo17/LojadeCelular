@@ -80,3 +80,17 @@ const PRODUTOS = [
 function buscarProduto(id) {
     return PRODUTOS.find(p => p.id === id);
 }
+
+// Transforma um número em preço escrito do jeito brasileiro:
+//   3499 -> "R$ 3.499"      291.5833 -> "R$ 291,58"
+// Só mostra os centavos quando eles existem, igual aos preços que já estão nas páginas.
+// toLocaleString faz o trabalho pesado: 'pt-BR' = ponto nos milhares e vírgula nos centavos.
+function formatarPreco(valor) {
+    const temCentavos = Math.round(valor * 100) % 100 !== 0;
+    return valor.toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+        minimumFractionDigits: temCentavos ? 2 : 0,
+        maximumFractionDigits: 2
+    });
+}
