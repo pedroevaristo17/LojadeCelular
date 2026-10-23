@@ -1195,3 +1195,74 @@ legend {
         grid-column: 2;
     }
 }
+
+/* =========================================
+   AV2: JAVASCRIPT (contador do carrinho e avisos)
+========================================= */
+
+/* Sem isto, um elemento com "display" definido no CSS (flex, inline-block...)
+   continuaria visível mesmo com o atributo hidden. */
+[hidden] {
+    display: none !important;
+}
+
+/* Número de itens ao lado de "Carrinho", no menu (17:1 de contraste: #1a1a1a sobre branco) */
+.contador {
+    display: inline-block;
+    min-width: 1.5rem;
+    margin-left: 0.5rem;
+    padding: 0 0.4rem;
+    background-color: #ffffff;
+    color: var(--cor-fundo-cabecalho);
+    border-radius: 0.75rem;
+    font-size: 0.875rem;
+    font-weight: bold;
+    line-height: 1.5rem;
+    text-align: center;
+}
+
+/* Caixa de aviso (sucesso ou erro) fixa no rodapé da tela */
+.aviso {
+    position: fixed;
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 1000;
+    max-width: 38rem;
+    margin: 0 auto; /* com left/right definidos, centraliza a caixa */
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    padding: 1rem;
+    color: var(--cor-texto);
+    background-color: var(--cor-sucesso-fundo);
+    border: 2px solid var(--cor-sucesso);
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.aviso-texto {
+    flex: 1 1 14rem;
+    font-weight: 600;
+}
+
+/* O ícone vem antes do texto, então o estado não depende só da cor */
+.aviso-texto::before {
+    content: "✓";
+    content: "✓" / "";
+    margin-right: 0.5rem;
+    color: var(--cor-sucesso);
+    font-weight: bold;
+}
+
+.aviso-erro {
+    background-color: #ffe6e6;
+    border-color: var(--cor-erro);
+}
+
+.aviso-erro .aviso-texto::before {
+    content: "⚠️";
+    content: "⚠️" / "";
+    color: var(--cor-erro);
+}

@@ -29,6 +29,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CelStore - Loja de celulares com o melhor preço</title>
 <link rel="stylesheet" href="style.css">
+<script src="js/produtos.js" defer></script>
+<script src="js/carrinho.js" defer></script>
+<script src="js/loja.js" defer></script>
 </head>
 <body>
 <a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
@@ -46,7 +49,7 @@
       <li><a href="#">Ofertas</a></li>
       <li><a href="login.html">Login</a></li>
       <li><a href="cadastro.html">Cadastro</a></li>
-      <li><a href="carrinho.html">Carrinho</a></li>
+      <li><a href="carrinho.html">Carrinho<span class="contador" data-contador hidden></span></a></li>
     </ul>
   </nav>
 
@@ -77,7 +80,7 @@
         <li>256 GB de armazenamento</li>
         <li>Câmera tripla 50 MP</li>
       </ul>
-      <button type="button">Adicionar ao carrinho<span class="sr-only"> Galaxy S26</span></button>
+      <button type="button" data-adicionar="galaxy-s26">Adicionar ao carrinho<span class="sr-only"> Galaxy S26</span></button>
       <a href="produto.html">Ver detalhes<span class="sr-only"> do Galaxy S26</span></a>
     </article>
 
@@ -90,7 +93,7 @@
         <li>128 GB de armazenamento</li>
         <li>Câmera dupla 48 MP</li>
       </ul>
-      <button type="button">Adicionar ao carrinho<span class="sr-only"> iPhone 17</span></button>
+      <button type="button" data-adicionar="iphone-17">Adicionar ao carrinho<span class="sr-only"> iPhone 17</span></button>
       <a href="#">Ver detalhes<span class="sr-only"> do iPhone 17</span></a>
     </article>
 
@@ -103,7 +106,7 @@
         <li>128 GB de armazenamento</li>
         <li>Bateria de 5000 mAh</li>
       </ul>
-      <button type="button">Adicionar ao carrinho<span class="sr-only"> Moto Edge 60</span></button>
+      <button type="button" data-adicionar="moto-edge-60">Adicionar ao carrinho<span class="sr-only"> Moto Edge 60</span></button>
       <a href="#">Ver detalhes<span class="sr-only"> do Moto Edge 60</span></a>
     </article>
 
@@ -116,7 +119,7 @@
         <li>256 GB de armazenamento</li>
         <li>Carregamento rápido 67W</li>
       </ul>
-      <button type="button">Adicionar ao carrinho<span class="sr-only"> Xiaomi Redmi Note 15</span></button>
+      <button type="button" data-adicionar="redmi-note-15">Adicionar ao carrinho<span class="sr-only"> Xiaomi Redmi Note 15</span></button>
       <a href="#">Ver detalhes<span class="sr-only"> do Xiaomi Redmi Note 15</span></a>
     </article>
 
@@ -129,7 +132,7 @@
         <li>128 GB de armazenamento</li>
         <li>Câmera tripla 50 MP</li>
       </ul>
-      <button type="button">Adicionar ao carrinho<span class="sr-only"> Galaxy A56</span></button>
+      <button type="button" data-adicionar="galaxy-a56">Adicionar ao carrinho<span class="sr-only"> Galaxy A56</span></button>
       <a href="#">Ver detalhes<span class="sr-only"> do Galaxy A56</span></a>
     </article>
 
@@ -142,7 +145,7 @@
         <li>128 GB de armazenamento</li>
         <li>Chip A18</li>
       </ul>
-      <button type="button">Adicionar ao carrinho<span class="sr-only"> iPhone 16e</span></button>
+      <button type="button" data-adicionar="iphone-16e">Adicionar ao carrinho<span class="sr-only"> iPhone 16e</span></button>
       <a href="#">Ver detalhes<span class="sr-only"> do iPhone 16e</span></a>
     </article>
   </section>
