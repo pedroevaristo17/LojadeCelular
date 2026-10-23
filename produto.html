@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Detalhes do produto | CelStore</title>
+<link rel="stylesheet" href="style.css">
+<script src="js/produtos.js" defer></script>
+<script src="js/carrinho.js" defer></script>
+<script src="js/loja.js" defer></script>
+<script src="js/pagina-produto.js" defer></script>
+</head>
+<body>
+<a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
+
+<header class="cabecalho">
+  <a href="index.html" class="logo">
+    <img src="img/logo-celstore.png" alt="CelStore - página inicial" width="160" height="100">
+  </a>
+  <nav class="nav-principal" aria-label="Principal">
+    <ul>
+      <li><a href="index.html">Início</a></li>
+      <li><a href="login.html">Login</a></li>
+      <li><a href="cadastro.html">Cadastro</a></li>
+      <li><a href="carrinho.html">Carrinho<span class="contador" data-contador hidden></span></a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="conteudo">
+  <noscript>
+    <p class="mensagem-erro">Esta página precisa de JavaScript para mostrar o produto. Ative o JavaScript no seu navegador e recarregue a página.</p>
+  </noscript>
+
+  <!-- A página serve para TODOS os celulares: o endereço diz qual (produto.html?id=iphone-17).
+       O js/pagina-produto.js procura o produto em produtos.js e preenche tudo isto. -->
+  <div data-produto-conteudo hidden>
+    <nav class="migalhas" aria-label="Você está aqui">
+      <ol>
+        <li><a href="index.html">Início</a></li>
+        <li aria-current="page" data-produto-migalha></li>
+      </ol>
+    </nav>
+
+    <article class="detalhe">
+      <div class="detalhe-imagem" data-produto-imagem></div>
+
+      <div class="detalhe-info">
+        <h1 data-produto-nome></h1>
+
+        <p class="preco">De <del data-produto-preco-antigo></del> por <ins data-produto-preco></ins></p>
+        <p class="parcelamento" data-produto-parcelas></p>
+
+        <!-- O envio é tratado por js/loja.js (data-form-compra): adiciona ao carrinho e mostra o aviso.
+             O JS preenche data-produto com o id do produto da página. -->
+        <form class="form-compra" data-form-compra data-produto="">
+          <div class="campo campo-quantidade">
+            <label for="quantidade">Quantidade</label>
+            <input type="number" id="quantidade" name="quantidade" value="1" min="1" max="10">
+          </div>
+          <button type="submit" class="btn">Adicionar ao carrinho</button>
+        </form>
+
+        <ul class="beneficios">
+          <li>Frete grátis para compras acima de R$ 299</li>
+          <li data-produto-garantia></li>
+        </ul>
+      </div>
+    </article>
+
+    <section class="especificacoes-detalhe" aria-labelledby="titulo-specs">
+      <h2 id="titulo-specs" class="titulo-secao">Especificações</h2>
+      <table class="tabela-specs">
+        <tbody data-produto-ficha></tbody>
+      </table>
+    </section>
+  </div>
+
+  <!-- Estado de erro: o endereço não tem id, ou o id não existe -->
+  <section class="estado-vazio" data-produto-erro hidden aria-labelledby="titulo-erro">
+    <span class="icone-vazio" aria-hidden="true">🔍</span>
+    <h1 id="titulo-erro">Produto não encontrado</h1>
+    <p>Não encontramos o celular que você procura. Ele pode ter saído da loja ou o endereço pode estar errado.</p>
+    <a href="index.html" class="btn">Ver todos os celulares</a>
+  </section>
+</main>
+
+<footer class="rodape">
+  <nav class="nav-rodape" aria-label="Rodapé">
+    <ul>
+      <li><a href="#">Sobre</a></li>
+      <li><a href="#">Contato</a></li>
+      <li><a href="#">Política de privacidade</a></li>
+      <li><a href="#">Acessibilidade</a></li>
+      <li><a href="design-system.html">Design system</a></li>
+    </ul>
+  </nav>
+  <address>
+    R. da Harmônia - Farol, Maceió - AL<br>
+    Telefone: (82) 4000-0000<br>
+    E-mail: <a href="mailto:contato@celstore.com.br">contato@celstore.com.br</a>
+  </address>
+  <p>&copy; 2026 CelStore. Todos os direitos reservados.</p>
+</footer>
+
+</body>
+</html>

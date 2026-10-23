@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Carrinho | CelStore</title>
+<link rel="stylesheet" href="style.css">
+<script src="js/produtos.js" defer></script>
+<script src="js/carrinho.js" defer></script>
+<script src="js/loja.js" defer></script>
+<script src="js/pagina-carrinho.js" defer></script>
+</head>
+<body data-sem-link-carrinho>
+<a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
+
+<header class="cabecalho">
+  <a href="index.html" class="logo">
+    <img src="img/logo-celstore.png" alt="CelStore - página inicial" width="160" height="100">
+  </a>
+  <nav class="nav-principal" aria-label="Principal">
+    <ul>
+      <li><a href="index.html">Início</a></li>
+      <li><a href="login.html">Login</a></li>
+      <li><a href="cadastro.html">Cadastro</a></li>
+      <li><a href="carrinho.html" aria-current="page">Carrinho<span class="contador" data-contador hidden></span></a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="conteudo">
+  <h1>Seu carrinho</h1>
+
+  <nav class="etapas" aria-label="Etapas da compra">
+    <ol>
+      <li aria-current="step">Carrinho</li>
+      <li>Entrega e pagamento</li>
+      <li>Confirmação</li>
+    </ol>
+  </nav>
+
+  <noscript>
+    <p class="mensagem-erro">O carrinho precisa de JavaScript para funcionar. Ative o JavaScript no seu navegador e recarregue a página.</p>
+  </noscript>
+
+  <!-- Os itens e os valores são desenhados por js/pagina-carrinho.js a partir do que está no localStorage.
+       Este bloco começa escondido (hidden) e o JS mostra ele quando existem itens. -->
+  <div class="layout-compra" data-carrinho-conteudo hidden>
+    <section aria-labelledby="titulo-itens">
+      <h2 id="titulo-itens" class="titulo-secao" tabindex="-1">Itens (<span data-titulo-qtd>0</span>)</h2>
+
+      <ul class="lista-carrinho" data-lista-carrinho></ul>
+    </section>
+
+    <section class="resumo" aria-labelledby="titulo-resumo">
+      <h2 id="titulo-resumo" class="titulo-secao">Resumo do pedido</h2>
+
+      <dl class="resumo-valores">
+        <div>
+          <dt data-resumo-rotulo>Subtotal</dt>
+          <dd data-resumo-subtotal>R$ 0</dd>
+        </div>
+        <div>
+          <dt>Frete</dt>
+          <dd>Grátis</dd>
+        </div>
+        <div class="resumo-total">
+          <dt>Total</dt>
+          <!-- aria-live: o leitor de tela avisa o novo total quando ele muda -->
+          <dd data-resumo-total aria-live="polite">R$ 0</dd>
+        </div>
+      </dl>
+
+      <p class="resumo-parcelas" data-resumo-parcelas></p>
+
+      <a href="checkout.html" class="btn btn-bloco">Finalizar compra</a>
+      <a href="index.html" class="btn btn-secundario btn-bloco">Continuar comprando</a>
+    </section>
+  </div>
+
+  <!-- Estado "carrinho vazio": aparece quando não há nenhum item -->
+  <section class="estado-vazio" data-carrinho-vazio hidden aria-labelledby="titulo-vazio">
+    <span class="icone-vazio" aria-hidden="true">🛒</span>
+    <h2 id="titulo-vazio" tabindex="-1">Seu carrinho está vazio</h2>
+    <p>Que tal dar uma olhada nos celulares da loja?</p>
+    <a href="index.html" class="btn">Ver celulares</a>
+  </section>
+</main>
+
+<footer class="rodape">
+  <nav class="nav-rodape" aria-label="Rodapé">
+    <ul>
+      <li><a href="#">Sobre</a></li>
+      <li><a href="#">Contato</a></li>
+      <li><a href="#">Política de privacidade</a></li>
+      <li><a href="#">Acessibilidade</a></li>
+      <li><a href="design-system.html">Design system</a></li>
+    </ul>
+  </nav>
+  <address>
+    R. da Harmônia - Farol, Maceió - AL<br>
+    Telefone: (82) 4000-0000<br>
+    E-mail: <a href="mailto:contato@celstore.com.br">contato@celstore.com.br</a>
+  </address>
+  <p>&copy; 2026 CelStore. Todos os direitos reservados.</p>
+</footer>
+
+</body>
+</html>

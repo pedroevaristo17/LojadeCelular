@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<!--
+  DESIGN SYSTEM DA CELSTORE
+  Esta página é a "vitrine" dos blocos que montam todas as telas do site:
+  cores, tipografia, espaçamento, botões, campos e mensagens.
+  Os valores (cores, tamanhos) NÃO estão escritos aqui: vêm dos tokens do style.css
+  (variáveis --cor-..., --fonte-..., --espaco-...). O js/design-system.js lê os tokens e
+  escreve os valores e o contraste na tela, então esta página nunca fica diferente do site de verdade.
+-->
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design system | CelStore</title>
+<link rel="stylesheet" href="style.css">
+<script src="js/produtos.js" defer></script>
+<script src="js/carrinho.js" defer></script>
+<script src="js/loja.js" defer></script>
+<script src="js/design-system.js" defer></script>
+</head>
+<body data-sem-link-carrinho>
+<a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
+
+<header class="cabecalho">
+  <a href="index.html" class="logo">
+    <img src="img/logo-celstore.png" alt="CelStore - página inicial" width="160" height="40">
+  </a>
+  <nav class="nav-principal" aria-label="Principal">
+    <ul>
+      <li><a href="index.html">Início</a></li>
+      <li><a href="login.html">Login</a></li>
+      <li><a href="cadastro.html">Cadastro</a></li>
+      <li><a href="carrinho.html">Carrinho<span class="contador" data-contador hidden></span></a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="conteudo">
+  <h1>Design system da CelStore</h1>
+
+  <p class="ds-intro">
+    Um design system é um conjunto de regras e peças prontas que mantém o site consistente e acessível.
+    Em vez de cada tela inventar o seu botão, todas usam o mesmo componente, com as mesmas cores, tamanhos e estados.
+    Os valores desta página são lidos do CSS do site, então o que você vê aqui é exatamente o que as telas usam.
+  </p>
+
+  <noscript>
+    <p class="mensagem-erro">Os valores de cor e o cálculo de contraste desta página precisam de JavaScript. Ative o JavaScript no navegador e recarregue.</p>
+  </noscript>
+
+  <nav class="ds-indice" aria-label="Nesta página">
+    <ul>
+      <li><a href="#cores">Cores</a></li>
+      <li><a href="#tipografia">Tipografia</a></li>
+      <li><a href="#espacamento">Espaçamento</a></li>
+      <li><a href="#botoes">Botões</a></li>
+      <li><a href="#campos">Campos</a></li>
+      <li><a href="#mensagens">Mensagens</a></li>
+      <li><a href="#estados">Estados</a></li>
+      <li><a href="#acessibilidade">Acessibilidade</a></li>
+    </ul>
+  </nav>
+
+  <!-- ============ CORES ============ -->
+  <section class="ds-secao" id="cores" aria-labelledby="t-cores">
+    <h2 id="t-cores" class="titulo-secao">Cores</h2>
+    <p>Cada cor tem um nome (token) e um papel. Texto e fundo só combinam nas duplas testadas na tabela de contraste mais abaixo.</p>
+
+    <h3>Marca e ação</h3>
+    <ul class="ds-cores">
+      <li class="ds-cor"><span class="ds-amostra" style="--amostra: var(--cor-primaria)"></span><span class="ds-cor-info"><span class="ds-cor-nome">Primária</span><code>--cor-primaria</code> <code data-valor="--cor-primaria"></code></span></li>
+      <li class="ds-cor"><span class="ds-amostra" style="--amostra: var(--cor-primaria-hover)"></span><span class="ds-cor-info"><span class="ds-cor-nome">Primária (hover)</span><code>--cor-primaria-hover</code> <code data-valor="--cor-primaria-hover"></code></span></li>
+      <li class="ds-cor"><span class="ds-amostra" style="--amostra: var(--cor-destaque-fundo)"></span><span class="ds-cor-info"><span class="ds-cor-nome">Destaque (fundo de hover)</span><code>--cor-destaque-fundo</code> <code data-valor="--cor-destaque-fundo"></code></span></li>
+      <li class="ds-cor"><span class="ds-amostra" style="--amostra: var(--cor-branco)"></span><span class="ds-cor-info"><span class="ds-cor-nome">Branco (texto sobre cor)</span><code>--cor-branco</code> <code data-valor="--cor-branco"></code></span></li>
+    </ul>
+
+    <h3>Texto e superfícies</h3>
+    <ul class="ds-cores">
+      <li class="ds-cor"><span class="ds-amostra" style="--amostra: var(--cor-texto)"></span><span class="ds-cor-info"><span class="ds-cor-nome">Texto</span><code>--cor-texto</code> <code data-valor="--cor-texto"></code></span></li>
+      <li class="ds-cor"><span class="ds-amostra" style="--amostra: var(--cor-texto-suave)"></span><span class="ds-cor-info"><span class="ds-cor-nome">Texto secundário</span><code>--cor-texto-suave</code> <code data-valor="--cor-texto-suave"></code></span></li>
+      <li class="ds-cor"><span class="ds-amostra" style="--amostra: var(--cor-fundo)"></span><span class="ds-cor-info"><span class="ds-cor-nome">Fundo da página</span><code>--cor-fundo</code> <code data-valor="--cor-fundo"></code></span></li>
+      <li class="ds-cor"><span class="ds-amostra" style="--amostra: var(--cor-superficie)"></span><span class="ds-cor-info"><span class="ds-cor-nome">Superfície (cartões)</span><code>--cor-superficie</code> <code data-valor="--cor-superficie"></code></span></li>
+      <li class="ds-cor"><span class="ds-amostra" style="--amostra: var(--cor-fundo-cabecalho)"></span><span class="ds-cor-info"><span class="ds-cor-nome">Cabeçalho e newsletter</span><code>--cor-fundo-cabecalho</code> <code data-valor="--cor-fundo-cabecalho"></code></span></li>
+      <li class="ds-cor"><span class="ds-amostra" style="--amostra: var(--cor-borda)"></span><span class="ds-cor-info"><span class="ds-cor-nome">Borda de campos</span><code>--cor-borda</code> <code data-valor="--cor-borda"></code></span></li>
+    </ul>
+
+    <h3>Feedback (sempre com ícone e texto, nunca só cor)</h3>
+    <ul class="ds-cores">
+      <li class="ds-cor"><span class="ds-amostra" style="--amostra: var(--cor-sucesso)"></span><span class="ds-cor-info"><span class="ds-cor-nome">Sucesso</span><code>--cor-sucesso</code> <code data-valor="--cor-sucesso"></code></span></li>
+      <li class="ds-cor"><span class="ds-amostra" style="--amostra: var(--cor-sucesso-fundo)"></span><span class="ds-cor-info"><span class="ds-cor-nome">Fundo de sucesso</span><code>--cor-sucesso-fundo</code> <code data-valor="--cor-sucesso-fundo"></code></span></li>
+      <li class="ds-cor"><span class="ds-amostra" style="--amostra: var(--cor-erro)"></span><span class="ds-cor-info"><span class="ds-cor-nome">Erro</span><code>--cor-erro</code> <code data-valor="--cor-erro"></code></span></li>
+      <li class="ds-cor"><span class="ds-amostra" style="--amostra: var(--cor-erro-fundo)"></span><span class="ds-cor-info"><span class="ds-cor-nome">Fundo de erro</span><code>--cor-erro-fundo</code> <code data-valor="--cor-erro-fundo"></code></span></li>
+      <li class="ds-cor"><span class="ds-amostra" style="--amostra: var(--cor-neutra-escura)"></span><span class="ds-cor-info"><span class="ds-cor-nome">Desabilitado e carregando</span><code>--cor-neutra-escura</code> <code data-valor="--cor-neutra-escura"></code></span></li>
+    </ul>
+
+    <h3>Contraste (WCAG 2.0, nível AA)</h3>
+    <p>
+      Contraste é a diferença de luminosidade entre texto e fundo. O mínimo é <strong>4,5:1</strong> para texto normal e
+      <strong>3:1</strong> para bordas, ícones e indicador de foco. A coluna "Razão" é calculada agora, pelo navegador, com a fórmula da WCAG.
+    </p>
+    <div class="ds-tabela-rolagem" role="region" aria-label="Tabela de contraste" tabindex="0">
+      <table class="ds-tabela">
+        <caption class="sr-only">Pares de cor usados no site e a razão de contraste de cada um</caption>
+        <thead>
+          <tr>
+            <th scope="col">Onde é usado</th>
+            <th scope="col">Exemplo</th>
+            <th scope="col">Razão</th>
+            <th scope="col">Mínimo</th>
+            <th scope="col">Resultado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-contraste data-texto="--cor-texto" data-fundo="--cor-fundo" data-minimo="4.5">
+            <th scope="row">Texto corrido</th><td><span class="ds-par">Aa</span></td><td data-razao></td><td>4,5:1</td><td data-resultado></td>
+          </tr>
+          <tr data-contraste data-texto="--cor-texto-suave" data-fundo="--cor-superficie" data-minimo="4.5">
+            <th scope="row">Texto secundário em cartão</th><td><span class="ds-par">Aa</span></td><td data-razao></td><td>4,5:1</td><td data-resultado></td>
+          </tr>
+          <tr data-contraste data-texto="--cor-branco" data-fundo="--cor-primaria" data-minimo="4.5">
+            <th scope="row">Botão primário</th><td><span class="ds-par">Aa</span></td><td data-razao></td><td>4,5:1</td><td data-resultado></td>
+          </tr>
+          <tr data-contraste data-texto="--cor-branco" data-fundo="--cor-primaria-hover" data-minimo="4.5">
+            <th scope="row">Botão primário em hover</th><td><span class="ds-par">Aa</span></td><td data-razao></td><td>4,5:1</td><td data-resultado></td>
+          </tr>
+          <tr data-contraste data-texto="--cor-primaria" data-fundo="--cor-fundo" data-minimo="4.5">
+            <th scope="row">Links e botão secundário</th><td><span class="ds-par">Aa</span></td><td data-razao></td><td>4,5:1</td><td data-resultado></td>
+          </tr>
+          <tr data-contraste data-texto="--cor-primaria-hover" data-fundo="--cor-destaque-fundo" data-minimo="4.5">
+            <th scope="row">Botão secundário em hover</th><td><span class="ds-par">Aa</span></td><td data-razao></td><td>4,5:1</td><td data-resultado></td>
+          </tr>
+          <tr data-contraste data-texto="--cor-branco" data-fundo="--cor-neutra-escura" data-minimo="4.5">
+            <th scope="row">Botão desabilitado ou carregando</th><td><span class="ds-par">Aa</span></td><td data-razao></td><td>4,5:1</td><td data-resultado></td>
+          </tr>
+          <tr data-contraste data-texto="--cor-texto-cabecalho" data-fundo="--cor-fundo-cabecalho" data-minimo="4.5">
+            <th scope="row">Menu no cabeçalho</th><td><span class="ds-par">Aa</span></td><td data-razao></td><td>4,5:1</td><td data-resultado></td>
+          </tr>
+          <tr data-contraste data-texto="--cor-texto" data-fundo="--cor-sucesso-fundo" data-minimo="4.5">
+            <th scope="row">Texto do aviso de sucesso</th><td><span class="ds-par">Aa</span></td><td data-razao></td><td>4,5:1</td><td data-resultado></td>
+          </tr>
+          <tr data-contraste data-texto="--cor-sucesso" data-fundo="--cor-sucesso-fundo" data-minimo="4.5">
+            <th scope="row">Título de sucesso</th><td><span class="ds-par">Aa</span></td><td data-razao></td><td>4,5:1</td><td data-resultado></td>
+          </tr>
+          <tr data-contraste data-texto="--cor-erro" data-fundo="--cor-erro-fundo" data-minimo="4.5">
+            <th scope="row">Resumo de erros</th><td><span class="ds-par">Aa</span></td><td data-razao></td><td>4,5:1</td><td data-resultado></td>
+          </tr>
+          <tr data-contraste data-texto="--cor-erro" data-fundo="--cor-superficie" data-minimo="4.5">
+            <th scope="row">Erro embaixo do campo</th><td><span class="ds-par">Aa</span></td><td data-razao></td><td>4,5:1</td><td data-resultado></td>
+          </tr>
+          <tr data-contraste data-texto="--cor-borda" data-fundo="--cor-fundo" data-minimo="3">
+            <th scope="row">Borda de campo (componente)</th><td><span class="ds-par">▭</span></td><td data-razao></td><td>3:1</td><td data-resultado></td>
+          </tr>
+          <tr data-contraste data-texto="--cor-primaria" data-fundo="--cor-fundo" data-minimo="3">
+            <th scope="row">Anel de foco (fundo claro)</th><td><span class="ds-par">◯</span></td><td data-razao></td><td>3:1</td><td data-resultado></td>
+          </tr>
+          <tr data-contraste data-texto="--cor-branco" data-fundo="--cor-fundo-cabecalho" data-minimo="3">
+            <th scope="row">Anel de foco (cabeçalho escuro)</th><td><span class="ds-par">◯</span></td><td data-razao></td><td>3:1</td><td data-resultado></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ TIPOGRAFIA ============ -->
+  <section class="ds-secao" id="tipografia" aria-labelledby="t-tipografia">
+    <h2 id="t-tipografia" class="titulo-secao">Tipografia</h2>
+    <p>
+      Uma única família sem serifa (a fonte do próprio sistema, que carrega rápido e é familiar para quem usa).
+      Os tamanhos ficam em <code>rem</code>, então acompanham o zoom e o tamanho de letra que a pessoa escolheu no navegador.
+    </p>
+    <p>Família: <code data-valor="--fonte-familia"></code></p>
+
+    <div class="ds-tabela-rolagem" role="region" aria-label="Escala tipográfica" tabindex="0">
+      <table class="ds-tabela">
+        <caption class="sr-only">Escala de tamanhos de letra</caption>
+        <thead>
+          <tr>
+            <th scope="col">Token</th>
+            <th scope="col">Tamanho</th>
+            <th scope="col">Uso</th>
+            <th scope="col">Exemplo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row"><code>--fonte-titulo-1</code></th><td><code data-valor="--fonte-titulo-1"></code></td><td>Título da página (h1)</td><td><span style="font-size: var(--fonte-titulo-1); font-weight: var(--peso-negrito)">Celulares</span></td></tr>
+          <tr><th scope="row"><code>--fonte-titulo-2</code></th><td><code data-valor="--fonte-titulo-2"></code></td><td>Título de bloco (h2)</td><td><span style="font-size: var(--fonte-titulo-2); font-weight: var(--peso-negrito)">Celulares</span></td></tr>
+          <tr><th scope="row"><code>--fonte-titulo-3</code></th><td><code data-valor="--fonte-titulo-3"></code></td><td>Título de seção, preços</td><td><span style="font-size: var(--fonte-titulo-3); font-weight: var(--peso-negrito)">Celulares</span></td></tr>
+          <tr><th scope="row"><code>--fonte-grande</code></th><td><code data-valor="--fonte-grande"></code></td><td>Título de cartão (h3)</td><td><span style="font-size: var(--fonte-grande); font-weight: var(--peso-negrito)">Celulares</span></td></tr>
+          <tr><th scope="row"><code>--fonte-media</code></th><td><code data-valor="--fonte-media"></code></td><td>Destaque, botão grande</td><td><span style="font-size: var(--fonte-media)">Celulares</span></td></tr>
+          <tr><th scope="row"><code>--fonte-base</code></th><td><code data-valor="--fonte-base"></code></td><td>Texto corrido e botões</td><td><span style="font-size: var(--fonte-base)">Celulares</span></td></tr>
+          <tr><th scope="row"><code>--fonte-pequena</code></th><td><code data-valor="--fonte-pequena"></code></td><td>Dicas, legendas, erros</td><td><span style="font-size: var(--fonte-pequena)">Celulares</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ ESPAÇAMENTO ============ -->
+  <section class="ds-secao" id="espacamento" aria-labelledby="t-espacamento">
+    <h2 id="t-espacamento" class="titulo-secao">Grade e espaçamento</h2>
+    <p>
+      Todo espaço do site é um múltiplo de 4 px. Poucos valores, repetidos em todo lugar, deixam as telas alinhadas e previsíveis.
+      O conteúdo fica numa coluna centralizada com largura máxima, e as listas de produtos usam CSS Grid.
+    </p>
+
+    <ul class="ds-escala">
+      <li><code>--espaco-1</code><code data-valor="--espaco-1"></code><span class="ds-barra" style="--largura: var(--espaco-1)"></span></li>
+      <li><code>--espaco-2</code><code data-valor="--espaco-2"></code><span class="ds-barra" style="--largura: var(--espaco-2)"></span></li>
+      <li><code>--espaco-3</code><code data-valor="--espaco-3"></code><span class="ds-barra" style="--largura: var(--espaco-3)"></span></li>
+      <li><code>--espaco-4</code><code data-valor="--espaco-4"></code><span class="ds-barra" style="--largura: var(--espaco-4)"></span></li>
+      <li><code>--espaco-5</code><code data-valor="--espaco-5"></code><span class="ds-barra" style="--largura: var(--espaco-5)"></span></li>
+      <li><code>--espaco-6</code><code data-valor="--espaco-6"></code><span class="ds-barra" style="--largura: var(--espaco-6)"></span></li>
+      <li><code>--espaco-7</code><code data-valor="--espaco-7"></code><span class="ds-barra" style="--largura: var(--espaco-7)"></span></li>
+      <li><code>--espaco-8</code><code data-valor="--espaco-8"></code><span class="ds-barra" style="--largura: var(--espaco-8)"></span></li>
+    </ul>
+
+    <h3>Larguras do layout</h3>
+    <ul class="ds-lista-simples">
+      <li><code>--largura-site</code> <code data-valor="--largura-site"></code>: largura máxima das páginas com grade de produtos.</li>
+      <li><code>--largura-coluna</code> <code data-valor="--largura-coluna"></code>: textos e páginas de uma coluna (confirmação).</li>
+      <li><code>--largura-formulario</code> <code data-valor="--largura-formulario"></code>: login, cadastro.</li>
+      <li><code>--alvo-minimo</code> <code data-valor="--alvo-minimo"></code>: altura e largura mínimas de botão, link de menu e campo (44 px).</li>
+    </ul>
+  </section>
+
+  <!-- ============ BOTÕES ============ -->
+  <section class="ds-secao" id="botoes" aria-labelledby="t-botoes">
+    <h2 id="t-botoes" class="titulo-secao">Botões</h2>
+    <p>
+      Um único componente, <code>.btn</code>, serve para <code>&lt;button&gt;</code> e para links que parecem botão.
+      Todos têm no mínimo 44 × 44 px. Os estados "hover" e "foco" abaixo estão fixos só para você ver; no site eles aparecem
+      quando o mouse passa por cima (hover) ou quando a pessoa navega com a tecla Tab (foco).
+    </p>
+
+    <div class="ds-tabela-rolagem" role="region" aria-label="Botões e seus estados" tabindex="0">
+      <table class="ds-tabela">
+        <caption class="sr-only">Variações de botão (linhas) e seus estados (colunas)</caption>
+        <thead>
+          <tr>
+            <th scope="col">Variação</th>
+            <th scope="col">Padrão</th>
+            <th scope="col">Hover</th>
+            <th scope="col">Foco</th>
+            <th scope="col">Desabilitado</th>
+            <th scope="col">Carregando</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Primário<br><code>.btn</code></th>
+            <td><button type="button" class="btn">Comprar</button></td>
+            <td><button type="button" class="btn is-hover">Comprar</button></td>
+            <td><button type="button" class="btn is-focus">Comprar</button></td>
+            <td><button type="button" class="btn" aria-disabled="true">Comprar</button></td>
+            <td><button type="button" class="btn" aria-disabled="true" aria-busy="true">Processando…</button></td>
+          </tr>
+          <tr>
+            <th scope="row">Secundário<br><code>.btn-secundario</code></th>
+            <td><button type="button" class="btn btn-secundario">Voltar</button></td>
+            <td><button type="button" class="btn btn-secundario is-hover">Voltar</button></td>
+            <td><button type="button" class="btn btn-secundario is-focus">Voltar</button></td>
+            <td><button type="button" class="btn btn-secundario" aria-disabled="true">Voltar</button></td>
+            <td><button type="button" class="btn btn-secundario" aria-disabled="true" aria-busy="true">Salvando…</button></td>
+          </tr>
+          <tr>
+            <th scope="row">Link<br><code>.btn-link</code></th>
+            <td><button type="button" class="btn btn-link">Remover</button></td>
+            <td><button type="button" class="btn btn-link is-hover">Remover</button></td>
+            <td><button type="button" class="btn btn-link is-focus">Remover</button></td>
+            <td><button type="button" class="btn btn-link" aria-disabled="true">Remover</button></td>
+            <td><span class="ds-nao-se-aplica">não se aplica</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Tamanhos</h3>
+    <div class="ds-exemplo ds-grade">
+      <div>
+        <p class="ds-rotulo">Padrão</p>
+        <button type="button" class="btn">Buscar</button>
+      </div>
+      <div>
+        <p class="ds-rotulo"><code>.btn-grande</code>: botão de formulário</p>
+        <button type="button" class="btn btn-grande">Confirmar pedido</button>
+      </div>
+      <div>
+        <p class="ds-rotulo"><code>.btn-bloco</code>: largura total</p>
+        <button type="button" class="btn btn-bloco">Adicionar ao carrinho</button>
+      </div>
+    </div>
+
+    <h3>Regras de uso</h3>
+    <ul class="ds-lista-simples">
+      <li>Uma ação principal por tela usa o botão primário (por exemplo, "Finalizar compra").</li>
+      <li>Ações de apoio (voltar, continuar comprando) usam o secundário; ações discretas (remover) usam o link.</li>
+      <li>O texto diz o que acontece ("Confirmar pedido", e não "Enviar"). No estado carregando, o texto também muda ("Processando pedido…").</li>
+      <li>Desabilitado e carregando usam <code>aria-disabled</code> (e não <code>disabled</code>): o botão continua recebendo foco do teclado e os leitores de tela anunciam o estado.</li>
+    </ul>
+    <pre class="ds-codigo" tabindex="0"><code>&lt;button type="submit" class="btn btn-bloco btn-grande"&gt;Confirmar pedido&lt;/button&gt;
+&lt;a href="carrinho.html" class="btn btn-secundario"&gt;Voltar ao carrinho&lt;/a&gt;</code></pre>
+  </section>
+
+  <!-- ============ CAMPOS ============ -->
+  <section class="ds-secao" id="campos" aria-labelledby="t-campos">
+    <h2 id="t-campos" class="titulo-secao">Campos de formulário</h2>
+    <p>
+      Todo campo tem um rótulo sempre visível (nunca só o texto de exemplo dentro do campo, que some quando a pessoa digita),
+      uma dica quando o formato não é óbvio e uma mensagem de erro com ícone e texto, ligada ao campo para o leitor de tela.
+    </p>
+
+    <div class="ds-exemplo ds-grade">
+      <div class="campo">
+        <label for="ds-campo-padrao">E-mail (padrão)</label>
+        <input type="email" id="ds-campo-padrao" autocomplete="off" aria-describedby="ds-dica-padrao">
+        <p id="ds-dica-padrao" class="dica-campo">Exemplo: nome@exemplo.com</p>
+      </div>
+
+      <div class="campo">
+        <label for="ds-campo-foco">E-mail (com foco)</label>
+        <input type="email" id="ds-campo-foco" class="is-focus" autocomplete="off">
+      </div>
+
+      <div class="campo">
+        <label for="ds-campo-erro">E-mail (com erro)</label>
+        <input type="email" id="ds-campo-erro" value="ana@exemplo" aria-invalid="true" aria-describedby="ds-erro-demo" autocomplete="off">
+        <p id="ds-erro-demo" class="erro-campo">Informe um e-mail válido, como nome@exemplo.com.</p>
+      </div>
+    </div>
+
+    <h3>Opções (rádio e caixa de seleção)</h3>
+    <div class="ds-exemplo ds-grade">
+      <fieldset class="pagamento">
+        <legend>Forma de pagamento</legend>
+        <div class="opcao">
+          <input type="radio" id="ds-radio-pix" name="ds-pagamento" value="pix" checked>
+          <label for="ds-radio-pix">Pix (5% de desconto)</label>
+        </div>
+        <div class="opcao">
+          <input type="radio" id="ds-radio-boleto" name="ds-pagamento" value="boleto">
+          <label for="ds-radio-boleto">Boleto bancário</label>
+        </div>
+      </fieldset>
+
+      <fieldset class="preferencias">
+        <legend>Preferências</legend>
+        <div class="campo">
+          <input type="checkbox" id="ds-caixa-ofertas">
+          <label for="ds-caixa-ofertas">Quero receber ofertas por e-mail</label>
+        </div>
+      </fieldset>
+    </div>
+  </section>
+
+  <!-- ============ MENSAGENS ============ -->
+  <section class="ds-secao" id="mensagens" aria-labelledby="t-mensagens">
+    <h2 id="t-mensagens" class="titulo-secao">Mensagens de feedback</h2>
+    <p>
+      O site sempre responde ao que a pessoa faz. Cada mensagem tem ícone, texto e cor, e quem usa leitor de tela
+      ouve o mesmo texto (as mensagens reais usam <code>role="alert"</code> ou <code>role="status"</code>; aqui elas ficam paradas só para exibição).
+    </p>
+
+    <div class="ds-grade">
+      <div>
+        <h3>Aviso de sucesso</h3>
+        <div class="aviso aviso-sucesso ds-aviso-estatico">
+          <p class="aviso-texto">Galaxy S26 adicionado ao carrinho.</p>
+          <a href="carrinho.html" class="btn">Ver carrinho</a>
+          <button type="button" class="btn btn-link">Fechar</button>
+        </div>
+      </div>
+
+      <div>
+        <h3>Aviso de erro</h3>
+        <div class="aviso aviso-erro ds-aviso-estatico">
+          <p class="aviso-texto">O limite é de 10 unidades por pedido.</p>
+          <button type="button" class="btn btn-link">Fechar</button>
+        </div>
+      </div>
+
+      <div>
+        <h3>Resumo de erros do formulário</h3>
+        <div class="mensagem-erro">Corrija 2 campos para continuar: CEP, Estado.</div>
+      </div>
+    </div>
+
+    <div class="ds-grade">
+      <div>
+        <h3>Estado vazio</h3>
+        <div class="estado-vazio ds-estatico">
+          <span class="icone-vazio" aria-hidden="true">🛒</span>
+          <h4>Seu carrinho está vazio</h4>
+          <p>Escolha um celular para começar.</p>
+          <a href="index.html" class="btn">Ver celulares</a>
+        </div>
+      </div>
+
+      <div>
+        <h3>Estado de sucesso</h3>
+        <div class="confirmacao ds-estatico">
+          <span class="icone-sucesso" aria-hidden="true">✓</span>
+          <h4>Pedido confirmado</h4>
+          <p>Enviamos os detalhes para o seu e-mail.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ESTADOS POR TELA ============ -->
+  <section class="ds-secao" id="estados" aria-labelledby="t-estados">
+    <h2 id="t-estados" class="titulo-secao">Estados em cada tela</h2>
+    <p>Os quatro estados de feedback e onde cada um aparece nas telas do site. Abra a tela para ver na prática.</p>
+
+    <div class="ds-tabela-rolagem" role="region" aria-label="Estados de feedback por tela" tabindex="0">
+      <table class="ds-tabela">
+        <caption class="sr-only">Estados de feedback (carregando, sucesso, erro e vazio) e a tela em que cada um aparece</caption>
+        <thead>
+          <tr>
+            <th scope="col">Estado</th>
+            <th scope="col">Como aparece</th>
+            <th scope="col">Onde ver</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Carregando</th>
+            <td>Botão cinza com círculo girando e texto novo ("Entrando…", "Criando conta…", "Processando pedido…"). Cliques repetidos são ignorados.</td>
+            <td><a href="login.html">Login</a>, <a href="cadastro.html">Cadastro</a>, <a href="checkout.html">Checkout</a></td>
+          </tr>
+          <tr>
+            <th scope="row">Sucesso</th>
+            <td>Aviso verde com ✓ ao adicionar ao carrinho; tela "Conta criada com sucesso"; página de pedido confirmado.</td>
+            <td><a href="index.html">Início</a>, <a href="cadastro.html">Cadastro</a>, <a href="confirmacao.html">Confirmação</a></td>
+          </tr>
+          <tr>
+            <th scope="row">Erro</th>
+            <td>Mensagem vermelha com ⚠ embaixo de cada campo inválido, resumo no topo do formulário e foco levado ao primeiro erro.</td>
+            <td><a href="login.html">Login</a>, <a href="cadastro.html">Cadastro</a>, <a href="checkout.html">Checkout</a></td>
+          </tr>
+          <tr>
+            <th scope="row">Vazio</th>
+            <td>Caixa tracejada com ícone, explicação e botão para seguir em frente.</td>
+            <td><a href="carrinho.html">Carrinho</a> (sem itens), <a href="confirmacao.html">Confirmação</a> (sem pedido), <a href="produto.html?id=inexistente">Produto</a> (inexistente)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ ACESSIBILIDADE ============ -->
+  <section class="ds-secao" id="acessibilidade" aria-labelledby="t-acessibilidade">
+    <h2 id="t-acessibilidade" class="titulo-secao">Regras de acessibilidade</h2>
+    <p>Regras que valem para toda peça nova do site (WCAG 2.0, nível AA).</p>
+    <ul class="ds-lista-simples">
+      <li><strong>Contraste:</strong> 4,5:1 para texto e 3:1 para bordas e foco, conferidos na tabela de contraste desta página.</li>
+      <li><strong>Alvo de toque:</strong> botões, links de menu e campos com no mínimo 44 × 44 px.</li>
+      <li><strong>Foco visível:</strong> anel de 3 px em todo elemento que recebe foco pelo teclado (branco nas áreas escuras).</li>
+      <li><strong>Rótulos visíveis:</strong> todo campo tem <code>&lt;label&gt;</code> ligado ao <code>id</code> do campo.</li>
+      <li><strong>Não depender só da cor:</strong> erro e sucesso sempre têm ícone e texto; o campo com erro também ganha <code>aria-invalid</code>.</li>
+      <li><strong>Movimento reduzido:</strong> quem pede menos animação no sistema recebe o círculo de carregando parado.</li>
+      <li><strong>Zoom:</strong> tamanhos em <code>rem</code>, para a página acompanhar o tamanho de letra escolhido.</li>
+      <li><strong>Teclado:</strong> tudo funciona só com Tab, Enter e Esc, e há um link "Pular para o conteúdo" no topo de cada página.</li>
+    </ul>
+  </section>
+</main>
+
+<footer class="rodape">
+  <nav class="nav-rodape" aria-label="Rodapé">
+    <ul>
+      <li><a href="#">Sobre</a></li>
+      <li><a href="#">Contato</a></li>
+      <li><a href="#">Política de privacidade</a></li>
+      <li><a href="#">Acessibilidade</a></li>
+      <li><a href="design-system.html" aria-current="page">Design system</a></li>
+    </ul>
+  </nav>
+  <p>&copy; 2026 CelStore. Todos os direitos reservados.</p>
+</footer>
+
+</body>
+</html>

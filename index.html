@@ -29,6 +29,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CelStore - Loja de celulares com o melhor preço</title>
 <link rel="stylesheet" href="style.css">
+<script src="js/produtos.js" defer></script>
+<script src="js/carrinho.js" defer></script>
+<script src="js/loja.js" defer></script>
 </head>
 <body>
 <a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
@@ -46,13 +49,14 @@
       <li><a href="#">Ofertas</a></li>
       <li><a href="login.html">Login</a></li>
       <li><a href="cadastro.html">Cadastro</a></li>
+      <li><a href="carrinho.html">Carrinho<span class="contador" data-contador hidden></span></a></li>
     </ul>
   </nav>
 
   <form class="busca" role="search" action="#" method="get">
     <label for="busca" class="sr-only">Buscar produtos</label>
     <input type="search" id="busca" name="busca">
-    <button type="submit">Buscar</button>
+    <button type="submit" class="btn">Buscar</button>
   </form>
 </header>
 
@@ -69,80 +73,80 @@
 
     <article class="produto">
       <h3>Galaxy S26</h3>
-      <img src="img/galaxy-s26.webp" alt="Smartphone Galaxy S26 na cor preta, vista frontal e traseira" width="300" height="300">
+      <img src="img/galaxy-s26.webp" alt="Smartphone Galaxy S26 na cor azul-clara, vista frontal e traseira" width="668" height="808">
       <p class="preco">De <del>R$ 3.999</del> por <ins>R$ 3.499</ins></p>
       <ul class="especificacoes">
         <li>Tela 6,5" AMOLED</li>
         <li>256 GB de armazenamento</li>
         <li>Câmera tripla 50 MP</li>
       </ul>
-      <button type="button">Adicionar ao carrinho<span class="sr-only"> Galaxy S26</span></button>
-      <a href="#">Ver detalhes<span class="sr-only"> do Galaxy S26</span></a>
+      <button type="button" class="btn btn-bloco" data-adicionar="galaxy-s26">Adicionar ao carrinho<span class="sr-only"> Galaxy S26</span></button>
+      <a href="produto.html?id=galaxy-s26" class="btn btn-secundario btn-bloco">Ver detalhes<span class="sr-only"> do Galaxy S26</span></a>
     </article>
 
     <article class="produto">
       <h3>iPhone 17</h3>
-      <img src="img/iphone-17.webp" alt="Smartphone iPhone 17 na cor branca, vista frontal e traseira" width="300" height="300">
+      <img src="img/iphone-17.webp" alt="Smartphone iPhone 17 na cor grafite, vista frontal e traseira" width="967" height="1200">
       <p class="preco">De <del>R$ 6.499</del> por <ins>R$ 5.999</ins></p>
       <ul class="especificacoes">
         <li>Tela 6,1" Super Retina</li>
         <li>128 GB de armazenamento</li>
         <li>Câmera dupla 48 MP</li>
       </ul>
-      <button type="button">Adicionar ao carrinho<span class="sr-only"> iPhone 17</span></button>
-      <a href="#">Ver detalhes<span class="sr-only"> do iPhone 17</span></a>
+      <button type="button" class="btn btn-bloco" data-adicionar="iphone-17">Adicionar ao carrinho<span class="sr-only"> iPhone 17</span></button>
+      <a href="produto.html?id=iphone-17" class="btn btn-secundario btn-bloco">Ver detalhes<span class="sr-only"> do iPhone 17</span></a>
     </article>
 
     <article class="produto">
       <h3>Moto Edge 60</h3>
-      <img src="img/moto-edge-60.webp" alt="Smartphone Moto Edge 60 na cor azul, vista frontal e traseira" width="300" height="300">
+      <img src="img/moto-edge-60.webp" alt="Smartphone Moto Edge 60 na cor dourada, vista frontal e traseira" width="1000" height="1000">
       <p class="preco">De <del>R$ 2.799</del> por <ins>R$ 2.299</ins></p>
       <ul class="especificacoes">
         <li>Tela 6,7" OLED</li>
         <li>128 GB de armazenamento</li>
         <li>Bateria de 5000 mAh</li>
       </ul>
-      <button type="button">Adicionar ao carrinho<span class="sr-only"> Moto Edge 60</span></button>
-      <a href="#">Ver detalhes<span class="sr-only"> do Moto Edge 60</span></a>
+      <button type="button" class="btn btn-bloco" data-adicionar="moto-edge-60">Adicionar ao carrinho<span class="sr-only"> Moto Edge 60</span></button>
+      <a href="produto.html?id=moto-edge-60" class="btn btn-secundario btn-bloco">Ver detalhes<span class="sr-only"> do Moto Edge 60</span></a>
     </article>
 
     <article class="produto">
       <h3>Xiaomi Redmi Note 15</h3>
-      <img src="img/redmi-note-15.webp" alt="Smartphone Xiaomi Redmi Note 15 na cor verde, vista frontal e traseira" width="300" height="300">
+      <img src="img/redmi-note-15.webp" alt="Smartphone Xiaomi Redmi Note 15 na cor azul-arroxeada, vista frontal e traseira" width="960" height="1116">
       <p class="preco">De <del>R$ 1.899</del> por <ins>R$ 1.599</ins></p>
       <ul class="especificacoes">
         <li>Tela 6,6" AMOLED 120Hz</li>
         <li>256 GB de armazenamento</li>
         <li>Carregamento rápido 67W</li>
       </ul>
-      <button type="button">Adicionar ao carrinho<span class="sr-only"> Xiaomi Redmi Note 15</span></button>
-      <a href="#">Ver detalhes<span class="sr-only"> do Xiaomi Redmi Note 15</span></a>
+      <button type="button" class="btn btn-bloco" data-adicionar="redmi-note-15">Adicionar ao carrinho<span class="sr-only"> Xiaomi Redmi Note 15</span></button>
+      <a href="produto.html?id=redmi-note-15" class="btn btn-secundario btn-bloco">Ver detalhes<span class="sr-only"> do Xiaomi Redmi Note 15</span></a>
     </article>
 
     <article class="produto">
       <h3>Galaxy A56</h3>
-      <img src="img/galaxy-a56.webp" alt="Smartphone Galaxy A56 na cor lilás, vista frontal e traseira" width="300" height="300">
+      <img src="img/galaxy-a56.webp" alt="Smartphone Galaxy A56 na cor lilás, vista frontal e traseira" width="1200" height="1200">
       <p class="preco">De <del>R$ 2.199</del> por <ins>R$ 1.899</ins></p>
       <ul class="especificacoes">
         <li>Tela 6,4" Super AMOLED</li>
         <li>128 GB de armazenamento</li>
         <li>Câmera tripla 50 MP</li>
       </ul>
-      <button type="button">Adicionar ao carrinho<span class="sr-only"> Galaxy A56</span></button>
-      <a href="#">Ver detalhes<span class="sr-only"> do Galaxy A56</span></a>
+      <button type="button" class="btn btn-bloco" data-adicionar="galaxy-a56">Adicionar ao carrinho<span class="sr-only"> Galaxy A56</span></button>
+      <a href="produto.html?id=galaxy-a56" class="btn btn-secundario btn-bloco">Ver detalhes<span class="sr-only"> do Galaxy A56</span></a>
     </article>
 
     <article class="produto">
       <h3>iPhone 16e</h3>
-      <img src="img/iphone-16e.webp" alt="Smartphone iPhone 16e na cor preta, vista frontal e traseira" width="300" height="300">
+      <img src="img/iphone-16e.webp" alt="Smartphone iPhone 16e na cor branca, vista frontal e traseira" width="987" height="1200">
       <p class="preco">De <del>R$ 4.799</del> por <ins>R$ 4.299</ins></p>
       <ul class="especificacoes">
         <li>Tela 6,1" Liquid Retina</li>
         <li>128 GB de armazenamento</li>
         <li>Chip A18</li>
       </ul>
-      <button type="button">Adicionar ao carrinho<span class="sr-only"> iPhone 16e</span></button>
-      <a href="#">Ver detalhes<span class="sr-only"> do iPhone 16e</span></a>
+      <button type="button" class="btn btn-bloco" data-adicionar="iphone-16e">Adicionar ao carrinho<span class="sr-only"> iPhone 16e</span></button>
+      <a href="produto.html?id=iphone-16e" class="btn btn-secundario btn-bloco">Ver detalhes<span class="sr-only"> do iPhone 16e</span></a>
     </article>
   </section>
 
@@ -174,7 +178,7 @@
     <form action="#" method="post">
       <label for="newsletter-email">E-mail</label>
       <input type="email" id="newsletter-email" name="newsletter-email" required autocomplete="email">
-      <button type="submit">Assinar</button>
+      <button type="submit" class="btn">Assinar</button>
     </form>
   </aside>
 </main>
@@ -186,6 +190,7 @@
       <li><a href="#">Contato</a></li>
       <li><a href="#">Política de privacidade</a></li>
       <li><a href="#">Acessibilidade</a></li>
+      <li><a href="design-system.html">Design system</a></li>
     </ul>
   </nav>
   <address>

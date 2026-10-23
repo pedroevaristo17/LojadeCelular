@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Entrega e pagamento | CelStore</title>
+<link rel="stylesheet" href="style.css">
+<script src="js/produtos.js" defer></script>
+<script src="js/carrinho.js" defer></script>
+<script src="js/loja.js" defer></script>
+<script src="js/formulario.js" defer></script>
+<script src="js/pedido.js" defer></script>
+<script src="js/pagina-checkout.js" defer></script>
+</head>
+<body>
+<a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
+
+<header class="cabecalho">
+  <a href="index.html" class="logo">
+    <img src="img/logo-celstore.png" alt="CelStore - página inicial" width="160" height="100">
+  </a>
+  <nav class="nav-principal" aria-label="Principal">
+    <ul>
+      <li><a href="index.html">Início</a></li>
+      <li><a href="login.html">Login</a></li>
+      <li><a href="cadastro.html">Cadastro</a></li>
+      <li><a href="carrinho.html">Carrinho<span class="contador" data-contador hidden></span></a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="conteudo">
+  <h1>Entrega e pagamento</h1>
+
+  <nav class="etapas" aria-label="Etapas da compra">
+    <ol>
+      <li class="etapa-concluida"><a href="carrinho.html">Carrinho<span class="sr-only"> (etapa concluída)</span></a></li>
+      <li aria-current="step">Entrega e pagamento</li>
+      <li>Confirmação</li>
+    </ol>
+  </nav>
+
+  <noscript>
+    <p class="mensagem-erro">O checkout precisa de JavaScript para funcionar. Ative o JavaScript no seu navegador e recarregue a página.</p>
+  </noscript>
+
+  <!-- Este bloco começa escondido (hidden). O js/pagina-checkout.js mostra ele quando há itens no carrinho. -->
+  <div class="layout-compra" data-checkout-conteudo hidden>
+    <!-- novalidate: desliga os balões de erro do navegador, porque o JS mostra mensagens próprias (mais claras).
+         As marcações "required" continuam aqui para os leitores de tela avisarem que o campo é obrigatório. -->
+    <form class="formulario" data-form-checkout novalidate>
+      <!-- Resumo dos erros: o JS escreve aqui. role="alert" faz o leitor de tela falar a mensagem na hora. -->
+      <div role="alert" class="mensagem-erro"></div>
+
+      <fieldset>
+        <legend>Endereço de entrega</legend>
+
+        <div class="campo">
+          <label for="nome">Nome completo (obrigatório)</label>
+          <input type="text" id="nome" name="nome" required autocomplete="name">
+        </div>
+
+        <div class="campo">
+          <label for="cep">CEP (obrigatório)</label>
+          <input type="text" id="cep" name="cep" required inputmode="numeric" pattern="[0-9]{5}-?[0-9]{3}" title="Digite o CEP no formato 00000-000" autocomplete="postal-code" aria-describedby="dica-cep">
+          <p id="dica-cep" class="dica-campo">Formato: 00000-000</p>
+        </div>
+
+        <div class="campo">
+          <label for="endereco">Endereço (obrigatório)</label>
+          <input type="text" id="endereco" name="endereco" required autocomplete="address-line1">
+        </div>
+
+        <div class="campos-linha">
+          <div class="campo">
+            <label for="numero">Número (obrigatório)</label>
+            <input type="text" id="numero" name="numero" required>
+          </div>
+
+          <div class="campo">
+            <label for="complemento">Complemento (opcional)</label>
+            <input type="text" id="complemento" name="complemento" autocomplete="address-line2">
+          </div>
+        </div>
+
+        <div class="campo">
+          <label for="bairro">Bairro (obrigatório)</label>
+          <input type="text" id="bairro" name="bairro" required>
+        </div>
+
+        <div class="campos-linha">
+          <div class="campo">
+            <label for="cidade">Cidade (obrigatório)</label>
+            <input type="text" id="cidade" name="cidade" required autocomplete="address-level2">
+          </div>
+
+          <div class="campo">
+            <label for="estado">Estado (obrigatório)</label>
+            <select id="estado" name="estado" required autocomplete="address-level1">
+              <option value="">Selecione</option>
+              <option value="AC">Acre</option>
+              <option value="AL">Alagoas</option>
+              <option value="AP">Amapá</option>
+              <option value="AM">Amazonas</option>
+              <option value="BA">Bahia</option>
+              <option value="CE">Ceará</option>
+              <option value="DF">Distrito Federal</option>
+              <option value="ES">Espírito Santo</option>
+              <option value="GO">Goiás</option>
+              <option value="MA">Maranhão</option>
+              <option value="MT">Mato Grosso</option>
+              <option value="MS">Mato Grosso do Sul</option>
+              <option value="MG">Minas Gerais</option>
+              <option value="PA">Pará</option>
+              <option value="PB">Paraíba</option>
+              <option value="PR">Paraná</option>
+              <option value="PE">Pernambuco</option>
+              <option value="PI">Piauí</option>
+              <option value="RJ">Rio de Janeiro</option>
+              <option value="RN">Rio Grande do Norte</option>
+              <option value="RS">Rio Grande do Sul</option>
+              <option value="RO">Rondônia</option>
+              <option value="RR">Roraima</option>
+              <option value="SC">Santa Catarina</option>
+              <option value="SP">São Paulo</option>
+              <option value="SE">Sergipe</option>
+              <option value="TO">Tocantins</option>
+            </select>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="pagamento">
+        <legend>Forma de pagamento (obrigatório)</legend>
+
+        <div class="opcao">
+          <input type="radio" id="pagamento-pix" name="pagamento" value="pix" required>
+          <label for="pagamento-pix">Pix</label>
+        </div>
+
+        <div class="opcao">
+          <input type="radio" id="pagamento-cartao" name="pagamento" value="cartao">
+          <label for="pagamento-cartao">Cartão de crédito (até 12x sem juros)</label>
+        </div>
+
+        <div class="opcao">
+          <input type="radio" id="pagamento-boleto" name="pagamento" value="boleto">
+          <label for="pagamento-boleto">Boleto bancário</label>
+        </div>
+      </fieldset>
+
+      <button type="submit" class="btn btn-bloco btn-grande" data-botao-confirmar>Confirmar pedido</button>
+    </form>
+
+    <section class="resumo" aria-labelledby="titulo-resumo">
+      <h2 id="titulo-resumo" class="titulo-secao">Resumo do pedido</h2>
+
+      <ul class="resumo-itens" data-resumo-itens></ul>
+
+      <dl class="resumo-valores">
+        <div>
+          <dt>Subtotal</dt>
+          <dd data-resumo-subtotal>R$ 0</dd>
+        </div>
+        <div>
+          <dt>Frete</dt>
+          <dd>Grátis</dd>
+        </div>
+        <div class="resumo-total">
+          <dt>Total</dt>
+          <dd data-resumo-total>R$ 0</dd>
+        </div>
+      </dl>
+
+      <a href="carrinho.html" class="btn btn-secundario btn-bloco">Voltar ao carrinho</a>
+    </section>
+  </div>
+
+  <!-- Estado "carrinho vazio": sem itens não há o que finalizar -->
+  <section class="estado-vazio" data-checkout-vazio hidden aria-labelledby="titulo-vazio">
+    <span class="icone-vazio" aria-hidden="true">🛒</span>
+    <h2 id="titulo-vazio">Seu carrinho está vazio</h2>
+    <p>Adicione um celular ao carrinho antes de finalizar a compra.</p>
+    <a href="index.html" class="btn">Ver celulares</a>
+  </section>
+</main>
+
+<footer class="rodape">
+  <nav class="nav-rodape" aria-label="Rodapé">
+    <ul>
+      <li><a href="#">Sobre</a></li>
+      <li><a href="#">Contato</a></li>
+      <li><a href="#">Política de privacidade</a></li>
+      <li><a href="#">Acessibilidade</a></li>
+      <li><a href="design-system.html">Design system</a></li>
+    </ul>
+  </nav>
+  <address>
+    R. da Harmônia - Farol, Maceió - AL<br>
+    Telefone: (82) 4000-0000<br>
+    E-mail: <a href="mailto:contato@celstore.com.br">contato@celstore.com.br</a>
+  </address>
+  <p>&copy; 2026 CelStore. Todos os direitos reservados.</p>
+</footer>
+
+</body>
+</html>

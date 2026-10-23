@@ -1,16 +1,86 @@
 /* =========================================
-   VARIÁVEIS (Cores com alto contraste)
+   DESIGN SYSTEM: TOKENS
+   Todo valor de cor, tamanho e espaço usado no site nasce aqui.
+   Para mudar o visual, mude o token: o site inteiro acompanha.
+   (A página design-system.html mostra e testa estes valores. As razões de contraste dos
+   comentários abaixo são cortadas, e não arredondadas, em 1 casa decimal.)
 ========================================= */
 :root {
-    /* Contraste testado para WCAG AA (4.5:1) */
-    --cor-fundo: #ffffff;
-    --cor-texto: #222222; /* Contraste > 12:1 com o fundo */
-    --cor-primaria: #0056b3; /* Contraste > 7:1 com fundo branco */
+    /* ---------- CORES ---------- */
+    /* Marca e ação. Contraste testado para WCAG AA (mínimo 4,5:1 para texto). */
+    --cor-primaria: #0056b3;         /* 7,0:1 com branco */
     --cor-primaria-hover: #004494;
-    --cor-fundo-cabecalho: #1a1a1a;
-    --cor-texto-cabecalho: #ffffff;
-    --cor-erro: #b30000; /* Contraste > 7:1 com fundo branco */
-    --cor-borda: #767676; /* Contraste > 4.5:1 com fundo branco */
+    --cor-branco: #ffffff;           /* texto sobre fundos coloridos e escuros */
+
+    /* Texto e superfícies */
+    --cor-fundo: #ffffff;
+    --cor-texto: #222222;            /* 15,9:1 com o fundo */
+    --cor-texto-suave: #444444;      /* textos secundários: 9,7:1 */
+    --cor-superficie: #f9f9f9;       /* caixas e cartões */
+    --cor-superficie-rodape: #f1f1f1;
+    --cor-destaque-fundo: #e8f0fa;   /* fundo de hover/seleção */
+    --cor-fundo-cabecalho: #1a1a1a;  /* cabeçalho e newsletter */
+    --cor-texto-cabecalho: #ffffff;  /* 17,4:1 sobre o cabeçalho */
+
+    /* Bordas */
+    --cor-borda: #767676;            /* bordas de campos: 4,5:1 (exigido para componentes de interface) */
+    --cor-borda-suave: #e0e0e0;      /* divisórias só decorativas */
+
+    /* Feedback: nunca usados sozinhos, sempre com ícone + texto */
+    --cor-sucesso: #1b5e20;          /* 7,8:1 com branco */
+    --cor-sucesso-fundo: #e8f5e9;
+    --cor-erro: #b30000;             /* 7,2:1 com branco */
+    --cor-erro-fundo: #ffe6e6;
+    --cor-neutra-escura: #555555;    /* botão desabilitado ou carregando: 7,4:1 com branco */
+
+    /* ---------- TIPOGRAFIA (sem serifa; tamanhos em rem para acompanhar o zoom) ---------- */
+    --fonte-familia: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --fonte-pequena: 0.875rem;       /* 14px: dicas, legendas */
+    --fonte-base: 1rem;              /* 16px: texto corrido */
+    --fonte-media: 1.125rem;         /* 18px: destaque, botões grandes */
+    --fonte-grande: 1.25rem;         /* 20px: títulos de cartão */
+    --fonte-titulo-3: 1.5rem;        /* 24px: títulos de seção e preços */
+    --fonte-titulo-2: 1.75rem;       /* 28px: títulos de bloco */
+    --fonte-titulo-1: 2rem;          /* 32px: título da página */
+    --fonte-ilustracao: 2.5rem;      /* 40px: ícones de estado vazio */
+    --peso-normal: 400;
+    --peso-medio: 500;
+    --peso-semibold: 600;
+    --peso-negrito: 700;
+    --altura-linha: 1.5;
+
+    /* ---------- ESPAÇAMENTO (escala de 4 em 4 px, em rem) ---------- */
+    --espaco-1: 0.25rem;             /* 4px */
+    --espaco-2: 0.5rem;              /* 8px */
+    --espaco-3: 0.75rem;             /* 12px */
+    --espaco-4: 1rem;                /* 16px */
+    --espaco-5: 1.5rem;              /* 24px */
+    --espaco-6: 2rem;                /* 32px */
+    --espaco-7: 3rem;                /* 48px */
+    --espaco-8: 4rem;                /* 64px */
+
+    /* ---------- FORMA ---------- */
+    --raio-pequeno: 0.25rem;
+    --raio-medio: 0.5rem;
+    --raio-pilula: 999px;
+    --raio-redondo: 50%;
+    --borda-fina: 1px;
+    --borda-espessa: 2px;
+    --sombra-1: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --sombra-2: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --sombra-3: 0 8px 15px rgba(0, 0, 0, 0.1);
+    --sombra-aviso: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+    /* ---------- INTERAÇÃO ---------- */
+    --alvo-minimo: 2.75rem;          /* 44px: tamanho mínimo de qualquer botão, link de menu ou campo */
+    --foco-largura: 3px;
+    --foco-afastamento: 3px;
+    --transicao: 0.2s;
+
+    /* ---------- LAYOUT ---------- */
+    --largura-site: 75rem;
+    --largura-coluna: 40rem;
+    --largura-formulario: 35rem;
 }
 
 /* =========================================
@@ -23,11 +93,11 @@
 }
 
 body {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: var(--fonte-familia);
     background-color: var(--cor-fundo);
     color: var(--cor-texto);
-    font-size: 1rem; /* Base 16px, escalável */
-    line-height: 1.5;
+    font-size: var(--fonte-base); /* Base 16px, escalável */
+    line-height: var(--altura-linha);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -42,8 +112,17 @@ body {
 }
 
 *:focus-visible {
-    outline: 3px solid var(--cor-primaria);
-    outline-offset: 3px;
+    outline: var(--foco-largura) solid var(--cor-primaria);
+    outline-offset: var(--foco-afastamento);
+}
+
+/* Em fundos escuros (cabeçalho e newsletter), o azul --cor-primaria
+   cai pra 2.47:1 de contraste contra #1a1a1a — abaixo do 3:1 exigido
+   pro indicador de foco (critério 1.4.11). Nessas áreas o foco usa
+   branco, que já é a cor do texto ali (17.4:1 de contraste). */
+.cabecalho *:focus-visible,
+.newsletter *:focus-visible {
+    outline-color: var(--cor-branco);
 }
 
 /* =========================================
@@ -55,13 +134,13 @@ body {
     top: -100%;
     left: 1rem;
     background-color: var(--cor-primaria);
-    color: #ffffff;
-    padding: 1rem;
+    color: var(--cor-branco);
+    padding: var(--espaco-4);
     text-decoration: none;
-    font-weight: bold;
+    font-weight: var(--peso-negrito);
     z-index: 9999;
-    border-radius: 0 0 0.25rem 0.25rem;
-    transition: top 0.2s ease-in-out;
+    border-radius: 0 0 var(--raio-pequeno) var(--raio-pequeno);
+    transition: top var(--transicao) ease-in-out;
 }
 
 .skip-link:focus {
@@ -87,12 +166,12 @@ body {
 .cabecalho {
     background-color: var(--cor-fundo-cabecalho);
     color: var(--cor-texto-cabecalho);
-    padding: 1rem 5%;
+    padding: var(--espaco-4) 5%;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    gap: 1rem;
+    gap: var(--espaco-4);
 }
 
 .logo img {
@@ -104,16 +183,20 @@ body {
 .nav-principal ul {
     list-style: none;
     display: flex;
-    gap: 1.5rem;
+    gap: var(--espaco-2);
     flex-wrap: wrap;
 }
 
+/* O link ocupa pelo menos 44px de altura e largura: dá para tocar com o dedo sem errar */
 .nav-principal a {
     color: var(--cor-texto-cabecalho);
     text-decoration: none;
-    font-weight: 500;
-    padding: 0.5rem;
-    display: inline-block;
+    font-weight: var(--peso-medio);
+    padding: var(--espaco-2) var(--espaco-3);
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--alvo-minimo);
+    min-width: var(--alvo-minimo);
 }
 
 .nav-principal a:hover {
@@ -121,7 +204,7 @@ body {
 }
 
 .nav-principal a[aria-current="page"] {
-    border-bottom: 2px solid #ffffff;
+    border-bottom: var(--borda-espessa) solid var(--cor-branco);
 }
 
 /* =========================================
@@ -130,14 +213,14 @@ body {
 #conteudo {
     flex: 1;
     width: 100%;
-    max-width: 35rem; /* ~560px, uso de rem para escalar com o zoom */
-    margin: 3rem auto;
-    padding: 0 1.5rem;
+    max-width: var(--largura-formulario); /* ~560px, uso de rem para escalar com o zoom */
+    margin: var(--espaco-7) auto;
+    padding: 0 var(--espaco-5);
 }
 
 #conteudo h1 {
-    font-size: 2rem;
-    margin-bottom: 2rem;
+    font-size: var(--fonte-titulo-1);
+    margin-bottom: var(--espaco-6);
     text-align: center;
 }
 
@@ -145,42 +228,49 @@ body {
    FORMULÁRIO
 ========================================= */
 .formulario {
-    background-color: #f9f9f9;
-    padding: 2rem;
-    border-radius: 0.5rem;
-    border: 1px solid #e0e0e0;
+    background-color: var(--cor-superficie);
+    padding: var(--espaco-6);
+    border-radius: var(--raio-medio);
+    border: var(--borda-fina) solid var(--cor-borda-suave);
 }
 
 .campo {
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--espaco-5);
 }
 
 .campo label {
     display: block;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
+    font-weight: var(--peso-semibold);
+    margin-bottom: var(--espaco-2);
 }
 
 .campo input:not([type="checkbox"]) {
     width: 100%;
-    padding: 0.75rem;
-    border: 2px solid var(--cor-borda);
-    border-radius: 0.25rem;
-    font-size: 1rem;
+    min-height: var(--alvo-minimo);
+    padding: var(--espaco-3);
+    border: var(--borda-espessa) solid var(--cor-borda);
+    border-radius: var(--raio-pequeno);
+    font-size: var(--fonte-base);
     background-color: var(--cor-fundo);
 }
 
+/* .is-focus: mostra o campo "com foco" parado, na página design-system.html */
+.campo input.is-focus {
+    outline: var(--foco-largura) solid var(--cor-primaria);
+    outline-offset: var(--foco-afastamento);
+}
+
 .dica-campo {
-    font-size: 0.875rem;
-    color: #555555; /* Contraste de 5:1 */
-    margin-top: 0.5rem;
+    font-size: var(--fonte-pequena);
+    color: var(--cor-texto-suave); /* Contraste de 5:1 */
+    margin-top: var(--espaco-2);
 }
 
 /* Estilo do Checkbox "Lembrar de mim" */
 .lembrete {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--espaco-2);
 }
 
 .lembrete input[type="checkbox"] {
@@ -190,51 +280,35 @@ body {
 }
 
 .lembrete label {
+    /* O espaço em cima e embaixo (em vez de "display: flex") faz a linha ter 44px de altura
+       sem estragar os espaços ao redor de um link dentro do texto. */
+    padding: var(--espaco-3) 0;
     margin-bottom: 0;
-    font-weight: normal;
-}
-
-/* Botão de Submit */
-.formulario button {
-    width: 100%;
-    background-color: var(--cor-primaria);
-    color: #ffffff;
-    font-size: 1.125rem;
-    font-weight: bold;
-    padding: 1rem;
-    border: none;
-    border-radius: 0.25rem;
-    cursor: pointer;
-    margin-top: 1rem;
-    transition: background-color 0.2s;
-}
-
-.formulario button:hover {
-    background-color: var(--cor-primaria-hover);
+    font-weight: var(--peso-normal);
 }
 
 /* Mensagem de Erro (Oculta até ter conteúdo) */
 .mensagem-erro {
     display: none; /* Escondido por padrão */
-    background-color: #ffe6e6;
+    background-color: var(--cor-erro-fundo);
     color: var(--cor-erro);
-    border: 2px solid var(--cor-erro);
-    padding: 1rem;
-    border-radius: 0.25rem;
-    margin-bottom: 1.5rem;
-    font-weight: 600;
+    border: var(--borda-espessa) solid var(--cor-erro);
+    padding: var(--espaco-4);
+    border-radius: var(--raio-pequeno);
+    margin-bottom: var(--espaco-5);
+    font-weight: var(--peso-semibold);
 }
 
 /* Quando houver texto injetado pelo JS, ela aparece e insere um ícone via CSS */
 .mensagem-erro:not(:empty) {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--espaco-2);
 }
 
 .mensagem-erro:not(:empty)::before {
     content: "⚠️"; /* Ícone exigido para não depender apenas da cor */
-    font-size: 1.25rem;
+    font-size: var(--fonte-grande);
 }
 
 /* =========================================
@@ -242,19 +316,22 @@ body {
 ========================================= */
 .links-auxiliares {
     list-style: none;
-    margin-top: 1.5rem;
+    margin-top: var(--espaco-5);
     text-align: center;
 }
 
 .links-auxiliares li {
-    margin-bottom: 0.75rem;
+    margin-bottom: var(--espaco-3);
 }
 
 .links-auxiliares a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--alvo-minimo);
     color: var(--cor-primaria);
     text-decoration: underline;
-    font-weight: 500;
-    padding: 0.25rem;
+    font-weight: var(--peso-medio);
+    padding: var(--espaco-2) var(--espaco-3);
 }
 
 .links-auxiliares a:hover {
@@ -266,9 +343,9 @@ body {
    RODAPÉ
 ========================================= */
 .rodape {
-    background-color: #f1f1f1;
-    border-top: 1px solid #e0e0e0;
-    padding: 2rem 5%;
+    background-color: var(--cor-superficie-rodape);
+    border-top: var(--borda-fina) solid var(--cor-borda-suave);
+    padding: var(--espaco-6) 5%;
     text-align: center;
     margin-top: auto; /* Empurra o rodapé pro final se a página for curta */
 }
@@ -278,17 +355,26 @@ body {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 1.5rem;
-    margin-bottom: 1rem;
+    gap: var(--espaco-2);
+    margin-bottom: var(--espaco-4);
 }
 
 .nav-rodape a {
-    color: #444444; /* Contraste validado > 4.5:1 */
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--alvo-minimo);
+    padding: var(--espaco-2) var(--espaco-3);
+    color: var(--cor-texto-suave); /* Contraste validado > 4.5:1 */
     text-decoration: underline;
 }
 
 .nav-rodape a:hover {
     color: var(--cor-texto);
+}
+
+.nav-rodape a[aria-current="page"] {
+    font-weight: var(--peso-negrito);
+    text-decoration: none;
 }
 
 /* =========================================
@@ -309,25 +395,31 @@ body {
    CADASTRO: FIELDSETS E PREFERÊNCIAS
 ========================================= */
 fieldset {
-    border: 2px solid var(--cor-borda);
-    border-radius: 0.5rem;
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
+    border: var(--borda-espessa) solid var(--cor-borda);
+    border-radius: var(--raio-medio);
+    padding: var(--espaco-5);
+    margin-bottom: var(--espaco-5);
     background-color: var(--cor-fundo);
 }
 
 legend {
-    font-size: 1.125rem;
-    font-weight: bold;
+    font-size: var(--fonte-media);
+    font-weight: var(--peso-negrito);
     color: var(--cor-texto);
-    padding: 0 0.5rem;
+    padding: 0 var(--espaco-2);
 }
 
 /* Estrutura flexível para alinhar os checkboxes com os textos */
 .preferencias .campo {
     display: flex;
+    flex-wrap: wrap; /* a mensagem de erro (.erro-campo) desce para a linha de baixo */
     align-items: center; /* Alinha o quadrado do checkbox com o meio do texto */
-    gap: 0.5rem;
+    gap: var(--espaco-2);
+}
+
+.preferencias .erro-campo {
+    flex-basis: 100%;
+    margin-top: 0;
 }
 
 .preferencias input[type="checkbox"] {
@@ -339,15 +431,17 @@ legend {
 }
 
 .preferencias label {
+    flex: 1;
+    padding: var(--espaco-3) 0; /* a linha toda é clicável, com mais de 44px de altura */
     margin-bottom: 0; /* Sobrescreve a margem que colocamos nos campos de texto */
-    font-weight: normal;
+    font-weight: var(--peso-normal);
     cursor: pointer;
 }
 
 /* Links dentro das preferências (ex: "termos de uso") */
 .preferencias a {
     color: var(--cor-primaria);
-    font-weight: 600;
+    font-weight: var(--peso-semibold);
     text-decoration: underline;
 }
 
@@ -361,12 +455,12 @@ legend {
 ========================================= */
 #conteudo {
     /* Substitui a largura antiga de 35rem para acomodar a grade de produtos */
-    max-width: 75rem; 
+    max-width: var(--largura-site);
 }
 
 .formulario, .links-auxiliares {
     /* Mantém os formulários de login/cadastro estreitos e centralizados */
-    max-width: 35rem; 
+    max-width: var(--largura-formulario);
     margin-left: auto;
     margin-right: auto;
 }
@@ -376,7 +470,7 @@ legend {
 ========================================= */
 .busca {
     display: flex;
-    gap: 0.5rem;
+    gap: var(--espaco-2);
     align-items: center;
     width: 100%;
     max-width: 20rem;
@@ -384,48 +478,34 @@ legend {
 
 .busca input[type="search"] {
     width: 100%;
-    padding: 0.5rem;
-    border: 2px solid var(--cor-borda);
-    border-radius: 0.25rem;
-    font-size: 1rem;
-}
-
-.busca button {
-    background-color: var(--cor-primaria);
-    color: #ffffff;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 0.25rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.busca button:hover {
-    background-color: var(--cor-primaria-hover);
+    min-height: var(--alvo-minimo);
+    padding: var(--espaco-2);
+    border: var(--borda-espessa) solid var(--cor-borda);
+    border-radius: var(--raio-pequeno);
+    font-size: var(--fonte-base);
 }
 
 /* =========================================
    DESTAQUES (BANNER)
 ========================================= */
 .destaques {
-    margin-bottom: 4rem;
+    margin-bottom: var(--espaco-8);
     text-align: center;
 }
 
 .banner {
     max-width: 100%;
     height: auto;
-    border-radius: 0.5rem;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border-radius: var(--raio-medio);
+    box-shadow: var(--sombra-2);
 }
 
 /* =========================================
    TÍTULOS DAS SEÇÕES
 ========================================= */
 .ofertas h2, .vantagens h2, .newsletter h2 {
-    font-size: 1.75rem;
-    margin-bottom: 2rem;
+    font-size: var(--fonte-titulo-2);
+    margin-bottom: var(--espaco-6);
     text-align: center;
     color: var(--cor-texto);
     grid-column: 1 / -1; /* Garante que o título ocupe toda a linha nas grades */
@@ -437,90 +517,62 @@ legend {
 .ofertas {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-    gap: 2rem;
-    margin-bottom: 4rem;
+    gap: var(--espaco-6);
+    margin-bottom: var(--espaco-8);
 }
 
 .produto {
     background-color: var(--cor-fundo);
-    border: 1px solid #e0e0e0;
-    border-radius: 0.5rem;
-    padding: 1.5rem;
+    border: var(--borda-fina) solid var(--cor-borda-suave);
+    border-radius: var(--raio-medio);
+    padding: var(--espaco-5);
     display: flex;
     flex-direction: column;
     text-align: center;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: var(--sombra-1);
+    transition: transform var(--transicao), box-shadow var(--transicao);
 }
 
 .produto:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+    box-shadow: var(--sombra-3);
 }
 
 .produto img {
     max-width: 100%;
     height: auto;
-    margin-bottom: 1rem;
+    margin-bottom: var(--espaco-4);
 }
 
 .produto h3 {
-    font-size: 1.25rem;
-    margin-bottom: 0.5rem;
+    font-size: var(--fonte-grande);
+    margin-bottom: var(--espaco-2);
 }
 
 .preco {
-    margin-bottom: 1rem;
+    margin-bottom: var(--espaco-4);
 }
 
 .preco del {
-    color: #555555;
-    font-size: 0.875rem;
-    margin-right: 0.5rem;
+    color: var(--cor-texto-suave);
+    font-size: var(--fonte-pequena);
+    margin-right: var(--espaco-2);
 }
 
 .preco ins {
     color: var(--cor-primaria);
-    font-size: 1.5rem;
-    font-weight: bold;
+    font-size: var(--fonte-titulo-3);
+    font-weight: var(--peso-negrito);
     text-decoration: none;
 }
 
 .especificacoes {
     list-style: inside disc;
     text-align: left;
-    color: #444444;
-    font-size: 0.875rem;
-    margin-bottom: 1.5rem;
+    color: var(--cor-texto-suave);
+    font-size: var(--fonte-pequena);
+    margin-bottom: var(--espaco-5);
     flex-grow: 1; /* Empurra os botões perfeitamente para a parte inferior do card */
-}
-
-.produto button {
-    background-color: var(--cor-primaria);
-    color: #ffffff;
-    border: none;
-    padding: 0.75rem;
-    border-radius: 0.25rem;
-    font-weight: bold;
-    font-size: 1rem;
-    cursor: pointer;
-    width: 100%;
-    margin-bottom: 0.75rem;
-    transition: background-color 0.2s;
-}
-
-.produto button:hover {
-    background-color: var(--cor-primaria-hover);
-}
-
-.produto a {
-    color: var(--cor-primaria);
-    font-weight: 500;
-    text-decoration: underline;
-}
-
-.produto a:hover {
-    text-decoration: none;
 }
 
 /* =========================================
@@ -530,18 +582,18 @@ legend {
     display: flex;
     flex-wrap: wrap;
     justify-content: center; /* O segredo para centralizar tudo */
-    gap: 2rem;
-    background-color: #f9f9f9;
-    padding: 2rem;
-    border-radius: 0.5rem;
-    margin-bottom: 4rem;
-    border: 1px solid #e0e0e0;
+    gap: var(--espaco-6);
+    background-color: var(--cor-superficie);
+    padding: var(--espaco-6);
+    border-radius: var(--raio-medio);
+    margin-bottom: var(--espaco-8);
+    border: var(--borda-fina) solid var(--cor-borda-suave);
 }
 
 .vantagens h2 {
     width: 100%; /* No flexbox, isso força o título a ocupar a linha de ponta a ponta */
     text-align: center;
-    margin-bottom: 2.5rem;
+    margin-bottom: var(--espaco-6);
 }
 
 .vantagem {
@@ -554,20 +606,20 @@ legend {
 }
 
 .icone {
-    margin-bottom: 1rem;
+    margin-bottom: var(--espaco-4);
 }
 
 .vantagem h3 {
-    font-size: 1.125rem;
+    font-size: var(--fonte-media);
     color: var(--cor-primaria);
-    margin-bottom: 0.5rem;
+    margin-bottom: var(--espaco-2);
 }
 
 .vantagem p {
-    font-size: 0.875rem;
-    color: #444444;
+    font-size: var(--fonte-pequena);
+    color: var(--cor-texto-suave);
     text-wrap: balance; /* Essa propriedade mágica divide as linhas do texto em tamanhos iguais */
-    line-height: 1.5; /* Dá um respiro melhor entre as linhas */
+    line-height: var(--altura-linha); /* Dá um respiro melhor entre as linhas */
 }
 
 /* =========================================
@@ -576,10 +628,10 @@ legend {
 .newsletter {
     background-color: var(--cor-fundo-cabecalho);
     color: var(--cor-texto-cabecalho);
-    padding: 3rem 2rem;
-    border-radius: 0.5rem;
+    padding: var(--espaco-7) var(--espaco-6);
+    border-radius: var(--raio-medio);
     text-align: center;
-    margin-bottom: 4rem;
+    margin-bottom: var(--espaco-8);
 }
 
 .newsletter h2 {
@@ -587,44 +639,1082 @@ legend {
 }
 
 .newsletter p {
-    margin-bottom: 1.5rem;
-    font-size: 1.125rem;
+    margin-bottom: var(--espaco-5);
+    font-size: var(--fonte-media);
 }
 
 .newsletter form {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--espaco-2);
     flex-wrap: wrap;
 }
 
 .newsletter label {
-    font-weight: bold;
-    margin-right: 0.5rem;
+    font-weight: var(--peso-negrito);
+    margin-right: var(--espaco-2);
 }
 
 .newsletter input[type="email"] {
-    padding: 0.75rem;
+    min-height: var(--alvo-minimo);
+    padding: var(--espaco-3);
     border: none;
-    border-radius: 0.25rem;
-    font-size: 1rem;
+    border-radius: var(--raio-pequeno);
+    font-size: var(--fonte-base);
     width: 100%;
     max-width: 20rem;
 }
 
-.newsletter button {
+/* =========================================
+   AV2: COMPONENTES DAS NOVAS TELAS
+   (produto, carrinho, checkout e confirmação)
+========================================= */
+
+/* =========================================
+   COMPONENTE: BOTÃO (.btn)
+   Um único componente para TODOS os botões e links-botão do site (substitui os 5 estilos antigos).
+   Serve para <button> e <a>. Tamanho mínimo: 44x44px (--alvo-minimo).
+   Variações:  .btn (primário)  ·  .btn-secundario (contorno)  ·  .btn-link (discreto)
+   Tamanhos:   .btn-grande (botão de formulário)  ·  .btn-bloco (largura total)
+   Estados:    padrão · hover · foco · desabilitado (aria-disabled) · carregando (aria-busy)
+   As classes .is-hover e .is-focus existem só para a página design-system.html
+   mostrar o estado "parado"; no site, quem ativa é o :hover e o :focus-visible de verdade.
+========================================= */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--espaco-3);
+    min-height: var(--alvo-minimo);
+    min-width: var(--alvo-minimo);
+    padding: var(--espaco-3) var(--espaco-5);
     background-color: var(--cor-primaria);
-    color: #ffffff;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.25rem;
-    font-weight: bold;
-    font-size: 1rem;
+    color: var(--cor-branco);
+    border: var(--borda-espessa) solid var(--cor-primaria);
+    border-radius: var(--raio-pequeno);
+    font-family: inherit;
+    font-size: var(--fonte-base);
+    font-weight: var(--peso-negrito);
+    line-height: 1.25;
+    text-align: center;
+    text-decoration: none;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background-color var(--transicao), border-color var(--transicao), color var(--transicao);
 }
 
-.newsletter button:hover {
+/* Hover */
+.btn:hover,
+.btn.is-hover {
     background-color: var(--cor-primaria-hover);
+    border-color: var(--cor-primaria-hover);
+}
+
+/* Foco: o contorno global (*:focus-visible, lá em cima) já cuida do teclado. */
+.btn.is-focus {
+    outline: var(--foco-largura) solid var(--cor-primaria);
+    outline-offset: var(--foco-afastamento);
+}
+
+/* Variação secundária: contorno, para ações menos importantes */
+.btn-secundario {
+    background-color: var(--cor-fundo);
+    color: var(--cor-primaria);
+}
+
+.btn-secundario:hover,
+.btn-secundario.is-hover {
+    background-color: var(--cor-destaque-fundo);
+    border-color: var(--cor-primaria-hover);
+    color: var(--cor-primaria-hover);
+}
+
+/* Variação "link": ações discretas, como Remover */
+.btn-link {
+    background-color: transparent;
+    border-color: transparent;
+    color: var(--cor-primaria);
+    text-decoration: underline;
+    padding: var(--espaco-2) var(--espaco-3);
+}
+
+.btn-link:hover,
+.btn-link.is-hover {
+    background-color: var(--cor-destaque-fundo);
+    border-color: transparent;
+    color: var(--cor-primaria-hover);
+    text-decoration: none;
+}
+
+/* Desabilitado. Usamos aria-disabled (e não "disabled") para o botão continuar recebendo foco do teclado.
+   Cinza escuro com texto branco: 7,4:1 de contraste. */
+.btn[aria-disabled="true"],
+.btn[aria-disabled="true"]:hover {
+    background-color: var(--cor-neutra-escura);
+    border-color: var(--cor-neutra-escura);
+    color: var(--cor-branco);
+    cursor: not-allowed;
+}
+
+.btn-secundario[aria-disabled="true"],
+.btn-secundario[aria-disabled="true"]:hover {
+    background-color: var(--cor-fundo);
+    color: var(--cor-neutra-escura);
+}
+
+.btn-link[aria-disabled="true"],
+.btn-link[aria-disabled="true"]:hover {
+    background-color: transparent;
+    border-color: transparent;
+    color: var(--cor-neutra-escura);
+    text-decoration: none;
+}
+
+/* Carregando: cursor de espera e um círculo girando antes do texto (o texto também muda,
+   por exemplo "Processando pedido…", então não depende só da animação). */
+.btn[aria-busy="true"],
+.btn[aria-busy="true"]:hover {
+    cursor: progress;
+}
+
+.btn[aria-busy="true"]::before {
+    content: "";
+    flex-shrink: 0;
+    width: 1.1em;
+    height: 1.1em;
+    border: 3px solid rgba(255, 255, 255, 0.4);
+    border-top-color: var(--cor-branco);
+    border-radius: var(--raio-redondo);
+    animation: girar 0.8s linear infinite;
+}
+
+.btn-secundario[aria-busy="true"]::before {
+    border-color: rgba(85, 85, 85, 0.3);
+    border-top-color: var(--cor-neutra-escura);
+}
+
+/* Tamanhos */
+.btn-grande {
+    padding: var(--espaco-4);
+    font-size: var(--fonte-media);
+}
+
+/* Botão que ocupa a largura toda do contêiner */
+.btn-bloco {
+    display: flex;
+    width: 100%;
+    padding-left: var(--espaco-3); /* menos folga nas laterais: "Adicionar ao carrinho" cabe em uma linha no cartão */
+    padding-right: var(--espaco-3);
+}
+
+.btn-bloco + .btn-bloco {
+    margin-top: var(--espaco-3);
+}
+
+/* O círculo do botão "carregando" gira; quem pede menos movimento no sistema (regra
+   "prefers-reduced-motion", lá em cima) recebe o círculo parado, e o texto continua dizendo o que acontece. */
+@keyframes girar {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Dentro de um formulário, o botão de enviar ganha um respiro em cima */
+.formulario .btn-bloco {
+    margin-top: var(--espaco-4);
+}
+
+/* ---------- Títulos de seção ---------- */
+.titulo-secao {
+    font-size: var(--fonte-titulo-3);
+    margin-bottom: var(--espaco-4);
+}
+
+/* ---------- Migalhas de pão (produto) ---------- */
+.migalhas {
+    margin-bottom: var(--espaco-5);
+}
+
+.migalhas ol {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    font-size: var(--fonte-pequena);
+}
+
+.migalhas li {
+    display: flex;
+    align-items: center;
+}
+
+.migalhas li + li::before {
+    content: "›";
+    content: "›" / ""; /* separador decorativo: leitor de tela ignora */
+    margin: 0 var(--espaco-2);
+    color: var(--cor-texto-suave);
+}
+
+.migalhas a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--alvo-minimo);
+    min-width: var(--alvo-minimo);
+    padding: 0 var(--espaco-1);
+    color: var(--cor-primaria);
+    text-decoration: underline;
+}
+
+.migalhas a:hover {
+    color: var(--cor-primaria-hover);
+    text-decoration: none;
+}
+
+.migalhas [aria-current="page"] {
+    font-weight: var(--peso-semibold);
+}
+
+/* ---------- Indicador de etapas da compra ---------- */
+.etapas {
+    margin-bottom: var(--espaco-6);
+}
+
+.etapas ol {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--espaco-3) var(--espaco-6);
+    counter-reset: etapa;
+}
+
+.etapas li {
+    display: flex;
+    align-items: center;
+    gap: var(--espaco-2);
+    color: var(--cor-texto-suave);
+    font-weight: var(--peso-semibold);
+    counter-increment: etapa;
+}
+
+/* Marcador numerado de cada etapa (decorativo: o texto da etapa já está no <li>) */
+.etapas li::before {
+    content: counter(etapa);
+    content: counter(etapa) / "";
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 2rem;
+    height: 2rem;
+    background-color: var(--cor-fundo);
+    border: var(--borda-espessa) solid var(--cor-borda);
+    border-radius: var(--raio-redondo);
+    font-weight: var(--peso-negrito);
+}
+
+/* Etapa atual: círculo preenchido (não depende só da cor) */
+.etapas li[aria-current="step"] {
+    color: var(--cor-primaria);
+}
+
+.etapas li[aria-current="step"]::before {
+    background-color: var(--cor-primaria);
+    border-color: var(--cor-primaria);
+    color: var(--cor-branco);
+}
+
+/* Etapa concluída: troca o número por um ✓ (declarada depois para vencer a regra acima) */
+.etapas li.etapa-concluida::before {
+    content: "✓";
+    content: "✓" / "";
+    background-color: var(--cor-sucesso);
+    border-color: var(--cor-sucesso);
+    color: var(--cor-branco);
+}
+
+.etapas li.etapa-concluida[aria-current="step"] {
+    color: var(--cor-sucesso);
+}
+
+.etapas a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--alvo-minimo);
+    color: inherit;
+    text-decoration: underline;
+}
+
+.etapas a:hover {
+    text-decoration: none;
+}
+
+/* ---------- Página de produto ---------- */
+.detalhe {
+    display: grid;
+    gap: var(--espaco-6);
+    margin-bottom: var(--espaco-7);
+}
+
+.detalhe-imagem {
+    background-color: var(--cor-superficie);
+    border: var(--borda-fina) solid var(--cor-borda-suave);
+    border-radius: var(--raio-medio);
+    padding: var(--espaco-5);
+}
+
+.detalhe-imagem img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    max-height: 32rem;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+
+/* O seletor começa em #conteudo para vencer "#conteudo h1" (centralizado) */
+#conteudo .detalhe-info h1 {
+    text-align: left;
+    margin-bottom: var(--espaco-4);
+}
+
+.detalhe-info .preco {
+    margin-bottom: var(--espaco-2);
+}
+
+.detalhe-info .preco ins {
+    font-size: var(--fonte-titulo-1);
+}
+
+.parcelamento {
+    color: var(--cor-texto-suave);
+    margin-bottom: var(--espaco-5);
+}
+
+.form-compra {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: var(--espaco-4);
+    margin-bottom: var(--espaco-5);
+}
+
+.form-compra .campo {
+    margin-bottom: 0;
+}
+
+.campo-quantidade {
+    width: 6.5rem;
+}
+
+.beneficios {
+    list-style: none;
+    border-top: var(--borda-fina) solid var(--cor-borda-suave);
+    padding-top: var(--espaco-4);
+    color: var(--cor-texto-suave);
+}
+
+.beneficios li {
+    position: relative;
+    padding-left: var(--espaco-5);
+    margin-bottom: var(--espaco-2);
+}
+
+.beneficios li::before {
+    content: "✓";
+    content: "✓" / "";
+    position: absolute;
+    left: 0;
+    color: var(--cor-sucesso);
+    font-weight: var(--peso-negrito);
+}
+
+.especificacoes-detalhe {
+    margin-bottom: var(--espaco-7);
+}
+
+.tabela-specs {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--cor-fundo);
+    border: var(--borda-fina) solid var(--cor-borda-suave);
+}
+
+.tabela-specs th,
+.tabela-specs td {
+    text-align: left;
+    padding: var(--espaco-3) var(--espaco-4);
+    border-bottom: var(--borda-fina) solid var(--cor-borda-suave);
+}
+
+.tabela-specs th {
+    width: 40%;
+    background-color: var(--cor-superficie);
+    font-weight: var(--peso-semibold);
+}
+
+.tabela-specs tr:last-child th,
+.tabela-specs tr:last-child td {
+    border-bottom: 0;
+}
+
+/* ---------- Carrinho e checkout: layout em duas colunas ---------- */
+.layout-compra {
+    display: grid;
+    gap: var(--espaco-6);
+    align-items: start;
+    margin-bottom: var(--espaco-7);
+}
+
+/* Sobrescreve a largura estreita (35rem) usada nos formulários de login/cadastro */
+.layout-compra .formulario {
+    max-width: none;
+    margin: 0;
+}
+
+.lista-carrinho {
+    list-style: none;
+    display: grid;
+    gap: var(--espaco-4);
+}
+
+.item-carrinho {
+    display: grid;
+    grid-template-columns: 6rem minmax(0, 1fr) auto;
+    gap: var(--espaco-4);
+    align-items: start;
+    padding: var(--espaco-4);
+    background-color: var(--cor-fundo);
+    border: var(--borda-fina) solid var(--cor-borda-suave);
+    border-radius: var(--raio-medio);
+}
+
+.item-carrinho img {
+    width: 6rem;
+    aspect-ratio: 1;
+    height: auto;
+    object-fit: contain;
+    background-color: var(--cor-superficie);
+    border-radius: var(--raio-pequeno);
+}
+
+.item-info h3 {
+    font-size: var(--fonte-media);
+    margin-bottom: var(--espaco-1);
+}
+
+.item-preco {
+    color: var(--cor-texto-suave);
+    font-size: var(--fonte-pequena);
+    margin-bottom: var(--espaco-3);
+}
+
+.item-acoes {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: var(--espaco-2) var(--espaco-4);
+}
+
+.item-acoes .campo {
+    margin-bottom: 0;
+}
+
+.item-subtotal {
+    font-size: var(--fonte-media);
+    font-weight: var(--peso-negrito);
+    white-space: nowrap;
+}
+
+/* ---------- Resumo do pedido (carrinho, checkout, confirmação) ---------- */
+.resumo {
+    background-color: var(--cor-superficie);
+    border: var(--borda-fina) solid var(--cor-borda-suave);
+    border-radius: var(--raio-medio);
+    padding: var(--espaco-5);
+}
+
+.resumo-itens {
+    list-style: none;
+    margin-bottom: var(--espaco-4);
+    padding-bottom: var(--espaco-4);
+    border-bottom: var(--borda-fina) solid var(--cor-borda-suave);
+}
+
+.resumo-itens li,
+.resumo-valores div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline; /* rótulo e valor na mesma linha de base, mesmo com fontes de tamanhos diferentes */
+    gap: var(--espaco-4);
+    margin-bottom: var(--espaco-2);
+}
+
+.resumo-valores dd {
+    font-weight: var(--peso-semibold);
+}
+
+.resumo-valores .resumo-total {
+    margin-top: var(--espaco-3);
+    padding-top: var(--espaco-3);
+    border-top: var(--borda-fina) solid var(--cor-borda);
+    font-size: var(--fonte-grande);
+    font-weight: var(--peso-negrito);
+}
+
+.resumo-valores .resumo-total dd {
+    font-size: var(--fonte-titulo-3);
+}
+
+.resumo-parcelas {
+    color: var(--cor-texto-suave);
+    font-size: var(--fonte-pequena);
+    margin: var(--espaco-4) 0 var(--espaco-5);
+}
+
+/* ---------- Formulário de checkout ---------- */
+.campo select {
+    width: 100%;
+    padding: var(--espaco-3);
+    border: var(--borda-espessa) solid var(--cor-borda);
+    border-radius: var(--raio-pequeno);
+    font-family: inherit;
+    font-size: var(--fonte-base);
+    color: var(--cor-texto);
+    background-color: var(--cor-fundo);
+}
+
+/* Dois campos lado a lado; empilham sozinhos quando não cabem */
+.campos-linha {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+    gap: 0 var(--espaco-4);
+}
+
+/* Opção de rádio: a caixa inteira é clicável e tem pelo menos 44px de altura */
+.opcao {
+    display: flex;
+    align-items: center;
+    gap: var(--espaco-3);
+    padding: 0 var(--espaco-3);
+    margin-bottom: var(--espaco-3);
+    background-color: var(--cor-fundo);
+    border: var(--borda-espessa) solid var(--cor-borda);
+    border-radius: var(--raio-pequeno);
+}
+
+.pagamento .opcao:last-child {
+    margin-bottom: 0;
+}
+
+.opcao input[type="radio"] {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex-shrink: 0;
+    accent-color: var(--cor-primaria);
+    cursor: pointer;
+}
+
+.opcao label {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-height: var(--alvo-minimo); /* o label é a área clicável: precisa ter 44px de altura */
+    cursor: pointer;
+}
+
+/* Melhoria progressiva: destaca a opção marcada (o rádio marcado já mostra o estado por si só) */
+.opcao:has(input:checked) {
+    border-color: var(--cor-primaria);
+    background-color: var(--cor-destaque-fundo);
+}
+
+/* ---------- Confirmação do pedido ---------- */
+.coluna-estreita {
+    max-width: var(--largura-coluna);
+    margin: 0 auto;
+}
+
+.confirmacao {
+    text-align: center;
+    background-color: var(--cor-sucesso-fundo);
+    border: var(--borda-espessa) solid var(--cor-sucesso);
+    border-radius: var(--raio-medio);
+    padding: var(--espaco-6) var(--espaco-5);
+    margin-bottom: var(--espaco-5);
+}
+
+.icone-sucesso {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    margin-bottom: var(--espaco-4);
+    background-color: var(--cor-sucesso);
+    border-radius: var(--raio-redondo);
+    color: var(--cor-branco);
+    font-size: var(--fonte-titulo-2);
+    font-weight: var(--peso-negrito);
+}
+
+.confirmacao h2,
+.confirmacao h3,
+.confirmacao h4 {
+    font-size: var(--fonte-titulo-3);
+    color: var(--cor-sucesso);
+    margin-bottom: var(--espaco-2);
+}
+
+.numero-pedido {
+    margin-top: var(--espaco-4);
+}
+
+.acoes-finais {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--espaco-3);
+    margin-top: var(--espaco-6);
+}
+
+/* ---------- Telas maiores (em em, para acompanhar o zoom do navegador) ---------- */
+@media (min-width: 48em) {
+    .detalhe {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: start;
+    }
+}
+
+@media (min-width: 56em) {
+    .layout-compra {
+        grid-template-columns: minmax(0, 2fr) minmax(18rem, 1fr);
+    }
+
+    .layout-compra .resumo {
+        position: sticky;
+        top: 1rem;
+    }
+}
+
+/* ---------- Telas pequenas: o item do carrinho vira uma coluna só ---------- */
+@media (max-width: 30em) {
+    .item-carrinho {
+        grid-template-columns: 5rem minmax(0, 1fr);
+    }
+
+    .item-carrinho img {
+        width: 5rem;
+    }
+
+    .item-subtotal {
+        grid-column: 2;
+    }
+}
+
+/* =========================================
+   AV2: JAVASCRIPT (contador do carrinho e avisos)
+========================================= */
+
+/* Sem isto, um elemento com "display" definido no CSS (flex, inline-block...)
+   continuaria visível mesmo com o atributo hidden. */
+[hidden] {
+    display: none !important;
+}
+
+/* Número de itens ao lado de "Carrinho", no menu (17:1 de contraste: #1a1a1a sobre branco) */
+.contador {
+    display: inline-block;
+    min-width: 1.5rem;
+    margin-left: var(--espaco-2);
+    padding: 0 var(--espaco-2);
+    background-color: var(--cor-branco);
+    color: var(--cor-fundo-cabecalho);
+    border-radius: var(--raio-pilula);
+    font-size: var(--fonte-pequena);
+    font-weight: var(--peso-negrito);
+    line-height: 1.5rem;
+    text-align: center;
+}
+
+/* Estado "carrinho vazio": caixa tracejada com ícone, mensagem e um botão para voltar à loja */
+.estado-vazio {
+    max-width: 32rem;
+    margin: var(--espaco-6) auto var(--espaco-7);
+    padding: var(--espaco-6) var(--espaco-5);
+    text-align: center;
+    background-color: var(--cor-superficie);
+    border: var(--borda-espessa) dashed var(--cor-borda);
+    border-radius: var(--raio-medio);
+}
+
+.icone-vazio {
+    display: block;
+    margin-bottom: var(--espaco-2);
+    font-size: var(--fonte-ilustracao);
+}
+
+.estado-vazio h2,
+.estado-vazio h3,
+.estado-vazio h4,
+#conteudo .estado-vazio h1 {
+    font-size: var(--fonte-titulo-3);
+    margin-bottom: var(--espaco-2);
+}
+
+.estado-vazio p {
+    margin-bottom: var(--espaco-5);
+    color: var(--cor-texto-suave);
+}
+
+/* Caixa de aviso (sucesso ou erro) fixa no rodapé da tela */
+.aviso {
+    position: fixed;
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 1000;
+    max-width: 38rem;
+    margin: 0 auto; /* com left/right definidos, centraliza a caixa */
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--espaco-2) var(--espaco-4);
+    padding: var(--espaco-4);
+    color: var(--cor-texto);
+    background-color: var(--cor-sucesso-fundo);
+    border: var(--borda-espessa) solid var(--cor-sucesso);
+    border-radius: var(--raio-medio);
+    box-shadow: var(--sombra-aviso);
+}
+
+.aviso-texto {
+    flex: 1 1 14rem;
+    font-weight: var(--peso-semibold);
+}
+
+/* O ícone vem antes do texto, então o estado não depende só da cor */
+.aviso-texto::before {
+    content: "✓";
+    content: "✓" / "";
+    margin-right: var(--espaco-2);
+    color: var(--cor-sucesso);
+    font-weight: var(--peso-negrito);
+}
+
+.aviso-erro {
+    background-color: var(--cor-erro-fundo);
+    border-color: var(--cor-erro);
+}
+
+.aviso-erro .aviso-texto::before {
+    content: "⚠️";
+    content: "⚠️" / "";
+    color: var(--cor-erro);
+}
+/* =========================================
+   AV2: CHECKOUT E CONFIRMAÇÃO (erros, carregando, dados do pedido)
+========================================= */
+
+/* Campo com erro: borda vermelha. A cor sozinha não basta, por isso o erro também
+   ganha ícone + texto logo abaixo (.erro-campo) e o aria-invalid avisa os leitores de tela. */
+.campo input[aria-invalid="true"],
+.campo select[aria-invalid="true"] {
+    border-color: var(--cor-erro);
+}
+
+.erro-campo {
+    margin-top: var(--espaco-2);
+    color: var(--cor-erro); /* 7:1 de contraste */
+    font-size: var(--fonte-pequena);
+    font-weight: var(--peso-semibold);
+}
+
+.erro-campo::before {
+    content: "⚠️";
+    content: "⚠️" / "";
+    margin-right: var(--espaco-2);
+}
+
+.pagamento .erro-campo {
+    margin-top: var(--espaco-3);
+}
+
+/* Dois blocos "resumo" empilhados na confirmação */
+.resumo + .resumo {
+    margin-top: var(--espaco-4);
+}
+
+.dados-pedido dt {
+    font-weight: var(--peso-semibold);
+}
+
+.dados-pedido dd {
+    margin: 0 0 var(--espaco-3);
+    color: var(--cor-texto-suave);
+}
+
+.dados-pedido dd:last-child {
+    margin-bottom: 0;
+}
+
+/* =========================================
+   PÁGINA DO DESIGN SYSTEM (design-system.html)
+   Só organiza a "vitrine"; os componentes mostrados ali usam as classes do próprio site.
+========================================= */
+.ds-intro {
+    max-width: var(--largura-coluna);
+    margin: 0 auto var(--espaco-5);
+    text-align: center;
+    color: var(--cor-texto-suave);
+}
+
+.ds-indice ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--espaco-2);
+    margin-bottom: var(--espaco-7);
+}
+
+.ds-indice a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--alvo-minimo);
+    padding: var(--espaco-2) var(--espaco-4);
+    color: var(--cor-primaria);
+    font-weight: var(--peso-semibold);
+    text-decoration: none;
+    border: var(--borda-espessa) solid var(--cor-primaria);
+    border-radius: var(--raio-pilula);
+}
+
+.ds-indice a:hover {
+    background-color: var(--cor-destaque-fundo);
+}
+
+.ds-secao {
+    margin-bottom: var(--espaco-8);
+}
+
+.ds-secao > p {
+    max-width: var(--largura-coluna);
+    margin-bottom: var(--espaco-5);
+    color: var(--cor-texto-suave);
+}
+
+.ds-secao h3 {
+    margin: var(--espaco-6) 0 var(--espaco-3);
+    font-size: var(--fonte-grande);
+}
+
+.ds-secao code {
+    padding: 0 var(--espaco-1);
+    background-color: var(--cor-superficie-rodape);
+    border-radius: var(--raio-pequeno);
+    font-size: var(--fonte-pequena);
+}
+
+/* Cores */
+.ds-cores {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+    gap: var(--espaco-4);
+}
+
+.ds-cor {
+    overflow: hidden;
+    background-color: var(--cor-fundo);
+    border: var(--borda-fina) solid var(--cor-borda);
+    border-radius: var(--raio-medio);
+}
+
+.ds-amostra {
+    display: block;
+    height: 4rem;
+    background-color: var(--amostra);
+    border-bottom: var(--borda-fina) solid var(--cor-borda);
+}
+
+.ds-cor-info {
+    display: block;
+    padding: var(--espaco-3);
+    font-size: var(--fonte-pequena);
+}
+
+.ds-cor-nome {
+    display: block;
+    margin-bottom: var(--espaco-1);
+    font-weight: var(--peso-semibold);
+}
+
+.ds-cor-info code {
+    display: inline-block;
+    margin-bottom: var(--espaco-1);
+    overflow-wrap: anywhere; /* só quebra o nome se não couber de jeito nenhum */
+}
+
+/* Tabelas (contraste, tipografia, botões, estados) */
+.ds-tabela-rolagem {
+    overflow-x: auto;
+    border: var(--borda-fina) solid var(--cor-borda-suave);
+    border-radius: var(--raio-medio);
+}
+
+.ds-tabela {
+    width: 100%;
+    min-width: 38rem;
+    border-collapse: collapse;
+}
+
+.ds-tabela th,
+.ds-tabela td {
+    padding: var(--espaco-3) var(--espaco-4);
+    border-bottom: var(--borda-fina) solid var(--cor-borda-suave);
+    text-align: left;
+    vertical-align: middle;
+}
+
+.ds-tabela thead th {
+    background-color: var(--cor-superficie);
+    font-size: var(--fonte-pequena);
+}
+
+.ds-tabela tbody th {
+    font-weight: var(--peso-semibold);
+}
+
+.ds-tabela tbody tr:last-child th,
+.ds-tabela tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.ds-tabela a {
+    color: var(--cor-primaria);
+}
+
+.ds-escala code {
+    white-space: nowrap;
+}
+
+.ds-par {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 3.5rem;
+    padding: var(--espaco-1) var(--espaco-3);
+    border-radius: var(--raio-pequeno);
+    border: var(--borda-fina) solid var(--cor-borda-suave);
+    font-size: var(--fonte-grande);
+    font-weight: var(--peso-negrito);
+}
+
+.ds-ok {
+    color: var(--cor-sucesso);
+    font-weight: var(--peso-negrito);
+}
+
+.ds-falha {
+    color: var(--cor-erro);
+    font-weight: var(--peso-negrito);
+}
+
+.ds-nao-se-aplica {
+    color: var(--cor-texto-suave);
+    font-size: var(--fonte-pequena);
+}
+
+/* Espaçamento */
+.ds-escala {
+    list-style: none;
+}
+
+.ds-escala li {
+    display: grid;
+    grid-template-columns: 8rem 11rem 1fr;
+    align-items: center;
+    gap: var(--espaco-3);
+    padding: var(--espaco-2) 0;
+    border-bottom: var(--borda-fina) solid var(--cor-borda-suave);
+}
+
+/* Celular: o nome e o valor ficam lado a lado e a barra desce para a linha de baixo */
+@media (max-width: 30em) {
+    .ds-escala li {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+
+    .ds-barra {
+        grid-column: 1 / -1;
+    }
+}
+
+.ds-barra {
+    display: block;
+    width: var(--largura);
+    height: var(--espaco-4);
+    background-color: var(--cor-primaria);
+    border-radius: var(--raio-pequeno);
+}
+
+.ds-lista-simples {
+    padding-left: var(--espaco-5);
+    max-width: var(--largura-coluna);
+}
+
+.ds-lista-simples li {
+    margin-bottom: var(--espaco-2);
+}
+
+/* Caixas de exemplo */
+.ds-exemplo {
+    padding: var(--espaco-5);
+    background-color: var(--cor-superficie);
+    border: var(--borda-fina) solid var(--cor-borda-suave);
+    border-radius: var(--raio-medio);
+}
+
+.ds-grade {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: var(--espaco-5);
+}
+
+.ds-rotulo {
+    margin-bottom: var(--espaco-2);
+    font-size: var(--fonte-pequena);
+    color: var(--cor-texto-suave);
+}
+
+/* Avisos e estados "parados", para exibição (no site, o aviso fica fixo no rodapé da tela) */
+.ds-aviso-estatico {
+    position: static;
+    max-width: none;
+    margin: 0;
+}
+
+.ds-estatico {
+    margin: 0;
+}
+
+.ds-codigo {
+    max-width: var(--largura-coluna);
+    margin-top: var(--espaco-4);
+    padding: var(--espaco-4);
+    overflow-x: auto;
+    white-space: pre-wrap; /* quebra linhas longas em vez de cortar */
+    overflow-wrap: anywhere;
+    background-color: var(--cor-fundo-cabecalho);
+    color: var(--cor-texto-cabecalho);
+    border-radius: var(--raio-medio);
+    font-size: var(--fonte-pequena);
+}
+
+.ds-secao .ds-codigo code {
+    padding: 0;
+    background: none;
+    color: inherit;
 }
