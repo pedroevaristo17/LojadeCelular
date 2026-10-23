@@ -1293,3 +1293,81 @@ legend {
     content: "⚠️" / "";
     color: var(--cor-erro);
 }
+/* =========================================
+   AV2: CHECKOUT E CONFIRMAÇÃO (erros, carregando, dados do pedido)
+========================================= */
+
+/* Campo com erro: borda vermelha. A cor sozinha não basta, por isso o erro também
+   ganha ícone + texto logo abaixo (.erro-campo) e o aria-invalid avisa os leitores de tela. */
+.campo input[aria-invalid="true"],
+.campo select[aria-invalid="true"] {
+    border-color: var(--cor-erro);
+}
+
+.erro-campo {
+    margin-top: 0.5rem;
+    color: var(--cor-erro); /* 7:1 de contraste */
+    font-size: 0.9375rem;
+    font-weight: 600;
+}
+
+.erro-campo::before {
+    content: "⚠️";
+    content: "⚠️" / "";
+    margin-right: 0.375rem;
+}
+
+.pagamento .erro-campo {
+    margin-top: 0.75rem;
+}
+
+/* Botão "Confirmar pedido" enquanto processa: cinza escuro (7:1 com o texto branco),
+   cursor de espera e um círculo girando. */
+.formulario button[aria-disabled="true"] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    background-color: #555555;
+    cursor: progress;
+}
+
+.formulario button[aria-disabled="true"]:hover {
+    background-color: #555555;
+}
+
+.formulario button[aria-disabled="true"]::before {
+    content: "";
+    width: 1.125rem;
+    height: 1.125rem;
+    border: 3px solid rgba(255, 255, 255, 0.4);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: girar 0.8s linear infinite;
+}
+
+/* Quem pede menos movimento no sistema (regra lá em cima, em "prefers-reduced-motion")
+   recebe o círculo parado, e o texto "Processando pedido…" continua dizendo o que acontece. */
+@keyframes girar {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Dois blocos "resumo" empilhados na confirmação */
+.resumo + .resumo {
+    margin-top: 1rem;
+}
+
+.dados-pedido dt {
+    font-weight: 600;
+}
+
+.dados-pedido dd {
+    margin: 0 0 0.75rem;
+    color: #333333;
+}
+
+.dados-pedido dd:last-child {
+    margin-bottom: 0;
+}

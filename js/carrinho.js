@@ -83,6 +83,11 @@ function removerDoCarrinho(id) {
     return salvarCarrinho(itens);
 }
 
+// Esvazia o carrinho (é o que acontece quando o pedido é finalizado). Devolve true se deu certo.
+function limparCarrinho() {
+    return salvarCarrinho([]);
+}
+
 // Troca a quantidade de um produto que já está no carrinho (a quantidade passa a ser exatamente esta).
 // Corrige valores que não fazem sentido, em vez de recusar:
 //   menos de 1 (ou algo que não é número) -> vira 1      mais que o máximo -> vira o máximo

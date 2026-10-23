@@ -41,11 +41,6 @@ function criarItemHTML(linha) {
     '</li>';
 }
 
-// Escreve um texto dentro do elemento marcado com data-xxx (ex.: data-resumo-total).
-function escrever(atributo, texto) {
-    document.querySelector('[' + atributo + ']').textContent = texto;
-}
-
 // Atualiza SÓ os números: subtotal de cada item, total de itens, total e parcelas.
 // Usamos isto quando a pessoa muda a quantidade. Não redesenhamos a lista inteira porque
 // isso apagaria o campo em que ela está digitando (e o foco do teclado iria embora junto).

@@ -82,7 +82,12 @@ function mostrarAviso(texto, tipo, acao) {
 
     avisoEl.hidden = false;
 
-    // Limpa e preenche de novo, assim o leitor de tela anuncia até mensagens repetidas.
+    anunciar(texto);
+}
+
+// Faz o leitor de tela falar um texto, sem mostrar nada na tela.
+// Limpa e preenche de novo, assim ele anuncia até mensagens repetidas.
+function anunciar(texto) {
     anuncioEl.textContent = '';
     setTimeout(function () {
         anuncioEl.textContent = texto;
@@ -145,6 +150,15 @@ function ligarFormulariosCompra() {
             adicionarComAviso(formulario.dataset.produto, quantidade);
         });
     });
+}
+
+// ---------- 4) Utilitário para as páginas ----------
+
+// Escreve um texto dentro do elemento marcado com data-xxx. Exemplo: escrever('data-resumo-total', 'R$ 10').
+// Usa textContent: o texto entra como TEXTO, nunca como HTML. É o jeito seguro para qualquer
+// coisa que a pessoa digitou (nome, endereço...).
+function escrever(atributo, texto) {
+    document.querySelector('[' + atributo + ']').textContent = texto;
 }
 
 // ---------- Início ----------

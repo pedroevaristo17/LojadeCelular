@@ -8,6 +8,8 @@
 <script src="js/produtos.js" defer></script>
 <script src="js/carrinho.js" defer></script>
 <script src="js/loja.js" defer></script>
+<script src="js/pedido.js" defer></script>
+<script src="js/pagina-checkout.js" defer></script>
 </head>
 <body>
 <a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
@@ -37,10 +39,16 @@
     </ol>
   </nav>
 
-  <div class="layout-compra">
-    <!-- Por enquanto o envio é por GET só para a navegação funcionar sem servidor; na etapa de JS isso vira um tratamento de submit. -->
-    <form class="formulario" action="confirmacao.html" method="get">
-      <!-- Container para mensagens de erro de validação exibidas dinamicamente -->
+  <noscript>
+    <p class="mensagem-erro">O checkout precisa de JavaScript para funcionar. Ative o JavaScript no seu navegador e recarregue a página.</p>
+  </noscript>
+
+  <!-- Este bloco começa escondido (hidden). O js/pagina-checkout.js mostra ele quando há itens no carrinho. -->
+  <div class="layout-compra" data-checkout-conteudo hidden>
+    <!-- novalidate: desliga os balões de erro do navegador, porque o JS mostra mensagens próprias (mais claras).
+         As marcações "required" continuam aqui para os leitores de tela avisarem que o campo é obrigatório. -->
+    <form class="formulario" data-form-checkout novalidate>
+      <!-- Resumo dos erros: o JS escreve aqui. role="alert" faz o leitor de tela falar a mensagem na hora. -->
       <div role="alert" class="mensagem-erro"></div>
 
       <fieldset>
@@ -140,21 +148,18 @@
         </div>
       </fieldset>
 
-      <button type="submit">Confirmar pedido</button>
+      <button type="submit" data-botao-confirmar>Confirmar pedido</button>
     </form>
 
     <section class="resumo" aria-labelledby="titulo-resumo">
       <h2 id="titulo-resumo" class="titulo-secao">Resumo do pedido</h2>
 
-      <ul class="resumo-itens">
-        <li><span>Galaxy S26 (1 un.)</span><span>R$ 3.499</span></li>
-        <li><span>Moto Edge 60 (1 un.)</span><span>R$ 2.299</span></li>
-      </ul>
+      <ul class="resumo-itens" data-resumo-itens></ul>
 
       <dl class="resumo-valores">
         <div>
           <dt>Subtotal</dt>
-          <dd>R$ 5.798</dd>
+          <dd data-resumo-subtotal>R$ 0</dd>
         </div>
         <div>
           <dt>Frete</dt>
@@ -162,13 +167,21 @@
         </div>
         <div class="resumo-total">
           <dt>Total</dt>
-          <dd>R$ 5.798</dd>
+          <dd data-resumo-total>R$ 0</dd>
         </div>
       </dl>
 
       <a href="carrinho.html" class="btn btn-secundario btn-bloco">Voltar ao carrinho</a>
     </section>
   </div>
+
+  <!-- Estado "carrinho vazio": sem itens não há o que finalizar -->
+  <section class="estado-vazio" data-checkout-vazio hidden aria-labelledby="titulo-vazio">
+    <span class="icone-vazio" aria-hidden="true">🛒</span>
+    <h2 id="titulo-vazio">Seu carrinho está vazio</h2>
+    <p>Adicione um celular ao carrinho antes de finalizar a compra.</p>
+    <a href="index.html" class="btn">Ver celulares</a>
+  </section>
 </main>
 
 <footer class="rodape">
