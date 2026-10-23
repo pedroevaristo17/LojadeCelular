@@ -77,8 +77,9 @@ function mostrarAviso(texto, tipo, acao) {
         };
     }
     avisoAcaoEl.hidden = !acao;
-    // Quem já está na página do carrinho não precisa do link para ela.
-    avisoVerCarrinhoEl.hidden = Boolean(acao) || document.body.dataset.pagina === 'carrinho';
+    // Páginas que não falam de carrinho (carrinho, login, cadastro) marcam o <body> com data-sem-link-carrinho
+    // e o link "Ver carrinho" some do aviso.
+    avisoVerCarrinhoEl.hidden = Boolean(acao) || document.body.hasAttribute('data-sem-link-carrinho');
 
     avisoEl.hidden = false;
 

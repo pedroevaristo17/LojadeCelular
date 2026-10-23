@@ -27,8 +27,11 @@
 <script src="js/produtos.js" defer></script>
 <script src="js/carrinho.js" defer></script>
 <script src="js/loja.js" defer></script>
+<script src="js/formulario.js" defer></script>
+<script src="js/usuarios.js" defer></script>
+<script src="js/pagina-login.js" defer></script>
 </head>
-<body>
+<body data-sem-link-carrinho>
 <a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
 
 <header class="cabecalho">
@@ -48,7 +51,13 @@
 <main id="conteudo">
   <h1>Entrar na sua conta</h1>
 
-  <form class="formulario" action="#" method="post">
+  <noscript>
+    <p class="mensagem-erro">Este formulário precisa de JavaScript para funcionar. Ative o JavaScript no seu navegador e recarregue a página.</p>
+  </noscript>
+
+  <!-- novalidate: os erros aparecem por JavaScript (js/pagina-login.js), com mensagens próprias.
+       As marcações "required" continuam para os leitores de tela avisarem que o campo é obrigatório. -->
+  <form class="formulario" data-form-login novalidate>
     <!-- Container para mensagens de erro de validação exibidas dinamicamente -->
     <div role="alert" class="mensagem-erro"></div>
 
@@ -68,8 +77,21 @@
       <label for="lembrar">Lembrar de mim</label>
     </div>
 
-    <button type="submit">Entrar</button>
+    <button type="submit" class="btn btn-bloco btn-grande" data-botao-enviar>Entrar</button>
   </form>
+
+  <!-- Estado de sucesso: aparece no lugar do formulário depois de entrar (ou se a pessoa já estava logada) -->
+  <div class="coluna-estreita">
+    <section class="confirmacao" data-login-sucesso hidden aria-labelledby="titulo-logado">
+      <span class="icone-sucesso" aria-hidden="true">✓</span>
+      <h2 id="titulo-logado" tabindex="-1" data-login-titulo></h2>
+      <p>Sessão iniciada com o e-mail <strong data-login-email></strong>.</p>
+      <p class="acoes-finais">
+        <a href="index.html" class="btn">Ir para a loja</a>
+        <button type="button" class="btn btn-secundario" data-sair>Sair da conta</button>
+      </p>
+    </section>
+  </div>
 
   <ul class="links-auxiliares">
     <li><a href="#">Esqueci minha senha</a></li>
@@ -84,6 +106,7 @@
       <li><a href="#">Contato</a></li>
       <li><a href="#">Política de privacidade</a></li>
       <li><a href="#">Acessibilidade</a></li>
+      <li><a href="design-system.html">Design system</a></li>
     </ul>
   </nav>
   <p>&copy; 2026 CelStore. Todos os direitos reservados.</p>
