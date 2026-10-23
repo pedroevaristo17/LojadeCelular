@@ -1,11 +1,13 @@
 /* =========================================
    LOJA: a parte que mexe na tela (roda em todas as páginas)
    Depende de produtos.js e carrinho.js, carregados antes.
-   Faz três coisas:
+   Faz cinco coisas:
    1) mantém o número do carrinho no menu atualizado;
    2) mostra avisos de sucesso e de erro (com texto e ícone, não só cor);
    3) liga os botões "Adicionar ao carrinho" (data-adicionar) da home e o
-      formulário da página do produto (data-form-compra).
+      formulário da página do produto (data-form-compra);
+   4) mostra no menu quem está logado ("Olá, Ana"), usando usuarios.js;
+   5) dá resposta ao formulário da newsletter (data-form-newsletter).
 ========================================= */
 
 // ---------- 1) Contador no menu ----------
@@ -63,7 +65,8 @@ function criarAviso() {
 // tipo: 'sucesso' ou 'erro'. O CSS usa o tipo pra escolher o ícone e as cores.
 // acao (opcional): { rotulo: 'Desfazer', aoClicar: function () { ... } }
 //   -> mostra um botão extra no aviso, no lugar do link "Ver carrinho".
-function mostrarAviso(texto, tipo, acao) {
+// opcoes (opcional): { semCarrinho: true } -> esconde o link "Ver carrinho" (aviso que não fala de compra).
+function mostrarAviso(texto, tipo, acao, opcoes) {
     avisoEl.className = 'aviso aviso-' + tipo;
     avisoTextoEl.textContent = texto;
 
@@ -79,7 +82,8 @@ function mostrarAviso(texto, tipo, acao) {
     avisoAcaoEl.hidden = !acao;
     // Páginas que não falam de carrinho (carrinho, login, cadastro) marcam o <body> com data-sem-link-carrinho
     // e o link "Ver carrinho" some do aviso.
-    avisoVerCarrinhoEl.hidden = Boolean(acao) || document.body.hasAttribute('data-sem-link-carrinho');
+    avisoVerCarrinhoEl.hidden = Boolean(acao) || document.body.hasAttribute('data-sem-link-carrinho') ||
+        Boolean(opcoes && opcoes.semCarrinho);
 
     avisoEl.hidden = false;
 
@@ -153,7 +157,44 @@ function ligarFormulariosCompra() {
     });
 }
 
-// ---------- 4) Utilitário para as páginas ----------
+// ---------- 4) Quem está logado, no menu ----------
+
+// Com a pessoa logada, o link "Login" vira "Olá, Ana" (e leva para a tela com o botão "Sair da conta")
+// e o link "Cadastro" some. Sem login, tudo volta ao normal.
+// lerSessao() e primeiroNome() vêm de usuarios.js, carregado antes deste arquivo.
+function atualizarConta() {
+    const sessao = lerSessao();
+    const linkLogin = document.querySelector('[data-nav-login]');
+    const itemCadastro = document.querySelector('[data-nav-cadastro]');
+    if (!linkLogin || !itemCadastro) {
+        return;
+    }
+    if (!linkLogin.dataset.textoOriginal) {
+        linkLogin.dataset.textoOriginal = linkLogin.textContent;
+    }
+    // textContent: o nome foi digitado pela pessoa, então entra como texto puro, nunca como HTML.
+    linkLogin.textContent = sessao ? 'Olá, ' + primeiroNome(sessao.nome) : linkLogin.dataset.textoOriginal;
+    itemCadastro.hidden = Boolean(sessao);
+}
+
+// ---------- 5) Newsletter ----------
+
+// Antes, o botão "Assinar" recarregava a página sem dizer nada. Agora confirma na tela.
+// (O campo já tem type="email" e required: o próprio navegador barra e-mail vazio ou mal escrito.)
+function ligarNewsletter() {
+    const formulario = document.querySelector('[data-form-newsletter]');
+    if (!formulario) {
+        return;
+    }
+    formulario.addEventListener('submit', function (evento) {
+        evento.preventDefault();
+        const email = formulario.querySelector('input[type="email"]').value.trim();
+        formulario.reset();
+        mostrarAviso('Obrigado! Enviaremos novidades e promoções para ' + email + '.', 'sucesso', null, { semCarrinho: true });
+    });
+}
+
+// ---------- 6) Utilitário para as páginas ----------
 
 // Escreve um texto dentro do elemento marcado com data-xxx. Exemplo: escrever('data-resumo-total', 'R$ 10').
 // Usa textContent: o texto entra como TEXTO, nunca como HTML. É o jeito seguro para qualquer
@@ -166,10 +207,14 @@ function escrever(atributo, texto) {
 // Como o script tem "defer", o HTML já está pronto quando chegamos aqui.
 criarAviso();
 atualizarContador();
+atualizarConta();
 ligarBotoesAdicionar();
 ligarFormulariosCompra();
+ligarNewsletter();
 
 // Se a pessoa voltar pra esta página com o botão "Voltar" do navegador (a página pode vir
 // de uma cópia guardada), ou mudar o carrinho em outra aba, o contador se atualiza.
 window.addEventListener('pageshow', atualizarContador);
+window.addEventListener('pageshow', atualizarConta);
 window.addEventListener('storage', atualizarContador);
+window.addEventListener('storage', atualizarConta);

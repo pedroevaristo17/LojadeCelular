@@ -16,6 +16,7 @@ const linksEl = document.querySelector('.links-auxiliares');
 const sucessoEl = document.querySelector('[data-login-sucesso]');
 
 const TEMPO_LOGIN = 1000; // milissegundos. Simula o tempo que um servidor levaria.
+const CHAVE_LEMBRAR = 'celstore-email-lembrado'; // só o e-mail, e só se a pessoa marcar "Lembrar de mim"
 
 const validador = criarValidador(formEl, [
     { id: 'email', nome: 'E-mail', mensagem: 'Informe um e-mail válido, como nome@exemplo.com.', valido: VALIDACOES.email },
@@ -42,6 +43,30 @@ function mostrarFormulario() {
     sucessoEl.hidden = true;
     formEl.hidden = false;
     linksEl.hidden = false;
+    preencherLembrado();
+}
+
+// ---------- "Lembrar de mim" ----------
+// Se a pessoa marcou a caixinha no último login, o e-mail já vem preenchido (a senha nunca é guardada).
+
+function preencherLembrado() {
+    const email = lerJSON(CHAVE_LEMBRAR, null);
+    if (typeof email === 'string' && email !== '') {
+        document.getElementById('email').value = email;
+        document.getElementById('lembrar').checked = true;
+    }
+}
+
+function guardarLembrado(email, lembrar) {
+    try {
+        if (lembrar) {
+            localStorage.setItem(CHAVE_LEMBRAR, JSON.stringify(normalizarEmail(email)));
+        } else {
+            localStorage.removeItem(CHAVE_LEMBRAR);
+        }
+    } catch (erro) {
+        // sem armazenamento, o login continua funcionando; só não lembra o e-mail
+    }
 }
 
 // ---------- Entrar ----------
@@ -60,7 +85,9 @@ function concluirLogin(email) {
         return;
     }
 
+    guardarLembrado(usuario.email, document.getElementById('lembrar').checked);
     formEl.reset(); // limpa o campo de senha da tela
+    atualizarConta(); // o menu passa a mostrar "Olá, Ana"
     mostrarLogado(usuario, 'Você entrou na sua conta');
 }
 
@@ -85,12 +112,14 @@ formEl.addEventListener('submit', function (evento) {
 
 document.querySelector('[data-sair]').addEventListener('click', function () {
     encerrarSessao();
+    atualizarConta(); // o menu volta a mostrar "Login"
     mostrarFormulario();
     document.getElementById('email').focus();
     mostrarAviso('Você saiu da conta.', 'sucesso');
 });
 
 // ---------- Início ----------
+preencherLembrado();
 // Se a pessoa já está logada (entrou antes e voltou para esta página), mostra direto o estado "logado".
 const sessao = lerSessao();
 if (sessao) {

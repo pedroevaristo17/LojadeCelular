@@ -31,7 +31,9 @@
 <link rel="stylesheet" href="style.css">
 <script src="js/produtos.js" defer></script>
 <script src="js/carrinho.js" defer></script>
+<script src="js/usuarios.js" defer></script>
 <script src="js/loja.js" defer></script>
+<script src="js/pagina-home.js" defer></script>
 </head>
 <body>
 <a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
@@ -44,11 +46,9 @@
   <nav class="nav-principal" aria-label="Principal">
     <ul>
       <li><a href="index.html" aria-current="page">Início</a></li>
-      <li><a href="#">Smartphones</a></li>
-      <li><a href="#">Acessórios</a></li>
-      <li><a href="#">Ofertas</a></li>
-      <li><a href="login.html">Login</a></li>
-      <li><a href="cadastro.html">Cadastro</a></li>
+      <li><a href="index.html#ofertas">Smartphones</a></li>
+      <li><a href="login.html" data-nav-login>Login</a></li>
+      <li data-nav-cadastro><a href="cadastro.html">Cadastro</a></li>
       <li><a href="carrinho.html">Carrinho<span class="contador" data-contador hidden></span></a></li>
     </ul>
   </nav>
@@ -68,8 +68,14 @@
     <img class="banner" src="img/banner-promocao.webp" alt="Promoção de setembro: até 30% de desconto em smartphones selecionados" width="1200" height="400">
   </section>
 
-  <section class="ofertas">
+  <section class="ofertas" id="ofertas">
     <h2>Smartphones em oferta</h2>
+
+    <!-- Resultado da busca (js/pagina-home.js preenche e mostra/esconde) -->
+    <div class="busca-resultado" data-busca-resultado hidden>
+      <p data-busca-texto></p>
+      <button type="button" class="btn btn-secundario" data-busca-limpar>Limpar busca</button>
+    </div>
 
     <article class="produto">
       <h3>Galaxy S26</h3>
@@ -148,6 +154,14 @@
       <button type="button" class="btn btn-bloco" data-adicionar="iphone-16e">Adicionar ao carrinho<span class="sr-only"> iPhone 16e</span></button>
       <a href="produto.html?id=iphone-16e" class="btn btn-secundario btn-bloco">Ver detalhes<span class="sr-only"> do iPhone 16e</span></a>
     </article>
+  
+    <!-- Estado "vazio" da busca: nenhum celular combina com o que a pessoa digitou -->
+    <section class="estado-vazio" data-busca-vazio hidden aria-labelledby="titulo-busca-vazio">
+      <span class="icone-vazio" aria-hidden="true">🔍</span>
+      <h3 id="titulo-busca-vazio">Nenhum celular encontrado</h3>
+      <p>Tente buscar pelo nome do aparelho, como “iPhone” ou “Galaxy”.</p>
+      <button type="button" class="btn" data-busca-limpar>Ver todos os celulares</button>
+    </section>
   </section>
 
   <section class="vantagens">
@@ -175,7 +189,7 @@
   <aside class="newsletter">
     <h2>Assine nossa newsletter</h2>
     <p>Receba novidades e promoções exclusivas no seu e-mail.</p>
-    <form action="#" method="post">
+    <form action="#" method="post" data-form-newsletter>
       <label for="newsletter-email">E-mail</label>
       <input type="email" id="newsletter-email" name="newsletter-email" required autocomplete="email">
       <button type="submit" class="btn">Assinar</button>
@@ -189,7 +203,7 @@
       <li><a href="#">Sobre</a></li>
       <li><a href="#">Contato</a></li>
       <li><a href="#">Política de privacidade</a></li>
-      <li><a href="#">Acessibilidade</a></li>
+      <li><a href="design-system.html#acessibilidade">Acessibilidade</a></li>
       <li><a href="design-system.html">Design system</a></li>
     </ul>
   </nav>

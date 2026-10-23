@@ -26,9 +26,9 @@
 <link rel="stylesheet" href="style.css">
 <script src="js/produtos.js" defer></script>
 <script src="js/carrinho.js" defer></script>
+<script src="js/usuarios.js" defer></script>
 <script src="js/loja.js" defer></script>
 <script src="js/formulario.js" defer></script>
-<script src="js/usuarios.js" defer></script>
 <script src="js/pagina-login.js" defer></script>
 </head>
 <body data-sem-link-carrinho>
@@ -41,8 +41,9 @@
   <nav class="nav-principal" aria-label="Principal">
     <ul>
       <li><a href="index.html">Início</a></li>
-      <li><a href="login.html" aria-current="page">Login</a></li>
-      <li><a href="cadastro.html">Cadastro</a></li>
+      <li><a href="index.html#ofertas">Smartphones</a></li>
+      <li><a href="login.html" data-nav-login aria-current="page">Login</a></li>
+      <li data-nav-cadastro><a href="cadastro.html">Cadastro</a></li>
       <li><a href="carrinho.html">Carrinho<span class="contador" data-contador hidden></span></a></li>
     </ul>
   </nav>
@@ -69,7 +70,7 @@
     <div class="campo">
       <label for="senha">Senha (obrigatório)</label>
       <input type="password" id="senha" name="senha" required autocomplete="current-password" aria-describedby="dica-senha">
-      <p id="dica-senha" class="dica-campo">Mínimo de 8 caracteres, incluindo letras e números.</p>
+      <p id="dica-senha" class="dica-campo">Use a senha que você criou no cadastro.</p>
     </div>
 
     <div class="campo lembrete">
@@ -105,7 +106,7 @@
       <li><a href="#">Sobre</a></li>
       <li><a href="#">Contato</a></li>
       <li><a href="#">Política de privacidade</a></li>
-      <li><a href="#">Acessibilidade</a></li>
+      <li><a href="design-system.html#acessibilidade">Acessibilidade</a></li>
       <li><a href="design-system.html">Design system</a></li>
     </ul>
   </nav>

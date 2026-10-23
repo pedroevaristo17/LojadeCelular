@@ -1338,6 +1338,25 @@ legend {
     text-align: center;
 }
 
+/* Resultado da busca na home: "2 celulares encontrados para "iphone"" + botão para limpar */
+.busca-resultado {
+    grid-column: 1 / -1; /* ocupa a linha toda da grade de produtos */
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--espaco-3) var(--espaco-4);
+    padding: var(--espaco-3) var(--espaco-4);
+    background-color: var(--cor-destaque-fundo);
+    border-radius: var(--raio-medio);
+    font-weight: var(--peso-semibold);
+}
+
+.ofertas > .estado-vazio {
+    grid-column: 1 / -1;
+    width: 100%;
+}
+
 /* Estado "carrinho vazio": caixa tracejada com ícone, mensagem e um botão para voltar à loja */
 .estado-vazio {
     max-width: 32rem;
