@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Carrinho | CelStore</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
+
+<header class="cabecalho">
+  <a href="index.html" class="logo">
+    <img src="img/logo-celstore.png" alt="CelStore - página inicial" width="160" height="100">
+  </a>
+  <nav class="nav-principal" aria-label="Principal">
+    <ul>
+      <li><a href="index.html">Início</a></li>
+      <li><a href="login.html">Login</a></li>
+      <li><a href="cadastro.html">Cadastro</a></li>
+      <li><a href="carrinho.html" aria-current="page">Carrinho</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="conteudo">
+  <h1>Seu carrinho</h1>
+
+  <nav class="etapas" aria-label="Etapas da compra">
+    <ol>
+      <li aria-current="step">Carrinho</li>
+      <li>Entrega e pagamento</li>
+      <li>Confirmação</li>
+    </ol>
+  </nav>
+
+  <div class="layout-compra">
+    <section aria-labelledby="titulo-itens">
+      <h2 id="titulo-itens" class="titulo-secao">Itens (2)</h2>
+
+      <ul class="lista-carrinho">
+        <li class="item-carrinho">
+          <img src="img/galaxy-s26.webp" alt="Galaxy S26 na cor azul-clara" width="668" height="808">
+          <div class="item-info">
+            <h3>Galaxy S26</h3>
+            <p class="item-preco">R$ 3.499 cada</p>
+            <div class="item-acoes">
+              <div class="campo campo-quantidade">
+                <label for="qtd-galaxy-s26">Quantidade<span class="sr-only"> de Galaxy S26</span></label>
+                <input type="number" id="qtd-galaxy-s26" name="qtd-galaxy-s26" value="1" min="1" max="10">
+              </div>
+              <button type="button" class="btn btn-link">Remover<span class="sr-only"> Galaxy S26 do carrinho</span></button>
+            </div>
+          </div>
+          <p class="item-subtotal"><span class="sr-only">Subtotal: </span>R$ 3.499</p>
+        </li>
+
+        <li class="item-carrinho">
+          <img src="img/moto-edge-60.webp" alt="Moto Edge 60 na cor dourada" width="1000" height="1000">
+          <div class="item-info">
+            <h3>Moto Edge 60</h3>
+            <p class="item-preco">R$ 2.299 cada</p>
+            <div class="item-acoes">
+              <div class="campo campo-quantidade">
+                <label for="qtd-moto-edge-60">Quantidade<span class="sr-only"> de Moto Edge 60</span></label>
+                <input type="number" id="qtd-moto-edge-60" name="qtd-moto-edge-60" value="1" min="1" max="10">
+              </div>
+              <button type="button" class="btn btn-link">Remover<span class="sr-only"> Moto Edge 60 do carrinho</span></button>
+            </div>
+          </div>
+          <p class="item-subtotal"><span class="sr-only">Subtotal: </span>R$ 2.299</p>
+        </li>
+      </ul>
+    </section>
+
+    <section class="resumo" aria-labelledby="titulo-resumo">
+      <h2 id="titulo-resumo" class="titulo-secao">Resumo do pedido</h2>
+
+      <dl class="resumo-valores">
+        <div>
+          <dt>Subtotal (2 itens)</dt>
+          <dd>R$ 5.798</dd>
+        </div>
+        <div>
+          <dt>Frete</dt>
+          <dd>Grátis</dd>
+        </div>
+        <div class="resumo-total">
+          <dt>Total</dt>
+          <dd>R$ 5.798</dd>
+        </div>
+      </dl>
+
+      <p class="resumo-parcelas">Ou em até 12x de R$ 483,17 sem juros no cartão de crédito.</p>
+
+      <a href="checkout.html" class="btn btn-bloco">Finalizar compra</a>
+      <a href="index.html" class="btn btn-secundario btn-bloco">Continuar comprando</a>
+    </section>
+  </div>
+</main>
+
+<footer class="rodape">
+  <nav class="nav-rodape" aria-label="Rodapé">
+    <ul>
+      <li><a href="#">Sobre</a></li>
+      <li><a href="#">Contato</a></li>
+      <li><a href="#">Política de privacidade</a></li>
+      <li><a href="#">Acessibilidade</a></li>
+    </ul>
+  </nav>
+  <address>
+    R. da Harmônia - Farol, Maceió - AL<br>
+    Telefone: (82) 4000-0000<br>
+    E-mail: <a href="mailto:contato@celstore.com.br">contato@celstore.com.br</a>
+  </address>
+  <p>&copy; 2026 CelStore. Todos os direitos reservados.</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pedido confirmado | CelStore</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
+
+<header class="cabecalho">
+  <a href="index.html" class="logo">
+    <img src="img/logo-celstore.png" alt="CelStore - página inicial" width="160" height="100">
+  </a>
+  <nav class="nav-principal" aria-label="Principal">
+    <ul>
+      <li><a href="index.html">Início</a></li>
+      <li><a href="login.html">Login</a></li>
+      <li><a href="cadastro.html">Cadastro</a></li>
+      <li><a href="carrinho.html">Carrinho</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="conteudo">
+  <h1>Pedido confirmado</h1>
+
+  <nav class="etapas" aria-label="Etapas da compra">
+    <ol>
+      <li class="etapa-concluida">Carrinho<span class="sr-only"> (etapa concluída)</span></li>
+      <li class="etapa-concluida">Entrega e pagamento<span class="sr-only"> (etapa concluída)</span></li>
+      <li class="etapa-concluida" aria-current="step">Confirmação</li>
+    </ol>
+  </nav>
+
+  <div class="coluna-estreita">
+    <section class="confirmacao" aria-labelledby="titulo-sucesso">
+      <span class="icone-sucesso" aria-hidden="true">✓</span>
+      <h2 id="titulo-sucesso">Obrigado pela sua compra!</h2>
+      <p>Enviamos a confirmação do pedido para o seu e-mail.</p>
+      <p class="numero-pedido">Número do pedido: <strong>CEL-000123</strong></p>
+    </section>
+
+    <section class="resumo" aria-labelledby="titulo-resumo">
+      <h2 id="titulo-resumo" class="titulo-secao">Resumo do pedido</h2>
+
+      <ul class="resumo-itens">
+        <li><span>Galaxy S26 (1 un.)</span><span>R$ 3.499</span></li>
+        <li><span>Moto Edge 60 (1 un.)</span><span>R$ 2.299</span></li>
+      </ul>
+
+      <dl class="resumo-valores">
+        <div>
+          <dt>Subtotal</dt>
+          <dd>R$ 5.798</dd>
+        </div>
+        <div>
+          <dt>Frete</dt>
+          <dd>Grátis</dd>
+        </div>
+        <div class="resumo-total">
+          <dt>Total</dt>
+          <dd>R$ 5.798</dd>
+        </div>
+      </dl>
+    </section>
+
+    <p class="acoes-finais">
+      <a href="index.html" class="btn">Voltar para a loja</a>
+    </p>
+  </div>
+</main>
+
+<footer class="rodape">
+  <nav class="nav-rodape" aria-label="Rodapé">
+    <ul>
+      <li><a href="#">Sobre</a></li>
+      <li><a href="#">Contato</a></li>
+      <li><a href="#">Política de privacidade</a></li>
+      <li><a href="#">Acessibilidade</a></li>
+    </ul>
+  </nav>
+  <address>
+    R. da Harmônia - Farol, Maceió - AL<br>
+    Telefone: (82) 4000-0000<br>
+    E-mail: <a href="mailto:contato@celstore.com.br">contato@celstore.com.br</a>
+  </address>
+  <p>&copy; 2026 CelStore. Todos os direitos reservados.</p>
+</footer>
+
+</body>
+</html>

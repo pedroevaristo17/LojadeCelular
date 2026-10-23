@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Galaxy S26 | CelStore</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
+
+<header class="cabecalho">
+  <a href="index.html" class="logo">
+    <img src="img/logo-celstore.png" alt="CelStore - página inicial" width="160" height="100">
+  </a>
+  <nav class="nav-principal" aria-label="Principal">
+    <ul>
+      <li><a href="index.html">Início</a></li>
+      <li><a href="login.html">Login</a></li>
+      <li><a href="cadastro.html">Cadastro</a></li>
+      <li><a href="carrinho.html">Carrinho</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="conteudo">
+  <nav class="migalhas" aria-label="Você está aqui">
+    <ol>
+      <li><a href="index.html">Início</a></li>
+      <li aria-current="page">Galaxy S26</li>
+    </ol>
+  </nav>
+
+  <article class="detalhe">
+    <div class="detalhe-imagem">
+      <img src="img/galaxy-s26.webp" alt="Smartphone Galaxy S26 na cor azul-clara, vista frontal e traseira" width="668" height="808">
+    </div>
+
+    <div class="detalhe-info">
+      <h1>Galaxy S26</h1>
+
+      <p class="preco">De <del>R$ 3.999</del> por <ins>R$ 3.499</ins></p>
+      <p class="parcelamento">Em até 12x de R$ 291,58 sem juros no cartão de crédito.</p>
+
+      <form class="form-compra" action="carrinho.html" method="get">
+        <div class="campo campo-quantidade">
+          <label for="quantidade">Quantidade</label>
+          <input type="number" id="quantidade" name="quantidade" value="1" min="1" max="10">
+        </div>
+        <button type="submit" class="btn">Adicionar ao carrinho</button>
+      </form>
+
+      <ul class="beneficios">
+        <li>Frete grátis para compras acima de R$ 299</li>
+        <li>12 meses de garantia</li>
+      </ul>
+    </div>
+  </article>
+
+  <section class="especificacoes-detalhe" aria-labelledby="titulo-specs">
+    <h2 id="titulo-specs" class="titulo-secao">Especificações</h2>
+    <table class="tabela-specs">
+      <tbody>
+        <tr><th scope="row">Tela</th><td>6,5" AMOLED</td></tr>
+        <tr><th scope="row">Armazenamento</th><td>256 GB</td></tr>
+        <tr><th scope="row">Câmera</th><td>Tripla, 50 MP</td></tr>
+        <tr><th scope="row">Cor</th><td>Azul-claro</td></tr>
+        <tr><th scope="row">Garantia</th><td>12 meses</td></tr>
+      </tbody>
+    </table>
+  </section>
+</main>
+
+<footer class="rodape">
+  <nav class="nav-rodape" aria-label="Rodapé">
+    <ul>
+      <li><a href="#">Sobre</a></li>
+      <li><a href="#">Contato</a></li>
+      <li><a href="#">Política de privacidade</a></li>
+      <li><a href="#">Acessibilidade</a></li>
+    </ul>
+  </nav>
+  <address>
+    R. da Harmônia - Farol, Maceió - AL<br>
+    Telefone: (82) 4000-0000<br>
+    E-mail: <a href="mailto:contato@celstore.com.br">contato@celstore.com.br</a>
+  </address>
+  <p>&copy; 2026 CelStore. Todos os direitos reservados.</p>
+</footer>
+
+</body>
+</html>

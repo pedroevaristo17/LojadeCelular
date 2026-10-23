@@ -11,6 +11,9 @@
     --cor-texto-cabecalho: #ffffff;
     --cor-erro: #b30000; /* Contraste > 7:1 com fundo branco */
     --cor-borda: #767676; /* Contraste > 4.5:1 com fundo branco */
+    --cor-sucesso: #1b5e20; /* Contraste 7,9:1 com branco e 7:1 com o fundo de sucesso */
+    --cor-sucesso-fundo: #e8f5e9;
+    --cor-destaque-fundo: #e8f0fa; /* Fundo de hover/seleção; texto primário tem 6,1:1 sobre ele */
 }
 
 /* =========================================
@@ -44,6 +47,15 @@ body {
 *:focus-visible {
     outline: 3px solid var(--cor-primaria);
     outline-offset: 3px;
+}
+
+/* Em fundos escuros (cabeçalho e newsletter), o azul --cor-primaria
+   cai pra 2.47:1 de contraste contra #1a1a1a — abaixo do 3:1 exigido
+   pro indicador de foco (critério 1.4.11). Nessas áreas o foco usa
+   branco, que já é a cor do texto ali (17.4:1 de contraste). */
+.cabecalho *:focus-visible,
+.newsletter *:focus-visible {
+    outline-color: #ffffff;
 }
 
 /* =========================================
@@ -627,4 +639,559 @@ legend {
 
 .newsletter button:hover {
     background-color: var(--cor-primaria-hover);
+}
+
+/* =========================================
+   AV2: COMPONENTES DAS NOVAS TELAS
+   (produto, carrinho, checkout e confirmação)
+========================================= */
+
+/* ---------- Botão (.btn) ----------
+   Serve para <a> e <button>. Área de toque mínima de 44x44px (2.75rem). */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
+    min-width: 2.75rem;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--cor-primaria);
+    color: #ffffff;
+    border: 2px solid var(--cor-primaria);
+    border-radius: 0.25rem;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: bold;
+    line-height: 1.25;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.btn:hover {
+    background-color: var(--cor-primaria-hover);
+    border-color: var(--cor-primaria-hover);
+}
+
+/* Variação secundária: contorno, para ações menos importantes */
+.btn-secundario {
+    background-color: var(--cor-fundo);
+    color: var(--cor-primaria);
+}
+
+.btn-secundario:hover {
+    background-color: var(--cor-destaque-fundo);
+    border-color: var(--cor-primaria-hover);
+    color: var(--cor-primaria-hover);
+}
+
+/* Variação "link": ações discretas, como Remover */
+.btn-link {
+    background-color: transparent;
+    border-color: transparent;
+    color: var(--cor-primaria);
+    text-decoration: underline;
+    padding: 0.5rem 0.75rem;
+}
+
+.btn-link:hover {
+    background-color: var(--cor-destaque-fundo);
+    border-color: transparent;
+    color: var(--cor-primaria-hover);
+    text-decoration: none;
+}
+
+/* Botão que ocupa a largura toda do contêiner */
+.btn-bloco {
+    display: flex;
+    width: 100%;
+}
+
+.btn-bloco + .btn-bloco {
+    margin-top: 0.75rem;
+}
+
+/* ---------- Títulos de seção ---------- */
+.titulo-secao {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* ---------- Migalhas de pão (produto) ---------- */
+.migalhas {
+    margin-bottom: 1.5rem;
+}
+
+.migalhas ol {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    font-size: 0.875rem;
+}
+
+.migalhas li {
+    display: flex;
+    align-items: center;
+}
+
+.migalhas li + li::before {
+    content: "›";
+    content: "›" / ""; /* separador decorativo: leitor de tela ignora */
+    margin: 0 0.5rem;
+    color: #444444;
+}
+
+.migalhas a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    min-width: 2.75rem;
+    padding: 0 0.25rem;
+    color: var(--cor-primaria);
+    text-decoration: underline;
+}
+
+.migalhas a:hover {
+    color: var(--cor-primaria-hover);
+    text-decoration: none;
+}
+
+.migalhas [aria-current="page"] {
+    font-weight: 600;
+}
+
+/* ---------- Indicador de etapas da compra ---------- */
+.etapas {
+    margin-bottom: 2rem;
+}
+
+.etapas ol {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem 2rem;
+    counter-reset: etapa;
+}
+
+.etapas li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #444444;
+    font-weight: 600;
+    counter-increment: etapa;
+}
+
+/* Marcador numerado de cada etapa (decorativo: o texto da etapa já está no <li>) */
+.etapas li::before {
+    content: counter(etapa);
+    content: counter(etapa) / "";
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 2rem;
+    height: 2rem;
+    background-color: var(--cor-fundo);
+    border: 2px solid var(--cor-borda);
+    border-radius: 50%;
+    font-weight: bold;
+}
+
+/* Etapa atual: círculo preenchido (não depende só da cor) */
+.etapas li[aria-current="step"] {
+    color: var(--cor-primaria);
+}
+
+.etapas li[aria-current="step"]::before {
+    background-color: var(--cor-primaria);
+    border-color: var(--cor-primaria);
+    color: #ffffff;
+}
+
+/* Etapa concluída: troca o número por um ✓ (declarada depois para vencer a regra acima) */
+.etapas li.etapa-concluida::before {
+    content: "✓";
+    content: "✓" / "";
+    background-color: var(--cor-sucesso);
+    border-color: var(--cor-sucesso);
+    color: #ffffff;
+}
+
+.etapas li.etapa-concluida[aria-current="step"] {
+    color: var(--cor-sucesso);
+}
+
+.etapas a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    color: inherit;
+    text-decoration: underline;
+}
+
+.etapas a:hover {
+    text-decoration: none;
+}
+
+/* ---------- Página de produto ---------- */
+.detalhe {
+    display: grid;
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.detalhe-imagem {
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+}
+
+.detalhe-imagem img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    max-height: 32rem;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+
+/* O seletor começa em #conteudo para vencer "#conteudo h1" (centralizado) */
+#conteudo .detalhe-info h1 {
+    text-align: left;
+    margin-bottom: 1rem;
+}
+
+.detalhe-info .preco {
+    margin-bottom: 0.5rem;
+}
+
+.detalhe-info .preco ins {
+    font-size: 2rem;
+}
+
+.parcelamento {
+    color: #444444;
+    margin-bottom: 1.5rem;
+}
+
+.form-compra {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-compra .campo {
+    margin-bottom: 0;
+}
+
+.campo-quantidade {
+    width: 6.5rem;
+}
+
+.beneficios {
+    list-style: none;
+    border-top: 1px solid #e0e0e0;
+    padding-top: 1rem;
+    color: #444444;
+}
+
+.beneficios li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.beneficios li::before {
+    content: "✓";
+    content: "✓" / "";
+    position: absolute;
+    left: 0;
+    color: var(--cor-sucesso);
+    font-weight: bold;
+}
+
+.especificacoes-detalhe {
+    margin-bottom: 3rem;
+}
+
+.tabela-specs {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--cor-fundo);
+    border: 1px solid #e0e0e0;
+}
+
+.tabela-specs th,
+.tabela-specs td {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.tabela-specs th {
+    width: 40%;
+    background-color: #f9f9f9;
+    font-weight: 600;
+}
+
+.tabela-specs tr:last-child th,
+.tabela-specs tr:last-child td {
+    border-bottom: 0;
+}
+
+/* ---------- Carrinho e checkout: layout em duas colunas ---------- */
+.layout-compra {
+    display: grid;
+    gap: 2rem;
+    align-items: start;
+    margin-bottom: 3rem;
+}
+
+/* Sobrescreve a largura estreita (35rem) usada nos formulários de login/cadastro */
+.layout-compra .formulario {
+    max-width: none;
+    margin: 0;
+}
+
+.lista-carrinho {
+    list-style: none;
+    display: grid;
+    gap: 1rem;
+}
+
+.item-carrinho {
+    display: grid;
+    grid-template-columns: 6rem minmax(0, 1fr) auto;
+    gap: 1rem;
+    align-items: start;
+    padding: 1rem;
+    background-color: var(--cor-fundo);
+    border: 1px solid #e0e0e0;
+    border-radius: 0.5rem;
+}
+
+.item-carrinho img {
+    width: 6rem;
+    aspect-ratio: 1;
+    height: auto;
+    object-fit: contain;
+    background-color: #f9f9f9;
+    border-radius: 0.25rem;
+}
+
+.item-info h3 {
+    font-size: 1.125rem;
+    margin-bottom: 0.25rem;
+}
+
+.item-preco {
+    color: #444444;
+    font-size: 0.875rem;
+    margin-bottom: 0.75rem;
+}
+
+.item-acoes {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.5rem 1rem;
+}
+
+.item-acoes .campo {
+    margin-bottom: 0;
+}
+
+.item-subtotal {
+    font-size: 1.125rem;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+/* ---------- Resumo do pedido (carrinho, checkout, confirmação) ---------- */
+.resumo {
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+}
+
+.resumo-itens {
+    list-style: none;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.resumo-itens li,
+.resumo-valores div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline; /* rótulo e valor na mesma linha de base, mesmo com fontes de tamanhos diferentes */
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.resumo-valores dd {
+    font-weight: 600;
+}
+
+.resumo-valores .resumo-total {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--cor-borda);
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.resumo-valores .resumo-total dd {
+    font-size: 1.5rem;
+}
+
+.resumo-parcelas {
+    color: #444444;
+    font-size: 0.875rem;
+    margin: 1rem 0 1.5rem;
+}
+
+/* ---------- Formulário de checkout ---------- */
+.campo select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid var(--cor-borda);
+    border-radius: 0.25rem;
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--cor-texto);
+    background-color: var(--cor-fundo);
+}
+
+/* Dois campos lado a lado; empilham sozinhos quando não cabem */
+.campos-linha {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+    gap: 0 1rem;
+}
+
+/* Opção de rádio: a caixa inteira é clicável e tem pelo menos 44px de altura */
+.opcao {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0 0.75rem;
+    margin-bottom: 0.75rem;
+    background-color: var(--cor-fundo);
+    border: 2px solid var(--cor-borda);
+    border-radius: 0.25rem;
+}
+
+.pagamento .opcao:last-child {
+    margin-bottom: 0;
+}
+
+.opcao input[type="radio"] {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex-shrink: 0;
+    accent-color: var(--cor-primaria);
+    cursor: pointer;
+}
+
+.opcao label {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-height: 2.75rem; /* o label é a área clicável: precisa ter 44px de altura */
+    cursor: pointer;
+}
+
+/* Melhoria progressiva: destaca a opção marcada (o rádio marcado já mostra o estado por si só) */
+.opcao:has(input:checked) {
+    border-color: var(--cor-primaria);
+    background-color: var(--cor-destaque-fundo);
+}
+
+/* ---------- Confirmação do pedido ---------- */
+.coluna-estreita {
+    max-width: 40rem;
+    margin: 0 auto;
+}
+
+.confirmacao {
+    text-align: center;
+    background-color: var(--cor-sucesso-fundo);
+    border: 2px solid var(--cor-sucesso);
+    border-radius: 0.5rem;
+    padding: 2rem 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.icone-sucesso {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    margin-bottom: 1rem;
+    background-color: var(--cor-sucesso);
+    border-radius: 50%;
+    color: #ffffff;
+    font-size: 1.75rem;
+    font-weight: bold;
+}
+
+.confirmacao h2 {
+    font-size: 1.5rem;
+    color: var(--cor-sucesso);
+    margin-bottom: 0.5rem;
+}
+
+.numero-pedido {
+    margin-top: 1rem;
+}
+
+.acoes-finais {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+/* ---------- Telas maiores (em em, para acompanhar o zoom do navegador) ---------- */
+@media (min-width: 48em) {
+    .detalhe {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: start;
+    }
+}
+
+@media (min-width: 56em) {
+    .layout-compra {
+        grid-template-columns: minmax(0, 2fr) minmax(18rem, 1fr);
+    }
+
+    .layout-compra .resumo {
+        position: sticky;
+        top: 1rem;
+    }
+}
+
+/* ---------- Telas pequenas: o item do carrinho vira uma coluna só ---------- */
+@media (max-width: 30em) {
+    .item-carrinho {
+        grid-template-columns: 5rem minmax(0, 1fr);
+    }
+
+    .item-carrinho img {
+        width: 5rem;
+    }
+
+    .item-subtotal {
+        grid-column: 2;
+    }
 }
