@@ -1,27 +1,27 @@
-<%# PÁGINA DE LOGIN. Ainda é a simulação do navegador (public/js/pagina-login.js).
-    Na Etapa 3 o login passa a ser conferido pelo servidor, com senha de verdade. -%>
+<%# PÁGINA DE LOGIN
+    O formulário envia POST /login e o SERVIDOR confere a senha. O servidor passa:
+      erro    -> '' ou "E-mail ou senha incorretos."
+      email   -> o e-mail digitado (a senha nunca volta)
+      lembrar -> se a caixinha estava marcada
+      voltar  -> para onde ir depois de entrar ('' = Minha conta) -%>
 <!DOCTYPE html>
 <html lang="pt-BR">
-<%- include('partials/head', { titulo: 'Login | CelStore', scripts: ['produtos', 'carrinho', 'usuarios', 'loja', 'formulario', 'pagina-login'] }) %>
+<%- include('partials/head', { titulo: 'Login | CelStore', scripts: ['produtos', 'carrinho', 'loja', 'formulario', 'pagina-login'] }) %>
 <body data-sem-link-carrinho>
 <%- include('partials/navbar', { paginaAtual: 'login' }) %>
 
 <main id="conteudo">
   <h1>Entrar na sua conta</h1>
 
-  <noscript>
-    <p class="mensagem-erro">Este formulário precisa de JavaScript para funcionar. Ative o JavaScript no seu navegador e recarregue a página.</p>
-  </noscript>
-
-  <!-- novalidate: os erros aparecem por JavaScript (js/pagina-login.js), com mensagens próprias.
-       As marcações "required" continuam para os leitores de tela avisarem que o campo é obrigatório. -->
-  <form class="formulario" data-form-login novalidate>
-    <!-- Container para mensagens de erro de validação exibidas dinamicamente -->
-    <div role="alert" class="mensagem-erro"></div>
+  <%# novalidate: as mensagens são as nossas (JavaScript na tela e, de novo, o servidor).
+      As marcações "required" continuam para os leitores de tela avisarem que o campo é obrigatório. %>
+  <form class="formulario" action="/login<%= voltar ? '?voltar=' + encodeURIComponent(voltar) : '' %>" method="post" data-form-login novalidate>
+    <%# Resumo dos erros. Tem de ficar sem espaços quando vazio, senão o CSS mostra a caixa. -%>
+    <div role="alert" class="mensagem-erro" tabindex="-1"><%= erro %></div>
 
     <div class="campo">
       <label for="email">E-mail (obrigatório)</label>
-      <input type="email" id="email" name="email" required autocomplete="email">
+      <input type="email" id="email" name="email" value="<%= email %>" required autocomplete="email">
     </div>
 
     <div class="campo">
@@ -31,25 +31,12 @@
     </div>
 
     <div class="campo lembrete">
-      <input type="checkbox" id="lembrar" name="lembrar">
+      <input type="checkbox" id="lembrar" name="lembrar"<%= lembrar ? ' checked' : '' %>>
       <label for="lembrar">Lembrar de mim</label>
     </div>
 
     <button type="submit" class="btn btn-bloco btn-grande" data-botao-enviar>Entrar</button>
   </form>
-
-  <!-- Estado de sucesso: aparece no lugar do formulário depois de entrar (ou se a pessoa já estava logada) -->
-  <div class="coluna-estreita">
-    <section class="confirmacao" data-login-sucesso hidden aria-labelledby="titulo-logado">
-      <span class="icone-sucesso" aria-hidden="true">✓</span>
-      <h2 id="titulo-logado" tabindex="-1" data-login-titulo></h2>
-      <p>Sessão iniciada com o e-mail <strong data-login-email></strong>.</p>
-      <p class="acoes-finais">
-        <a href="/" class="btn">Ir para a loja</a>
-        <button type="button" class="btn btn-secundario" data-sair>Sair da conta</button>
-      </p>
-    </section>
-  </div>
 
   <ul class="links-auxiliares">
     <li><a href="#">Esqueci minha senha</a></li>

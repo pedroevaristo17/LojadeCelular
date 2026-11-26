@@ -13,8 +13,18 @@
   <nav class="nav-principal" aria-label="Principal">
     <ul>
       <li><a href="/#ofertas">Smartphones</a></li>
-      <li><a href="/login" data-nav-login<%- atual('login') %>>Login</a></li>
-      <li data-nav-cadastro><a href="/cadastro"<%- atual('cadastro') %>>Cadastro</a></li>
+<%# "user" vem do servidor (res.locals). Logado: "Olá, Nome" e "Sair". Visitante: "Login" e "Cadastro". -%>
+<% if (locals.user) { -%>
+      <li><a href="/conta"<%- atual('conta') %>>Olá, <%= primeiroNome(user.nome) %></a></li>
+      <li>
+        <form action="/sair" method="post">
+          <button type="submit" class="nav-sair">Sair</button>
+        </form>
+      </li>
+<% } else { -%>
+      <li><a href="/login"<%- atual('login') %>>Login</a></li>
+      <li><a href="/cadastro"<%- atual('cadastro') %>>Cadastro</a></li>
+<% } -%>
       <li><a href="/carrinho"<%- atual('carrinho') %>>Carrinho<span class="contador" data-contador hidden></span></a></li>
     </ul>
   </nav>

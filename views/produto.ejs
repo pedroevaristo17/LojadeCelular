@@ -1,13 +1,13 @@
 <%# PÁGINA DO PRODUTO: uma página só para todos os celulares.
-    O servidor (rota GET /produto/:id no index.js) passa:
-      produto  -> o celular do endereço, ou null se o id não existe (aí a página mostra o estado de erro, com status 404)
+    O servidor (rota GET /produto/:slug no index.js) passa:
+      produto  -> o celular do endereço, ou null se o endereço não existe (aí a página mostra o estado de erro, com status 404)
       garantia -> texto da garantia ("12 meses")
     Antes, o JavaScript do navegador lia o endereço e preenchia a página. Agora ela já chega pronta do servidor. -%>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <%- include('partials/head', {
     titulo: produto ? produto.nome + ' | CelStore' : 'Produto não encontrado | CelStore',
-    scripts: ['produtos', 'carrinho', 'usuarios', 'loja']
+    scripts: ['produtos', 'carrinho', 'loja']
 }) %>
 <body>
 <%- include('partials/navbar', { paginaAtual: 'produto' }) %>
@@ -34,7 +34,7 @@
 
       <%# O envio ainda é tratado por public/js/loja.js (data-form-compra): adiciona ao carrinho do navegador.
           Na Etapa 4 este formulário passa a enviar para o servidor. -%>
-      <form class="form-compra" data-form-compra data-produto="<%= produto.id %>">
+      <form class="form-compra" data-form-compra data-produto="<%= produto.slug %>">
         <div class="campo campo-quantidade">
           <label for="quantidade">Quantidade</label>
           <input type="number" id="quantidade" name="quantidade" value="1" min="1" max="10">
@@ -63,7 +63,7 @@
     </table>
   </section>
 <% } else { -%>
-  <%# Estado de erro: o id do endereço não existe -%>
+  <%# Estado de erro: o endereço não corresponde a nenhum produto -%>
   <section class="estado-vazio" aria-labelledby="titulo-erro">
     <span class="icone-vazio" aria-hidden="true">🔍</span>
     <h1 id="titulo-erro">Produto não encontrado</h1>

@@ -99,7 +99,9 @@ function criarValidador(formEl, regras) {
     // Quando aparece um erro ele é ADICIONADO à lista; quando some, voltamos ao original.
     regras.forEach(function (regra) {
         const el = elementoDe(regra);
-        el.dataset.dica = el.getAttribute('aria-describedby') || '';
+        // Se a página veio do servidor já com erro, o id "erro-..." não faz parte da dica original.
+        el.dataset.dica = (el.getAttribute('aria-describedby') || '')
+            .split(' ').filter(id => !id.startsWith('erro-')).join(' ');
     });
 
     // ----- Mostrar e tirar erros -----
@@ -184,7 +186,9 @@ function criarValidador(formEl, regras) {
     // Olhamos TODOS os campos com erro, e não só o que mudou: se a "senha" muda,
     // o erro de "confirmar senha" também pode ter sido resolvido.
     function revalidar() {
-        regras.concat(regrasExtras).forEach(function (regra) {
+        // Campo com erro do servidor é decidido só pela regra extra (senão o erro sumiria cedo demais).
+        const comExtra = regrasExtras.map(r => r.id);
+        regras.filter(r => !comExtra.includes(r.id)).concat(regrasExtras).forEach(function (regra) {
             if (!temErro(regra)) {
                 return;
             }

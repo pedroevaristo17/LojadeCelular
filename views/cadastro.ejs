@@ -1,47 +1,77 @@
-<%# PÁGINA DE CADASTRO. Ainda é a simulação do navegador (public/js/pagina-cadastro.js).
-    Na Etapa 3 a conta passa a ser gravada no banco, com a senha protegida (hash). -%>
+<%# PÁGINA DE CADASTRO
+    O formulário envia POST /cadastro. O SERVIDOR valida tudo e grava a conta no banco. Ele passa:
+      valores     -> o que foi digitado (menos as senhas), para a pessoa não perder o preenchimento
+      erros       -> { idDoCampo: { nome, mensagem } }
+      contaCriada -> { nome, email } logo depois de criar a conta, senão null -%>
+<% const lista = Object.values(erros);
+   // Resumo no topo: o mesmo texto que o JavaScript da tela escreve.
+   const resumo = lista.length === 0 ? '' :
+       (lista.length === 1 ? 'Corrija 1 campo' : 'Corrija ' + lista.length + ' campos') +
+       ' para continuar: ' + lista.map(e => e.nome).join(', ') + '.';
+   // Atributos de acessibilidade do campo: aria-invalid avisa "inválido" e
+   // aria-describedby liga o campo à dica e à mensagem de erro.
+   // (Só recebe textos fixos escritos aqui, nunca dados digitados.)
+   const aria = (id, dica) => {
+       const ids = [dica, erros[id] ? 'erro-' + id : ''].filter(Boolean).join(' ');
+       return (erros[id] ? ' aria-invalid="true"' : '') + (ids ? ' aria-describedby="' + ids + '"' : '');
+   };
+   const erroDe = id => include('partials/erro-campo', { id: id, erro: erros[id] });
+-%>
 <!DOCTYPE html>
 <html lang="pt-BR">
-<%- include('partials/head', { titulo: 'Cadastro | CelStore', scripts: ['produtos', 'carrinho', 'usuarios', 'loja', 'formulario', 'pagina-cadastro'] }) %>
+<%- include('partials/head', { titulo: 'Cadastro | CelStore', scripts: ['produtos', 'carrinho', 'loja', 'formulario', 'pagina-cadastro'] }) %>
 <body data-sem-link-carrinho>
 <%- include('partials/navbar', { paginaAtual: 'cadastro' }) %>
 
 <main id="conteudo">
   <h1>Criar conta</h1>
 
-  <noscript>
-    <p class="mensagem-erro">Este formulário precisa de JavaScript para funcionar. Ative o JavaScript no seu navegador e recarregue a página.</p>
-  </noscript>
-
-  <!-- novalidate: os erros aparecem por JavaScript (js/pagina-cadastro.js), com mensagens próprias.
-       As marcações "required" continuam para os leitores de tela avisarem que o campo é obrigatório. -->
-  <form class="formulario" data-form-cadastro novalidate>
-    <!-- Container para mensagens de erro de validação exibidas dinamicamente -->
-    <div role="alert" class="mensagem-erro"></div>
+<% if (contaCriada) { -%>
+  <%# Estado de SUCESSO: aparece no lugar do formulário depois de criar a conta %>
+  <div class="coluna-estreita">
+    <section class="confirmacao" aria-labelledby="titulo-conta-criada">
+      <span class="icone-sucesso" aria-hidden="true">✓</span>
+      <h2 id="titulo-conta-criada" tabindex="-1">Conta criada com sucesso, <%= primeiroNome(contaCriada.nome) %>!</h2>
+      <p>Agora você já pode entrar com o e-mail <strong><%= contaCriada.email %></strong>.</p>
+      <p class="acoes-finais">
+        <a href="/login" class="btn">Entrar na conta</a>
+      </p>
+    </section>
+  </div>
+<% } else { -%>
+  <%# novalidate: as mensagens são as nossas (JavaScript na tela e, de novo, o servidor).
+      As marcações "required" continuam para os leitores de tela avisarem que o campo é obrigatório. %>
+  <form class="formulario" action="/cadastro" method="post" data-form-cadastro novalidate>
+    <%# Resumo dos erros. Tem de ficar sem espaços quando vazio, senão o CSS mostra a caixa. -%>
+    <div role="alert" class="mensagem-erro"><%= resumo %></div>
 
     <fieldset>
       <legend>Dados pessoais</legend>
 
       <div class="campo">
         <label for="nome">Nome completo (obrigatório)</label>
-        <input type="text" id="nome" name="nome" required autocomplete="name">
+        <input type="text" id="nome" name="nome" value="<%= valores.nome %>" required autocomplete="name"<%- aria('nome') %>>
+        <%- erroDe('nome') %>
       </div>
 
       <div class="campo">
         <label for="cpf">CPF (obrigatório)</label>
-        <input type="text" id="cpf" name="cpf" required autocomplete="off" aria-describedby="dica-cpf">
+        <input type="text" id="cpf" name="cpf" value="<%= valores.cpf %>" required autocomplete="off"<%- aria('cpf', 'dica-cpf') %>>
         <p id="dica-cpf" class="dica-campo">Formato: 000.000.000-00</p>
+        <%- erroDe('cpf') %>
       </div>
 
       <div class="campo">
         <label for="nascimento">Data de nascimento (obrigatório)</label>
-        <input type="date" id="nascimento" name="nascimento" required autocomplete="bday">
+        <input type="date" id="nascimento" name="nascimento" value="<%= valores.nascimento %>" required autocomplete="bday"<%- aria('nascimento') %>>
+        <%- erroDe('nascimento') %>
       </div>
 
       <div class="campo">
         <label for="telefone">Telefone (obrigatório)</label>
-        <input type="tel" id="telefone" name="telefone" required autocomplete="tel" aria-describedby="dica-telefone">
+        <input type="tel" id="telefone" name="telefone" value="<%= valores.telefone %>" required autocomplete="tel"<%- aria('telefone', 'dica-telefone') %>>
         <p id="dica-telefone" class="dica-campo">Formato: (00) 00000-0000</p>
+        <%- erroDe('telefone') %>
       </div>
     </fieldset>
 
@@ -50,18 +80,22 @@
 
       <div class="campo">
         <label for="email">E-mail (obrigatório)</label>
-        <input type="email" id="email" name="email" required autocomplete="email">
+        <input type="email" id="email" name="email" value="<%= valores.email %>" required autocomplete="email"<%- aria('email') %>>
+        <%- erroDe('email') %>
       </div>
 
+      <%# Os campos de senha NUNCA recebem value: a senha não volta do servidor. %>
       <div class="campo">
         <label for="senha">Senha (obrigatório)</label>
-        <input type="password" id="senha" name="senha" required autocomplete="new-password" aria-describedby="dica-senha">
+        <input type="password" id="senha" name="senha" required autocomplete="new-password"<%- aria('senha', 'dica-senha') %>>
         <p id="dica-senha" class="dica-campo">Mínimo de 8 caracteres, incluindo letras e números.</p>
+        <%- erroDe('senha') %>
       </div>
 
       <div class="campo">
         <label for="confirmar-senha">Confirmar senha (obrigatório)</label>
-        <input type="password" id="confirmar-senha" name="confirmar-senha" required autocomplete="new-password">
+        <input type="password" id="confirmar-senha" name="confirmar-senha" required autocomplete="new-password"<%- aria('confirmar-senha') %>>
+        <%- erroDe('confirmar-senha') %>
       </div>
     </fieldset>
 
@@ -69,34 +103,24 @@
       <legend>Preferências</legend>
 
       <div class="campo">
-        <input type="checkbox" id="ofertas" name="ofertas">
+        <input type="checkbox" id="ofertas" name="ofertas"<%= valores.ofertas ? ' checked' : '' %>>
         <label for="ofertas">Quero receber ofertas por e-mail</label>
       </div>
 
       <div class="campo">
-        <input type="checkbox" id="termos" name="termos" required>
+        <input type="checkbox" id="termos" name="termos" required<%= valores.termos ? ' checked' : '' %><%- aria('termos') %>>
         <label for="termos">Li e aceito os <a href="#">termos de uso</a> (obrigatório)</label>
+        <%- erroDe('termos') %>
       </div>
     </fieldset>
 
     <button type="submit" class="btn btn-bloco btn-grande" data-botao-enviar>Criar conta</button>
   </form>
 
-  <!-- Estado de sucesso: aparece no lugar do formulário depois de criar a conta -->
-  <div class="coluna-estreita">
-    <section class="confirmacao" data-cadastro-sucesso hidden aria-labelledby="titulo-conta-criada">
-      <span class="icone-sucesso" aria-hidden="true">✓</span>
-      <h2 id="titulo-conta-criada" tabindex="-1" data-cadastro-titulo></h2>
-      <p>Agora você já pode entrar com o e-mail <strong data-cadastro-email></strong>.</p>
-      <p class="acoes-finais">
-        <a href="/login" class="btn">Entrar na conta</a>
-      </p>
-    </section>
-  </div>
-
   <ul class="links-auxiliares">
     <li><a href="/login">Já tem conta? Entrar</a></li>
   </ul>
+<% } -%>
 </main>
 
 <%- include('partials/footer', { paginaAtual: 'cadastro' }) %>

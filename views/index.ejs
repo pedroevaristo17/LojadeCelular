@@ -7,7 +7,7 @@
 <html lang="pt-BR">
 <%- include('partials/head', {
     titulo: busca ? 'Busca: ' + busca + ' | CelStore' : 'CelStore - Loja de celulares com o melhor preço',
-    scripts: ['produtos', 'carrinho', 'usuarios', 'loja']
+    scripts: ['produtos', 'carrinho', 'loja']
 }) %>
 <body>
 <%- include('partials/navbar', { paginaAtual: 'inicio' }) %>
@@ -41,8 +41,8 @@
         <li><%= item %></li>
 <% }) -%>
       </ul>
-      <button type="button" class="btn btn-bloco" data-adicionar="<%= produto.id %>">Adicionar ao carrinho<span class="sr-only"> <%= produto.nome %></span></button>
-      <a href="/produto/<%= produto.id %>" class="btn btn-secundario btn-bloco">Ver detalhes<span class="sr-only"> do <%= produto.nome %></span></a>
+      <button type="button" class="btn btn-bloco" data-adicionar="<%= produto.slug %>">Adicionar ao carrinho<span class="sr-only"> <%= produto.nome %></span></button>
+      <a href="/produto/<%= produto.slug %>" class="btn btn-secundario btn-bloco">Ver detalhes<span class="sr-only"> do <%= produto.nome %></span></a>
     </article>
 <% }) -%>
 <% if (busca && produtos.length === 0) { -%>

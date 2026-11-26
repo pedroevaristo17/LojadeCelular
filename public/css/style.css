@@ -203,6 +203,23 @@ body {
     text-decoration: underline;
 }
 
+/* Botão "Sair" do menu: é um <button> (envia um formulário), com a mesma aparência dos links */
+.nav-sair {
+    background: none;
+    border: 0;
+    cursor: pointer;
+    font: inherit;
+    font-weight: var(--peso-medio);
+    color: var(--cor-texto-cabecalho);
+    padding: var(--espaco-2) var(--espaco-3);
+    min-height: var(--alvo-minimo);
+    min-width: var(--alvo-minimo);
+}
+
+.nav-sair:hover {
+    text-decoration: underline;
+}
+
 .nav-principal a[aria-current="page"] {
     border-bottom: var(--borda-espessa) solid var(--cor-branco);
 }

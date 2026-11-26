@@ -1,0 +1,32 @@
+<%# MINHA CONTA (só para quem está logado: a rota usa requireAuth).
+    "user" vem de res.locals: { id, nome, email }, lido da sessão no servidor.
+    Na Etapa 4 esta página ganha a seção "Minhas compras". -%>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<%- include('partials/head', { titulo: 'Minha conta | CelStore', scripts: ['produtos', 'carrinho', 'loja'] }) %>
+<body data-sem-link-carrinho>
+<%- include('partials/navbar', { paginaAtual: 'conta' }) %>
+
+<main id="conteudo">
+  <h1>Minha conta</h1>
+
+  <section class="resumo" aria-labelledby="titulo-dados">
+    <h2 id="titulo-dados" class="titulo-secao">Seus dados</h2>
+
+    <dl class="dados-pedido">
+      <dt>Nome</dt>
+      <dd><%= user.nome %></dd>
+      <dt>E-mail</dt>
+      <dd><%= user.email %></dd>
+    </dl>
+
+    <%# Sair muda algo no servidor, por isso é um formulário POST. %>
+    <form action="/sair" method="post" class="acoes-finais">
+      <button type="submit" class="btn btn-secundario">Sair</button>
+    </form>
+  </section>
+</main>
+
+<%- include('partials/footer') %>
+</body>
+</html>

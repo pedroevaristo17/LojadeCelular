@@ -1,0 +1,7 @@
+<%# Mensagem de erro embaixo de um campo, vinda do servidor (mesma classe usada pelo JavaScript).
+    Quem inclui passa:  id   -> id do campo
+                        erro -> { nome, mensagem, repetido } ou undefined (aí nada aparece)
+    data-repetido marca o erro "e-mail já cadastrado", que só o servidor sabe conferir. -%>
+<% if (locals.erro) { -%>
+<p class="erro-campo" id="erro-<%= id %>" data-nome="<%= erro.nome %>"<%= erro.repetido ? ' data-repetido' : '' %>><%= erro.mensagem %></p>
+<% } -%>

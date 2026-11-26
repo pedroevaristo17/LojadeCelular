@@ -44,8 +44,8 @@ Na versão estática (AV1 e AV2), tudo ficava guardado no navegador e o login er
 
 | ID | Requisito | Prioridade |
 |----|-----------|------------|
-| REG-01 | Formulário com nome, e-mail, senha e confirmação de senha. | Alta |
-| REG-02 | Validação **no servidor**: campos obrigatórios, e-mail em formato válido, senha com no mínimo 6 caracteres, senhas iguais. As mensagens de erro aparecem no formulário, sem perder o que a pessoa digitou (exceto as senhas). | Alta |
+| REG-01 | Formulário (POST) com nome completo, CPF, data de nascimento, telefone, e-mail, senha, confirmação de senha e aceite dos termos. CPF, telefone e data de nascimento são validados e **não são guardados**. | Alta |
+| REG-02 | Validação **no servidor**: campos obrigatórios, e-mail em formato válido, senha com no mínimo 8 caracteres incluindo letras e números, senhas iguais, termos aceitos. As mensagens de erro aparecem no formulário, sem perder o que a pessoa digitou (exceto as senhas). | Alta |
 | REG-03 | Senha guardada **apenas como hash (bcrypt)**, nunca em texto puro. | Alta |
 | REG-04 | E-mail único (comparado em minúsculas); e-mail repetido mostra mensagem clara. | Alta |
 | REG-05 | Sucesso: mensagem de confirmação e convite para entrar. | Média |
@@ -117,7 +117,7 @@ Na versão estática (AV1 e AV2), tudo ficava guardado no navegador e o login er
 | Segurança | Senhas com bcrypt; cookie de sessão `httpOnly` e `sameSite`; segredo da sessão em variável de ambiente; toda entrada validada no servidor; dados do usuário escapados nas páginas (EJS `<%= %>`); segredos fora do git. Proteção CSRF por token é evolução futura. |
 | Usabilidade | Mensagens em português; formulários com estados de erro e sucesso visíveis; estados de carregando, sucesso, erro e vazio mantidos como na AV2. |
 | Acessibilidade | WCAG 2.1 AA: contraste mínimo 4,5:1, foco visível, navegação por teclado, labels visíveis, alvos de toque de pelo menos 44×44 px, hierarquia de títulos coerente. |
-| Dados | MongoDB. Coleções: `users` (índice único em `email`), `products` (índice único em `slug`) e `orders` (índice em `userId` e `createdAt`, e índice único em `numero`). |
+| Dados | MongoDB. Coleções: `users` (índice único em `email`), `products` (índice único em `slug`), `orders` (índice em `userId` e `createdAt`, e índice único em `numero`) e `sessions` (criada pelo `connect-mongo` para guardar as sessões). |
 | Operação | O sistema sobe com `docker compose up -d` (banco) e `npm run dev` (servidor), ambos descritos no README. |
 | Desempenho | Adequado para uso acadêmico. |
 
