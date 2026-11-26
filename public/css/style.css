@@ -203,6 +203,47 @@ body {
     text-decoration: underline;
 }
 
+/* Etapa 4: o "Adicionar ao carrinho" da home virou um formulário; mantém o espaço até "Ver detalhes" */
+.produto form {
+    margin-top: auto; /* empurra os botões para o fim do cartão, como antes */
+}
+
+.produto form + .btn-bloco {
+    margin-top: var(--espaco-2);
+}
+
+/* Minhas compras: cada pedido é um <details> que abre e fecha */
+.minhas-compras {
+    margin-top: var(--espaco-6);
+}
+
+.pedido-conta {
+    background-color: var(--cor-fundo);
+    border: var(--borda-fina) solid var(--cor-borda-suave);
+    border-radius: var(--raio-medio);
+    padding: 0 var(--espaco-4);
+    margin-bottom: var(--espaco-3);
+}
+
+.pedido-conta summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espaco-2) var(--espaco-4);
+    align-items: center;
+    min-height: var(--alvo-minimo);
+    padding: var(--espaco-3) 0;
+    cursor: pointer;
+}
+
+.pedido-conta[open] summary {
+    border-bottom: var(--borda-fina) solid var(--cor-borda-suave);
+    margin-bottom: var(--espaco-3);
+}
+
+.pedido-conta > p {
+    margin: var(--espaco-3) 0;
+}
+
 /* Botão "Sair" do menu: é um <button> (envia um formulário), com a mesma aparência dos links */
 .nav-sair {
     background: none;

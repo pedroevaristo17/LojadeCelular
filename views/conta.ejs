@@ -1,9 +1,9 @@
 <%# MINHA CONTA (só para quem está logado: a rota usa requireAuth).
     "user" vem de res.locals: { id, nome, email }, lido da sessão no servidor.
-    Na Etapa 4 esta página ganha a seção "Minhas compras". -%>
+    pedidos -> as compras DESTA pessoa (filtradas por userId no servidor), da mais nova para a mais antiga. -%>
 <!DOCTYPE html>
 <html lang="pt-BR">
-<%- include('partials/head', { titulo: 'Minha conta | CelStore', scripts: ['produtos', 'carrinho', 'loja'] }) %>
+<%- include('partials/head', { titulo: 'Minha conta | CelStore', scripts: ['loja'] }) %>
 <body data-sem-link-carrinho>
 <%- include('partials/navbar', { paginaAtual: 'conta' }) %>
 
@@ -24,6 +24,41 @@
     <form action="/sair" method="post" class="acoes-finais">
       <button type="submit" class="btn btn-secundario">Sair</button>
     </form>
+  </section>
+
+  <section class="minhas-compras" aria-labelledby="titulo-compras">
+    <h2 id="titulo-compras" class="titulo-secao">Minhas compras</h2>
+
+<% if (pedidos.length === 0) { -%>
+    <%# Estado VAZIO -%>
+    <div class="estado-vazio">
+      <span class="icone-vazio" aria-hidden="true">📦</span>
+      <h3>Você ainda não fez nenhuma compra</h3>
+      <p>Quando você finalizar um pedido, ele aparece aqui.</p>
+      <a href="/" class="btn">Ver celulares</a>
+    </div>
+<% } else { -%>
+    <%# <details> abre e fecha sem JavaScript, e funciona com teclado (Enter ou Espaço no resumo). -%>
+<% pedidos.forEach(function (pedido) { -%>
+    <details class="pedido-conta">
+      <summary>
+        <strong><%= pedido.numero %></strong>
+        <span><%= formatarData(pedido.createdAt) %></span>
+        <span><%= formatarPreco(pedido.total) %></span>
+      </summary>
+      <ul class="resumo-itens">
+<% pedido.itens.forEach(function (item) { -%>
+        <li><span><%= item.nome %> (<%= item.quantidade %> un.)</span> <span><%= formatarPreco(item.subtotal) %></span></li>
+<% }) -%>
+      </ul>
+      <dl class="dados-pedido">
+        <dt>Forma de pagamento</dt>
+        <dd><%= PAGAMENTOS[pedido.pagamento] %></dd>
+      </dl>
+      <p><a href="/pedido/<%= pedido.numero %>">Ver detalhes<span class="sr-only"> do pedido <%= pedido.numero %></span></a></p>
+    </details>
+<% }) -%>
+<% } -%>
   </section>
 </main>
 

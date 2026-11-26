@@ -2,7 +2,7 @@
     Os valores e os contrastes são lidos do CSS por public/js/design-system.js. -%>
 <!DOCTYPE html>
 <html lang="pt-BR">
-<%- include('partials/head', { titulo: 'Design system | CelStore', scripts: ['produtos', 'carrinho', 'loja', 'design-system'] }) %>
+<%- include('partials/head', { titulo: 'Design system | CelStore', scripts: ['loja', 'design-system'] }) %>
 <body data-sem-link-carrinho>
 <%- include('partials/navbar', { paginaAtual: 'design-system' }) %>
 
@@ -400,7 +400,7 @@
           <tr>
             <th scope="row">Sucesso</th>
             <td>Aviso verde com ✓ ao adicionar ao carrinho; tela "Conta criada com sucesso"; página de pedido confirmado.</td>
-            <td><a href="/">Início</a>, <a href="/cadastro">Cadastro</a>, <a href="/confirmacao">Confirmação</a></td>
+            <td><a href="/">Início</a>, <a href="/cadastro">Cadastro</a>, Confirmação do pedido (depois de comprar)</td>
           </tr>
           <tr>
             <th scope="row">Erro</th>
@@ -410,7 +410,7 @@
           <tr>
             <th scope="row">Vazio</th>
             <td>Caixa tracejada com ícone, explicação e botão para seguir em frente.</td>
-            <td><a href="/carrinho">Carrinho</a> (sem itens), <a href="/confirmacao">Confirmação</a> (sem pedido), <a href="/produto/inexistente">Produto</a> (inexistente)</td>
+            <td><a href="/carrinho">Carrinho</a> (sem itens), <a href="/conta">Minhas compras</a> (sem pedidos), <a href="/produto/inexistente">Produto</a> (inexistente)</td>
           </tr>
         </tbody>
       </table>

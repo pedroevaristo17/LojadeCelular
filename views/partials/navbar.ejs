@@ -25,7 +25,8 @@
       <li><a href="/login"<%- atual('login') %>>Login</a></li>
       <li><a href="/cadastro"<%- atual('cadastro') %>>Cadastro</a></li>
 <% } -%>
-      <li><a href="/carrinho"<%- atual('carrinho') %>>Carrinho<span class="contador" data-contador hidden></span></a></li>
+<%# O número vem da sessão no servidor. O texto sr-only faz o leitor de tela falar "2 itens no carrinho". -%>
+      <li><a href="/carrinho"<%- atual('carrinho') %>>Carrinho<% if (unidadesNoCarrinho > 0) { %><span class="contador"><%= unidadesNoCarrinho %><span class="sr-only"> <%= unidadesNoCarrinho === 1 ? 'item' : 'itens' %> no carrinho</span></span><% } %></a></li>
     </ul>
   </nav>
 <% if (locals.paginaAtual === 'inicio') { -%>

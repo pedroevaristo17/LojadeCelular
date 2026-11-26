@@ -1,37 +1,20 @@
 /* =========================================
    LOJA: a parte que mexe na tela (roda em todas as páginas)
-   Depende de produtos.js e carrinho.js, carregados antes.
-   Faz quatro coisas (quem está logado, "Olá, Nome", agora é o servidor que escreve no menu):
-   1) mantém o número do carrinho no menu atualizado;
-   2) mostra avisos de sucesso e de erro (com texto e ícone, não só cor);
-   3) liga os botões "Adicionar ao carrinho" (data-adicionar) da home e o
-      formulário da página do produto (data-form-compra);
-   4) dá resposta ao formulário da newsletter (data-form-newsletter).
+   Desde a Etapa 4, carrinho, contador e "Olá, Nome" vêm prontos do SERVIDOR.
+   Aqui sobram três coisas:
+   1) avisos de sucesso e de erro (com texto e ícone, não só cor), inclusive fechar o aviso do servidor;
+   2) resposta ao formulário da newsletter (data-form-newsletter);
+   3) escrever(), um utilitário para as páginas.
 ========================================= */
 
-// ---------- 1) Contador no menu ----------
-
-// Escreve o total de itens ao lado do link "Carrinho". Com 0 itens, esconde.
-function atualizarContador() {
-    const total = totalDeItens();
-    document.querySelectorAll('[data-contador]').forEach(function (contador) {
-        contador.hidden = total === 0;
-        // O texto escondido (sr-only) faz o leitor de tela falar "2 itens no carrinho",
-        // em vez de só "2".
-        contador.innerHTML = total + '<span class="sr-only"> ' +
-            (total === 1 ? 'item' : 'itens') + ' no carrinho</span>';
-    });
-}
-
-// ---------- 2) Avisos ----------
+// ---------- 1) Avisos ----------
 
 let avisoEl;       // caixa visível com a mensagem
 let avisoTextoEl;  // o parágrafo dentro da caixa
-let avisoVerCarrinhoEl; // link "Ver carrinho"
-let avisoAcaoEl;   // botão extra opcional (por exemplo, "Desfazer")
 let anuncioEl;     // região invisível que o leitor de tela "escuta"
 
 // O JS também pode criar HTML. Criamos a caixa de aviso uma vez só, escondida.
+// (Aqui o innerHTML só tem texto fixo escrito por nós; a mensagem entra depois com textContent.)
 function criarAviso() {
     anuncioEl = document.createElement('div');
     anuncioEl.className = 'sr-only';
@@ -43,49 +26,17 @@ function criarAviso() {
     avisoEl.hidden = true;
     avisoEl.innerHTML =
         '<p class="aviso-texto"></p>' +
-        '<a href="/carrinho" class="btn" data-aviso-ver>Ver carrinho</a>' +
-        '<button type="button" class="btn" data-aviso-acao hidden></button>' +
         '<button type="button" class="btn btn-link" data-aviso-fechar>Fechar</button>';
     document.body.appendChild(avisoEl);
-
     avisoTextoEl = avisoEl.querySelector('.aviso-texto');
-    avisoVerCarrinhoEl = avisoEl.querySelector('[data-aviso-ver]');
-    avisoAcaoEl = avisoEl.querySelector('[data-aviso-acao]');
-    avisoEl.querySelector('[data-aviso-fechar]').addEventListener('click', fecharAviso);
-
-    // A tecla Esc também fecha (a caixa não some sozinha: quem lê devagar não perde a mensagem).
-    document.addEventListener('keydown', function (evento) {
-        if (evento.key === 'Escape') {
-            fecharAviso();
-        }
-    });
 }
 
 // tipo: 'sucesso' ou 'erro'. O CSS usa o tipo pra escolher o ícone e as cores.
-// acao (opcional): { rotulo: 'Desfazer', aoClicar: function () { ... } }
-//   -> mostra um botão extra no aviso, no lugar do link "Ver carrinho".
-// opcoes (opcional): { semCarrinho: true } -> esconde o link "Ver carrinho" (aviso que não fala de compra).
-function mostrarAviso(texto, tipo, acao, opcoes) {
+function mostrarAviso(texto, tipo) {
+    fecharAvisos(); // um aviso de cada vez
     avisoEl.className = 'aviso aviso-' + tipo;
     avisoTextoEl.textContent = texto;
-
-    if (acao) {
-        avisoAcaoEl.textContent = acao.rotulo;
-        // "onclick =" troca o clique anterior pelo novo. Com addEventListener os cliques
-        // iam se acumulando, e um aviso novo executaria também a ação do aviso antigo.
-        avisoAcaoEl.onclick = function () {
-            fecharAviso();
-            acao.aoClicar();
-        };
-    }
-    avisoAcaoEl.hidden = !acao;
-    // Páginas que não falam de carrinho (carrinho, login, cadastro) marcam o <body> com data-sem-link-carrinho
-    // e o link "Ver carrinho" some do aviso.
-    avisoVerCarrinhoEl.hidden = Boolean(acao) || document.body.hasAttribute('data-sem-link-carrinho') ||
-        Boolean(opcoes && opcoes.semCarrinho);
-
     avisoEl.hidden = false;
-
     anunciar(texto);
 }
 
@@ -98,68 +49,32 @@ function anunciar(texto) {
     }, 50);
 }
 
-function fecharAviso() {
-    avisoEl.hidden = true;
+// Esconde qualquer aviso aberto: o nosso e o que veio pronto do servidor (data-aviso-servidor).
+function fecharAvisos() {
+    document.querySelectorAll('.aviso').forEach(function (aviso) {
+        aviso.hidden = true;
+    });
 }
 
-// ---------- 3) Adicionar ao carrinho ----------
-
-// Adiciona e já mostra o aviso certo. Quem chama só precisa dizer o produto e a quantidade.
-// Os botões da home e o formulário da página do produto usam esta mesma função.
-function adicionarComAviso(id, quantidade) {
-    const produto = buscarProduto(id);
-    if (!produto) {
-        mostrarAviso('Produto não encontrado.', 'erro');
-        return;
-    }
-
-    const resultado = adicionarAoCarrinho(id, quantidade);
-
-    if (resultado.ok) {
-        atualizarContador();
-        if (resultado.limitada) {
-            // Deu para adicionar só uma parte: avisamos, em vez de deixar a pessoa achar que veio tudo.
-            mostrarAviso('O limite é de ' + QUANTIDADE_MAXIMA + ' unidades de ' + produto.nome +
-                ' por pedido. Seu carrinho ficou com ' + resultado.quantidade + '.', 'erro');
-        } else {
-            const unidades = resultado.quantidade > 1 ? ' (' + resultado.quantidade + ' unidades no carrinho)' : '';
-            mostrarAviso(produto.nome + ' adicionado ao carrinho' + unidades + '.', 'sucesso');
+// O botão "Fechar" existe nos dois tipos de aviso. Um evento só, no documento inteiro, pega todos.
+// A caixa não some sozinha: quem lê devagar não perde a mensagem.
+function ligarFecharAvisos() {
+    document.addEventListener('click', function (evento) {
+        if (evento.target.closest('[data-aviso-fechar]')) {
+            fecharAvisos();
         }
-    } else if (resultado.motivo === 'limite') {
-        mostrarAviso('Limite de ' + QUANTIDADE_MAXIMA + ' unidades de ' + produto.nome + ' por pedido.', 'erro');
-    } else {
-        mostrarAviso('Não foi possível adicionar ao carrinho. Verifique se o navegador permite armazenamento e tente de novo.', 'erro');
-    }
-}
-
-// No HTML, cada botão tem data-adicionar="id-do-produto".
-// No JS, esse valor aparece em botao.dataset.adicionar.
-function ligarBotoesAdicionar() {
-    document.querySelectorAll('[data-adicionar]').forEach(function (botao) {
-        botao.addEventListener('click', function () {
-            adicionarComAviso(botao.dataset.adicionar, 1);
-        });
+    });
+    // A tecla Esc também fecha.
+    document.addEventListener('keydown', function (evento) {
+        if (evento.key === 'Escape') {
+            fecharAvisos();
+        }
     });
 }
 
-// Formulário da página do produto: <form data-form-compra data-produto="galaxy-s26">.
-// Aqui a quantidade vem do campo "Quantidade" que a pessoa preencheu.
-function ligarFormulariosCompra() {
-    document.querySelectorAll('[data-form-compra]').forEach(function (formulario) {
-        formulario.addEventListener('submit', function (evento) {
-            // Sem isto, o navegador recarregaria a página ao enviar o formulário.
-            evento.preventDefault();
-            const campo = formulario.querySelector('input[type="number"]');
-            const quantidade = Math.floor(Number(campo.value)) || 1;
-            adicionarComAviso(formulario.dataset.produto, quantidade);
-        });
-    });
-}
+// ---------- 2) Newsletter ----------
 
-// ---------- 4) Newsletter ----------
-
-// Antes, o botão "Assinar" recarregava a página sem dizer nada. Agora confirma na tela.
-// (O campo já tem type="email" e required: o próprio navegador barra e-mail vazio ou mal escrito.)
+// O botão "Assinar" confirma na tela. (O campo tem type="email" e required: o navegador barra e-mail mal escrito.)
 function ligarNewsletter() {
     const formulario = document.querySelector('[data-form-newsletter]');
     if (!formulario) {
@@ -169,15 +84,13 @@ function ligarNewsletter() {
         evento.preventDefault();
         const email = formulario.querySelector('input[type="email"]').value.trim();
         formulario.reset();
-        mostrarAviso('Obrigado! Enviaremos novidades e promoções para ' + email + '.', 'sucesso', null, { semCarrinho: true });
+        mostrarAviso('Obrigado! Enviaremos novidades e promoções para ' + email + '.', 'sucesso');
     });
 }
 
-// ---------- 5) Utilitário para as páginas ----------
+// ---------- 3) Utilitário para as páginas ----------
 
-// Escreve um texto dentro do elemento marcado com data-xxx. Exemplo: escrever('data-resumo-total', 'R$ 10').
-// Usa textContent: o texto entra como TEXTO, nunca como HTML. É o jeito seguro para qualquer
-// coisa que a pessoa digitou (nome, endereço...).
+// Escreve um texto dentro do elemento marcado com data-xxx. Usa textContent: entra como TEXTO, nunca como HTML.
 function escrever(atributo, texto) {
     document.querySelector('[' + atributo + ']').textContent = texto;
 }
@@ -185,12 +98,5 @@ function escrever(atributo, texto) {
 // ---------- Início ----------
 // Como o script tem "defer", o HTML já está pronto quando chegamos aqui.
 criarAviso();
-atualizarContador();
-ligarBotoesAdicionar();
-ligarFormulariosCompra();
+ligarFecharAvisos();
 ligarNewsletter();
-
-// Se a pessoa voltar pra esta página com o botão "Voltar" do navegador (a página pode vir
-// de uma cópia guardada), ou mudar o carrinho em outra aba, o contador se atualiza.
-window.addEventListener('pageshow', atualizarContador);
-window.addEventListener('storage', atualizarContador);

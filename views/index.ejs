@@ -7,7 +7,7 @@
 <html lang="pt-BR">
 <%- include('partials/head', {
     titulo: busca ? 'Busca: ' + busca + ' | CelStore' : 'CelStore - Loja de celulares com o melhor preço',
-    scripts: ['produtos', 'carrinho', 'loja']
+    scripts: ['loja']
 }) %>
 <body>
 <%- include('partials/navbar', { paginaAtual: 'inicio' }) %>
@@ -41,7 +41,12 @@
         <li><%= item %></li>
 <% }) -%>
       </ul>
-      <button type="button" class="btn btn-bloco" data-adicionar="<%= produto.slug %>">Adicionar ao carrinho<span class="sr-only"> <%= produto.nome %></span></button>
+      <%# Formulário de verdade: o servidor adiciona 1 unidade e volta para esta página. -%>
+      <form action="/carrinho/adicionar" method="post">
+        <input type="hidden" name="slug" value="<%= produto.slug %>">
+        <input type="hidden" name="voltar" value="<%= urlAtual %>">
+        <button type="submit" class="btn btn-bloco">Adicionar ao carrinho<span class="sr-only"> <%= produto.nome %></span></button>
+      </form>
       <a href="/produto/<%= produto.slug %>" class="btn btn-secundario btn-bloco">Ver detalhes<span class="sr-only"> do <%= produto.nome %></span></a>
     </article>
 <% }) -%>

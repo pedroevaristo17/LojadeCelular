@@ -1,6 +1,7 @@
 /* =========================================
    SERVIDOR DO CELSTORE
    Etapa 3: produtos e contas ficam no MongoDB; cadastro e login de verdade, com sessão.
+   Etapa 4: carrinho na sessão, checkout com login, pedidos no banco e Minhas compras.
 
    Como funciona (arquitetura cliente-servidor):
    1) o navegador (CLIENTE) pede um endereço, por exemplo GET /produto/iphone-17;
@@ -15,10 +16,11 @@
 require('dotenv').config({ quiet: true });
 
 const path = require('path');
+const crypto = require('crypto');                 // já vem com o Node: sorteia o número do pedido
 const express = require('express');
 const session = require('express-session');       // "memória" do servidor sobre cada visitante
 const { MongoStore } = require('connect-mongo');  // guarda essa memória dentro do MongoDB
-const { MongoClient } = require('mongodb');       // driver oficial do MongoDB
+const { MongoClient, ObjectId } = require('mongodb'); // driver oficial do MongoDB
 const bcrypt = require('bcrypt');                 // transforma a senha em hash
 // PRODUTOS agora só serve para a carga inicial do banco (veja popularProdutos).
 const { PRODUTOS, GARANTIA } = require('./dados/produtos');
@@ -70,9 +72,15 @@ app.use(session({
     }
 }));
 
-// res.locals = variáveis que a página DESTE pedido enxerga. O menu usa "user" para mostrar "Olá, Nome".
+// res.locals = variáveis que a página DESTE pedido enxerga.
 app.use((req, res, next) => {
-    res.locals.user = req.session.user || null;
+    res.locals.user = req.session.user || null;      // o menu mostra "Olá, Nome"
+    // O contador do menu soma as unidades guardadas na sessão.
+    res.locals.unidadesNoCarrinho = lerCarrinho(req).reduce((soma, item) => soma + item.quantidade, 0);
+    res.locals.urlAtual = req.originalUrl;           // para os formulários voltarem à mesma página
+    // Aviso "de uma vez só": a rota anterior guardou na sessão, esta página mostra e apaga.
+    res.locals.aviso = req.session.aviso || null;
+    delete req.session.aviso;
     next(); // segue para a próxima etapa (a rota)
 });
 
@@ -95,6 +103,109 @@ function formatarPreco(valor) {
 app.locals.formatarPreco = formatarPreco;
 // "Ana Silva" -> "Ana", para o cumprimento do menu.
 app.locals.primeiroNome = nomeCompleto => nomeCompleto.trim().split(/\s+/)[0];
+
+// Código guardado no pedido -> texto para a tela.
+const PAGAMENTOS = {
+    pix: 'Pix',
+    cartao: 'Cartão de crédito (até 12x sem juros)',
+    boleto: 'Boleto bancário'
+};
+app.locals.PAGAMENTOS = PAGAMENTOS;
+
+// Data do pedido: "26/11/2026 às 15:40" (no fuso de Maceió).
+app.locals.formatarData = data =>
+    data.toLocaleDateString('pt-BR', { timeZone: 'America/Maceio' }) + ' às ' +
+    data.toLocaleTimeString('pt-BR', { timeZone: 'America/Maceio', hour: '2-digit', minute: '2-digit' });
+
+// "Rua A, 10 - Apto 2 - Farol, Maceió/AL - CEP 57000-000" (sem buraco quando não há complemento).
+app.locals.montarEndereco = e =>
+    e.endereco + ', ' + e.numero + (e.complemento ? ' - ' + e.complemento : '') +
+    ' - ' + e.bairro + ', ' + e.cidade + '/' + e.estado + ' - CEP ' + e.cep;
+
+// ---------- Carrinho (guardado na sessão) ----------
+
+const QUANTIDADE_MAXIMA = 10; // mesmo limite de antes: até 10 unidades de cada celular
+
+// O carrinho é uma lista de { slug, quantidade }. Preço e nome NÃO ficam aqui:
+// vêm do banco na hora de mostrar, então ninguém consegue mudar o preço pelo navegador.
+function lerCarrinho(req) {
+    return Array.isArray(req.session.carrinho) ? req.session.carrinho : [];
+}
+
+// Junta o carrinho com os produtos do banco e faz as contas. Usado no carrinho e no checkout.
+// Devolve { linhas: [{ produto, quantidade, subtotal }], unidades, total }.
+async function montarResumo(req) {
+    const itens = lerCarrinho(req);
+    const slugs = itens.map(item => item.slug);
+    // $in = "o slug é um destes". Uma consulta só para todos os itens.
+    const produtos = await db.collection('products').find({ slug: { $in: slugs } }).toArray();
+
+    const linhas = [];
+    let unidades = 0;
+    let total = 0;
+    for (const item of itens) {
+        const produto = produtos.find(p => p.slug === item.slug);
+        if (!produto) {
+            continue; // o produto saiu da loja: ignora
+        }
+        const subtotal = produto.preco * item.quantidade;
+        linhas.push({ produto, quantidade: item.quantidade, subtotal });
+        unidades += item.quantidade;
+        total += subtotal;
+    }
+    return { linhas, unidades, total };
+}
+
+// Quantidade que veio do formulário -> número inteiro. "abc" ou vazio viram NaN.
+function lerQuantidade(valor) {
+    return Math.floor(Number(lerTexto(valor)));
+}
+
+// Guarda um aviso para a PRÓXIMA página mostrar (depois do redirecionamento).
+// tipo: 'sucesso' ou 'erro'. extras: { verCarrinho: true } ou { desfazer: { slug, quantidade } }.
+function avisar(req, texto, tipo, extras = {}) {
+    req.session.aviso = { texto, tipo, ...extras };
+}
+
+// ---------- Checkout: validação ----------
+
+const ESTADOS = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA',
+    'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'];
+
+// Mesmas regras e mensagens da tela (public/js/pagina-checkout.js).
+const naoVazio = valor => valor !== '' && valor.length <= 100;
+const REGRAS_CHECKOUT = [
+    { id: 'nome', nome: 'Nome completo', mensagem: 'Informe seu nome completo (nome e sobrenome).',
+        valido: d => d.nome.split(/\s+/).length >= 2 && d.nome.length >= 5 && d.nome.length <= 100 },
+    { id: 'cep', nome: 'CEP', mensagem: 'Informe o CEP no formato 00000-000.', valido: d => /^\d{5}-?\d{3}$/.test(d.cep) },
+    { id: 'endereco', nome: 'Endereço', mensagem: 'Informe o endereço.', valido: d => naoVazio(d.endereco) },
+    { id: 'numero', nome: 'Número', mensagem: 'Informe o número (ou S/N, se não tiver).', valido: d => naoVazio(d.numero) },
+    { id: 'complemento', nome: 'Complemento', mensagem: 'Use no máximo 100 caracteres.', valido: d => d.complemento.length <= 100 },
+    { id: 'bairro', nome: 'Bairro', mensagem: 'Informe o bairro.', valido: d => naoVazio(d.bairro) },
+    { id: 'cidade', nome: 'Cidade', mensagem: 'Informe a cidade.', valido: d => naoVazio(d.cidade) },
+    { id: 'estado', nome: 'Estado', mensagem: 'Selecione o estado.', valido: d => ESTADOS.includes(d.estado) },
+    { id: 'pagamento', nome: 'Forma de pagamento', mensagem: 'Escolha uma forma de pagamento.',
+        valido: d => Object.hasOwn(PAGAMENTOS, d.pagamento) }
+];
+
+// Confere uma lista de regras. Devolve { idDoCampo: { nome, mensagem } } (vazio = tudo certo).
+function validar(regras, dados) {
+    const erros = {};
+    for (const regra of regras) {
+        if (!regra.valido(dados)) {
+            erros[regra.id] = { nome: regra.nome, mensagem: regra.mensagem };
+        }
+    }
+    return erros;
+}
+
+// "CEL-" + 6 algarismos sorteados. O índice único do banco garante que não se repete.
+function gerarNumeroPedido() {
+    return 'CEL-' + String(crypto.randomInt(0, 1000000)).padStart(6, '0');
+}
+
+// Sessões que estão gravando um pedido agora: um segundo clique no mesmo instante é ignorado.
+const pedidosEmAndamento = new Set();
 
 // Tira acentos e maiúsculas, para "Câmera" e "camera" serem a mesma busca.
 function normalizar(texto) {
@@ -245,12 +356,7 @@ app.post('/cadastro', async (req, res) => {
     // O que volta para o formulário em caso de erro: tudo, MENOS as senhas.
     const { senha, confirmacao, ...valores } = dados;
 
-    const erros = {};
-    for (const regra of REGRAS_CADASTRO) {
-        if (!regra.valido(dados)) {
-            erros[regra.id] = { nome: regra.nome, mensagem: regra.mensagem };
-        }
-    }
+    const erros = validar(REGRAS_CADASTRO, dados);
     if (Object.keys(erros).length > 0) {
         // 400 = "o pedido veio com dados errados"
         return mostrarCadastro(res, { status: 400, valores, erros });
@@ -312,10 +418,14 @@ app.post('/login', async (req, res, next) => {
     }
 
     // regenerate() troca o número da sessão no momento do login (protege contra "roubo" de sessão).
-    // Atenção, Etapa 4: o carrinho guardado na sessão precisa ser copiado para a sessão nova.
+    // A sessão nova nasce vazia, então guardamos o carrinho antes e copiamos depois.
+    const carrinho = lerCarrinho(req);
     req.session.regenerate(erroSessao => {
         if (erroSessao) {
             return next(erroSessao);
+        }
+        if (carrinho.length > 0) {
+            req.session.carrinho = carrinho;
         }
         // Na sessão vai só o necessário. O hash da senha NUNCA.
         req.session.user = { id: usuario._id.toString(), nome: usuario.nome, email: usuario.email };
@@ -346,16 +456,198 @@ app.post('/sair', (req, res, next) => {
 // ----- Minha conta -----
 
 // requireAuth roda antes: sem login, a rota nem chega a montar a página.
-app.get('/conta', requireAuth, (req, res) => {
+app.get('/conta', requireAuth, async (req, res) => {
     res.set('Cache-Control', 'no-store'); // depois de sair, o "Voltar" não mostra a conta guardada
-    res.render('conta');
+    // Minhas compras: SÓ os pedidos desta pessoa, do mais novo para o mais antigo.
+    const pedidos = await db.collection('orders')
+        .find({ userId: new ObjectId(req.session.user.id) })
+        .sort({ createdAt: -1 })
+        .toArray();
+    res.render('conta', { pedidos });
 });
 
-// Estas páginas ainda funcionam com o JavaScript do navegador (localStorage), como antes.
-// Na Etapa 4 elas passam a falar com o servidor e o banco.
-app.get('/carrinho', (req, res) => res.render('carrinho'));
-app.get('/checkout', (req, res) => res.render('checkout'));
-app.get('/confirmacao', (req, res) => res.render('confirmacao'));
+// ----- Carrinho -----
+// As rotas POST mudam o carrinho e REDIRECIONAM (padrão "POST -> redirecionar -> GET"):
+// recarregar a página depois não repete a ação.
+
+app.get('/carrinho', async (req, res) => {
+    res.render('carrinho', { resumo: await montarResumo(req), QUANTIDADE_MAXIMA });
+});
+
+app.post('/carrinho/adicionar', async (req, res) => {
+    const corpo = req.body || {};
+    const voltar = caminhoSeguro(corpo.voltar) || '/carrinho';
+    // O produto é conferido no BANCO: um slug inventado no DevTools não entra no carrinho.
+    const produto = await db.collection('products').findOne({ slug: lerTexto(corpo.slug) });
+    const pedida = lerQuantidade(corpo.quantidade || '1');
+
+    if (!produto) {
+        avisar(req, 'Produto não encontrado.', 'erro');
+        return res.redirect(303, voltar);
+    }
+    if (!(pedida >= 1)) {   // pega 0, negativos e NaN
+        avisar(req, 'Informe uma quantidade de 1 a ' + QUANTIDADE_MAXIMA + '.', 'erro');
+        return res.redirect(303, voltar);
+    }
+
+    const carrinho = lerCarrinho(req);
+    const item = carrinho.find(i => i.slug === produto.slug);
+    const atual = item ? item.quantidade : 0;
+
+    if (atual >= QUANTIDADE_MAXIMA) {
+        avisar(req, 'Limite de ' + QUANTIDADE_MAXIMA + ' unidades de ' + produto.nome + ' por pedido.', 'erro', { verCarrinho: true });
+        return res.redirect(303, voltar);
+    }
+
+    const nova = Math.min(atual + pedida, QUANTIDADE_MAXIMA);
+    if (item) {
+        item.quantidade = nova;
+    } else {
+        carrinho.push({ slug: produto.slug, quantidade: nova });
+    }
+    req.session.carrinho = carrinho;
+
+    if (atual + pedida > nova) {
+        avisar(req, 'O limite é de ' + QUANTIDADE_MAXIMA + ' unidades de ' + produto.nome +
+            ' por pedido. Seu carrinho ficou com ' + nova + '.', 'erro', { verCarrinho: true });
+    } else {
+        const unidades = nova > 1 ? ' (' + nova + ' unidades no carrinho)' : '';
+        avisar(req, produto.nome + ' adicionado ao carrinho' + unidades + '.', 'sucesso', { verCarrinho: true });
+    }
+    res.redirect(303, voltar);
+});
+
+app.post('/carrinho/atualizar', async (req, res) => {
+    const corpo = req.body || {};
+    const item = lerCarrinho(req).find(i => i.slug === lerTexto(corpo.slug));
+    if (!item) {
+        return res.redirect(303, '/carrinho');
+    }
+    const produto = await db.collection('products').findOne({ slug: item.slug });
+    const nome = produto ? produto.nome : 'este produto';
+    const pedida = lerQuantidade(corpo.quantidade);
+
+    // Valores sem sentido são corrigidos (em vez de recusados), e a pessoa é avisada.
+    if (!(pedida >= 1)) {
+        item.quantidade = 1;
+        avisar(req, 'A quantidade mínima é 1. Para tirar ' + nome + ' do carrinho, use o botão Remover.', 'erro');
+    } else if (pedida > QUANTIDADE_MAXIMA) {
+        item.quantidade = QUANTIDADE_MAXIMA;
+        avisar(req, 'Limite de ' + QUANTIDADE_MAXIMA + ' unidades de ' + nome + ' por pedido. A quantidade foi ajustada para ' + QUANTIDADE_MAXIMA + '.', 'erro');
+    } else {
+        item.quantidade = pedida;
+        avisar(req, 'Quantidade de ' + nome + ' atualizada para ' + pedida + '.', 'sucesso');
+    }
+    res.redirect(303, '/carrinho');
+});
+
+app.post('/carrinho/remover', async (req, res) => {
+    const slug = lerTexto((req.body || {}).slug);
+    const carrinho = lerCarrinho(req);
+    const item = carrinho.find(i => i.slug === slug);
+    if (item) {
+        req.session.carrinho = carrinho.filter(i => i !== item);
+        const produto = await db.collection('products').findOne({ slug });
+        // "Desfazer": o aviso traz um botão que adiciona de volta a mesma quantidade.
+        avisar(req, (produto ? produto.nome : 'Item') + ' removido do carrinho.', 'sucesso',
+            { desfazer: { slug, quantidade: item.quantidade } });
+    }
+    res.redirect(303, '/carrinho');
+});
+
+// ----- Checkout e pedido -----
+
+// Mostra o checkout. Carrinho vazio = estado vazio (sem formulário).
+async function mostrarCheckout(req, res, { status = 200, valores = {}, erros = {} } = {}) {
+    res.status(status).render('checkout', { resumo: await montarResumo(req), valores, erros, ESTADOS });
+}
+
+app.get('/checkout', requireAuth, (req, res) => mostrarCheckout(req, res));
+
+app.post('/checkout', requireAuth, async (req, res) => {
+    const corpo = req.body || {};
+    const campo = nome => lerTexto(corpo[nome]).trim();
+    const dados = {
+        nome: campo('nome'), cep: campo('cep'), endereco: campo('endereco'), numero: campo('numero'),
+        complemento: campo('complemento'), bairro: campo('bairro'), cidade: campo('cidade'),
+        estado: campo('estado'), pagamento: campo('pagamento')
+    };
+
+    // Os preços vêm do BANCO agora. Qualquer preço ou total enviado pelo navegador é ignorado.
+    const resumo = await montarResumo(req);
+    if (resumo.linhas.length === 0) {
+        return res.redirect(303, '/checkout'); // nada a comprar: mostra o estado vazio
+    }
+
+    const erros = validar(REGRAS_CHECKOUT, dados);
+    if (Object.keys(erros).length > 0) {
+        return mostrarCheckout(req, res, { status: 400, valores: dados, erros });
+    }
+
+    // Dois cliques ao mesmo tempo: o segundo espera o primeiro terminar e cai no carrinho vazio.
+    if (pedidosEmAndamento.has(req.sessionID)) {
+        return res.redirect(303, '/conta');
+    }
+    pedidosEmAndamento.add(req.sessionID);
+    try {
+        const { pagamento, ...endereco } = dados;
+        endereco.cep = endereco.cep.replace(/^(\d{5})-?(\d{3})$/, '$1-$2'); // 57000000 -> 57000-000
+
+        const pedido = {
+            userId: new ObjectId(req.session.user.id), // o DONO vem da sessão, nunca do formulário
+            // Os itens são uma "foto" do momento da compra: se o preço mudar amanhã, o pedido não muda.
+            itens: resumo.linhas.map(l => ({
+                slug: l.produto.slug, nome: l.produto.nome, preco: l.produto.preco,
+                quantidade: l.quantidade, subtotal: l.subtotal
+            })),
+            total: resumo.total,
+            pagamento,
+            endereco,
+            createdAt: new Date()
+        };
+
+        // Se o número sorteado já existir (erro 11000), sorteia outro.
+        for (let tentativa = 1; ; tentativa++) {
+            try {
+                pedido.numero = gerarNumeroPedido();
+                await db.collection('orders').insertOne(pedido);
+                break;
+            } catch (erro) {
+                delete pedido._id; // o driver põe um _id no objeto; a próxima tentativa precisa de outro
+                if (erro.code !== 11000 || tentativa === 5) {
+                    throw erro;
+                }
+            }
+        }
+
+        // Só depois de gravar: esvazia o carrinho e vai para a confirmação.
+        // Redirecionar faz o "recarregar" abrir a confirmação, e não criar outro pedido.
+        req.session.carrinho = [];
+        req.session.save(() => {
+            pedidosEmAndamento.delete(req.sessionID);
+            res.redirect(303, '/pedido/' + pedido.numero);
+        });
+    } catch (erro) {
+        pedidosEmAndamento.delete(req.sessionID);
+        throw erro;
+    }
+});
+
+// Confirmação: busca pelo número E pelo dono. Pedido de outra pessoa = 404, igual a um que não existe.
+app.get('/pedido/:numero', requireAuth, async (req, res) => {
+    const pedido = await db.collection('orders').findOne({
+        numero: req.params.numero,
+        userId: new ObjectId(req.session.user.id)
+    });
+    if (!pedido) {
+        return res.status(404).render('erro', {
+            titulo: 'Pedido não encontrado',
+            mensagem: 'Não encontramos este pedido na sua conta. Confira suas compras em Minha conta.'
+        });
+    }
+    res.render('confirmacao', { pedido });
+});
+
 app.get('/design-system', (req, res) => res.render('design-system'));
 
 // ---------- Erros ----------
@@ -397,6 +689,9 @@ async function main() {
     // Índice único = o próprio banco impede dois e-mails (ou dois slugs) iguais.
     await db.collection('users').createIndex({ email: 1 }, { unique: true });
     await db.collection('products').createIndex({ slug: 1 }, { unique: true });
+    await db.collection('orders').createIndex({ numero: 1 }, { unique: true });
+    // Acelera "Minhas compras": pedidos de uma pessoa, do mais novo para o mais antigo.
+    await db.collection('orders').createIndex({ userId: 1, createdAt: -1 });
     await popularProdutos();
 
     app.listen(PORTA, () => {

@@ -5,8 +5,7 @@
    Etapa 2: o servidor lê a lista direto daqui.
    Etapa 3: esta lista vira a "carga inicial" do banco de dados: na primeira vez que o servidor
             sobe, ela é copiada para a coleção "products" do MongoDB.
-   (Ainda existe uma cópia em public/js/produtos.js, usada pelo carrinho do navegador.
-    Ela some na Etapa 4, quando o carrinho também passar para o servidor.)
+   Etapa 4: o carrinho também usa só o banco (a cópia antiga do navegador foi apagada).
 ========================================= */
 
 // Garantia de todos os produtos (a home já diz: 12 meses de garantia em todos os smartphones).

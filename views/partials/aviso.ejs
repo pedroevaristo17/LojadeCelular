@@ -1,0 +1,20 @@
+<%# Aviso que o servidor guardou na sessão e aparece UMA vez (ex.: "Galaxy S26 adicionado ao carrinho.").
+    Usa o mesmo visual .aviso de antes. role="status" faz o leitor de tela anunciar a mensagem.
+    aviso = { texto, tipo: 'sucesso' | 'erro', verCarrinho?, desfazer?: { slug, quantidade } } -%>
+<% if (locals.aviso) { -%>
+<div class="aviso aviso-<%= aviso.tipo === 'erro' ? 'erro' : 'sucesso' %>" role="status" data-aviso-servidor>
+  <p class="aviso-texto"><%= aviso.texto %></p>
+<% if (aviso.desfazer) { -%>
+  <%# "Desfazer" adiciona de volta a mesma quantidade que foi removida. -%>
+  <form action="/carrinho/adicionar" method="post">
+    <input type="hidden" name="slug" value="<%= aviso.desfazer.slug %>">
+    <input type="hidden" name="quantidade" value="<%= aviso.desfazer.quantidade %>">
+    <input type="hidden" name="voltar" value="/carrinho">
+    <button type="submit" class="btn">Desfazer</button>
+  </form>
+<% } else if (aviso.verCarrinho && locals.paginaAtual !== 'carrinho') { -%>
+  <a href="/carrinho" class="btn">Ver carrinho</a>
+<% } -%>
+  <button type="button" class="btn btn-link" data-aviso-fechar>Fechar</button>
+</div>
+<% } -%>

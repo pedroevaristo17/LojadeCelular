@@ -1,8 +1,11 @@
-<%# PÁGINA DO CARRINHO. Os itens ainda são desenhados no navegador por public/js/pagina-carrinho.js,
-    a partir do localStorage. Na Etapa 4 o carrinho passa para o servidor. -%>
+<%# PÁGINA DO CARRINHO (GET /carrinho). Tudo é calculado no SERVIDOR com os preços do banco.
+    O servidor passa:
+      resumo            -> { linhas: [{ produto, quantidade, subtotal }], unidades, total }
+      QUANTIDADE_MAXIMA -> limite de unidades por produto (10)
+    Cada ação (atualizar, remover) é um formulário POST: funciona até sem JavaScript. -%>
 <!DOCTYPE html>
 <html lang="pt-BR">
-<%- include('partials/head', { titulo: 'Carrinho | CelStore', scripts: ['produtos', 'carrinho', 'loja', 'pagina-carrinho'] }) %>
+<%- include('partials/head', { titulo: 'Carrinho | CelStore', scripts: ['loja'] }) %>
 <body data-sem-link-carrinho>
 <%- include('partials/navbar', { paginaAtual: 'carrinho' }) %>
 
@@ -17,17 +20,38 @@
     </ol>
   </nav>
 
-  <noscript>
-    <p class="mensagem-erro">O carrinho precisa de JavaScript para funcionar. Ative o JavaScript no seu navegador e recarregue a página.</p>
-  </noscript>
-
-  <!-- Os itens e os valores são desenhados por js/pagina-carrinho.js a partir do que está no localStorage.
-       Este bloco começa escondido (hidden) e o JS mostra ele quando existem itens. -->
-  <div class="layout-compra" data-carrinho-conteudo hidden>
+<% if (resumo.linhas.length > 0) { -%>
+  <div class="layout-compra">
     <section aria-labelledby="titulo-itens">
-      <h2 id="titulo-itens" class="titulo-secao" tabindex="-1">Itens (<span data-titulo-qtd>0</span>)</h2>
+      <h2 id="titulo-itens" class="titulo-secao">Itens (<%= resumo.unidades %>)</h2>
 
-      <ul class="lista-carrinho" data-lista-carrinho></ul>
+      <ul class="lista-carrinho">
+<% resumo.linhas.forEach(function (linha) { const p = linha.produto; -%>
+        <li class="item-carrinho">
+          <img src="<%= p.imagem %>" alt="<%= p.alt %>" width="<%= p.largura %>" height="<%= p.altura %>">
+          <div class="item-info">
+            <h3><%= p.nome %></h3>
+            <p class="item-preco"><%= formatarPreco(p.preco) %> cada</p>
+            <div class="item-acoes">
+              <%# Muda a quantidade: o servidor confere e corrige (mínimo 1, máximo 10). -%>
+              <form action="/carrinho/atualizar" method="post" class="item-acoes">
+                <input type="hidden" name="slug" value="<%= p.slug %>">
+                <div class="campo campo-quantidade">
+                  <label for="qtd-<%= p.slug %>">Quantidade<span class="sr-only"> de <%= p.nome %></span></label>
+                  <input type="number" id="qtd-<%= p.slug %>" name="quantidade" value="<%= linha.quantidade %>" min="1" max="<%= QUANTIDADE_MAXIMA %>">
+                </div>
+                <button type="submit" class="btn btn-secundario">Atualizar<span class="sr-only"> quantidade de <%= p.nome %></span></button>
+              </form>
+              <form action="/carrinho/remover" method="post">
+                <input type="hidden" name="slug" value="<%= p.slug %>">
+                <button type="submit" class="btn btn-link">Remover<span class="sr-only"> <%= p.nome %> do carrinho</span></button>
+              </form>
+            </div>
+          </div>
+          <p class="item-subtotal"><span class="sr-only">Subtotal: </span><%= formatarPreco(linha.subtotal) %></p>
+        </li>
+<% }) -%>
+      </ul>
     </section>
 
     <section class="resumo" aria-labelledby="titulo-resumo">
@@ -35,8 +59,8 @@
 
       <dl class="resumo-valores">
         <div>
-          <dt data-resumo-rotulo>Subtotal</dt>
-          <dd data-resumo-subtotal>R$ 0</dd>
+          <dt>Subtotal (<%= resumo.unidades === 1 ? '1 item' : resumo.unidades + ' itens' %>)</dt>
+          <dd><%= formatarPreco(resumo.total) %></dd>
         </div>
         <div>
           <dt>Frete</dt>
@@ -44,25 +68,25 @@
         </div>
         <div class="resumo-total">
           <dt>Total</dt>
-          <!-- aria-live: o leitor de tela avisa o novo total quando ele muda -->
-          <dd data-resumo-total aria-live="polite">R$ 0</dd>
+          <dd><%= formatarPreco(resumo.total) %></dd>
         </div>
       </dl>
 
-      <p class="resumo-parcelas" data-resumo-parcelas></p>
+      <p class="resumo-parcelas">Ou em até 12x de <%= formatarPreco(resumo.total / 12) %> sem juros no cartão de crédito.</p>
 
       <a href="/checkout" class="btn btn-bloco">Finalizar compra</a>
       <a href="/" class="btn btn-secundario btn-bloco">Continuar comprando</a>
     </section>
   </div>
-
-  <!-- Estado "carrinho vazio": aparece quando não há nenhum item -->
-  <section class="estado-vazio" data-carrinho-vazio hidden aria-labelledby="titulo-vazio">
+<% } else { -%>
+  <%# Estado VAZIO -%>
+  <section class="estado-vazio" aria-labelledby="titulo-vazio">
     <span class="icone-vazio" aria-hidden="true">🛒</span>
-    <h2 id="titulo-vazio" tabindex="-1">Seu carrinho está vazio</h2>
+    <h2 id="titulo-vazio">Seu carrinho está vazio</h2>
     <p>Que tal dar uma olhada nos celulares da loja?</p>
     <a href="/" class="btn">Ver celulares</a>
   </section>
+<% } -%>
 </main>
 
 <%- include('partials/footer', { paginaAtual: 'carrinho' }) %>

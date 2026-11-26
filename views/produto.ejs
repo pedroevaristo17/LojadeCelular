@@ -7,7 +7,7 @@
 <html lang="pt-BR">
 <%- include('partials/head', {
     titulo: produto ? produto.nome + ' | CelStore' : 'Produto não encontrado | CelStore',
-    scripts: ['produtos', 'carrinho', 'loja']
+    scripts: ['loja']
 }) %>
 <body>
 <%- include('partials/navbar', { paginaAtual: 'produto' }) %>
@@ -32,9 +32,10 @@
       <p class="preco">De <del><%= formatarPreco(produto.precoAntigo) %></del> por <ins><%= formatarPreco(produto.preco) %></ins></p>
       <p class="parcelamento">Em até 12x de <%= formatarPreco(produto.preco / 12) %> sem juros no cartão de crédito.</p>
 
-      <%# O envio ainda é tratado por public/js/loja.js (data-form-compra): adiciona ao carrinho do navegador.
-          Na Etapa 4 este formulário passa a enviar para o servidor. -%>
-      <form class="form-compra" data-form-compra data-produto="<%= produto.slug %>">
+      <%# Envia para o servidor só QUAL produto e QUANTAS unidades. O preço o servidor busca no banco. -%>
+      <form class="form-compra" action="/carrinho/adicionar" method="post">
+        <input type="hidden" name="slug" value="<%= produto.slug %>">
+        <input type="hidden" name="voltar" value="<%= urlAtual %>">
         <div class="campo campo-quantidade">
           <label for="quantidade">Quantidade</label>
           <input type="number" id="quantidade" name="quantidade" value="1" min="1" max="10">

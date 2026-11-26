@@ -1,83 +1,74 @@
-<%# PÁGINA DE CONFIRMAÇÃO DO PEDIDO. Ainda lê o pedido do localStorage (public/js/pagina-confirmacao.js).
-    Na Etapa 4 ela mostra o pedido gravado no banco. -%>
+<%# CONFIRMAÇÃO DO PEDIDO (GET /pedido/CEL-xxxxxx). Só o DONO abre: o servidor busca por número E userId.
+    O servidor passa:  pedido -> o documento gravado em "orders"
+    Tudo que a pessoa digitou (nome, endereço) entra com a tag de saída com "=", que escapa o HTML. -%>
 <!DOCTYPE html>
 <html lang="pt-BR">
-<%- include('partials/head', { titulo: 'Confirmação do pedido | CelStore', scripts: ['produtos', 'carrinho', 'loja', 'pedido', 'pagina-confirmacao'] }) %>
+<%- include('partials/head', { titulo: 'Pedido ' + pedido.numero + ' | CelStore', scripts: ['loja'] }) %>
 <body>
 <%- include('partials/navbar', { paginaAtual: 'confirmacao' }) %>
 
 <main id="conteudo">
   <h1>Confirmação do pedido</h1>
 
-  <noscript>
-    <p class="mensagem-erro">Esta página precisa de JavaScript para mostrar o seu pedido. Ative o JavaScript no seu navegador e recarregue a página.</p>
-  </noscript>
+  <nav class="etapas" aria-label="Etapas da compra">
+    <ol>
+      <li class="etapa-concluida">Carrinho<span class="sr-only"> (etapa concluída)</span></li>
+      <li class="etapa-concluida">Entrega e pagamento<span class="sr-only"> (etapa concluída)</span></li>
+      <li class="etapa-concluida" aria-current="step">Confirmação</li>
+    </ol>
+  </nav>
 
-  <!-- Tudo aqui é preenchido por js/pagina-confirmacao.js a partir do pedido guardado.
-       Este bloco começa escondido (hidden) e só aparece se existir um pedido. -->
-  <div data-confirmacao-conteudo hidden>
-    <nav class="etapas" aria-label="Etapas da compra">
-      <ol>
-        <li class="etapa-concluida">Carrinho<span class="sr-only"> (etapa concluída)</span></li>
-        <li class="etapa-concluida">Entrega e pagamento<span class="sr-only"> (etapa concluída)</span></li>
-        <li class="etapa-concluida" aria-current="step">Confirmação</li>
-      </ol>
-    </nav>
+  <div class="coluna-estreita">
+    <section class="confirmacao" aria-labelledby="titulo-sucesso">
+      <span class="icone-sucesso" aria-hidden="true">✓</span>
+      <h2 id="titulo-sucesso">Obrigado pela sua compra, <%= primeiroNome(pedido.endereco.nome) %>!</h2>
+      <p>Seu pedido foi registrado.</p>
+      <p class="numero-pedido">Número do pedido: <strong><%= pedido.numero %></strong></p>
+      <p>Realizado em <%= formatarData(pedido.createdAt) %></p>
+    </section>
 
-    <div class="coluna-estreita">
-      <section class="confirmacao" aria-labelledby="titulo-sucesso">
-        <span class="icone-sucesso" aria-hidden="true">✓</span>
-        <h2 id="titulo-sucesso">Obrigado pela sua compra<span data-pedido-nome></span>!</h2>
-        <p>Seu pedido foi registrado.</p>
-        <p class="numero-pedido">Número do pedido: <strong data-pedido-numero></strong></p>
-        <p data-pedido-data></p>
-      </section>
+    <section class="resumo" aria-labelledby="titulo-resumo">
+      <h2 id="titulo-resumo" class="titulo-secao">Resumo do pedido</h2>
 
-      <section class="resumo" aria-labelledby="titulo-resumo">
-        <h2 id="titulo-resumo" class="titulo-secao">Resumo do pedido</h2>
+      <%# Nome e preço copiados no momento da compra: não mudam se o catálogo mudar. -%>
+      <ul class="resumo-itens">
+<% pedido.itens.forEach(function (item) { -%>
+        <li><span><%= item.nome %> (<%= item.quantidade %> un.)</span> <span><%= formatarPreco(item.subtotal) %></span></li>
+<% }) -%>
+      </ul>
 
-        <ul class="resumo-itens" data-resumo-itens></ul>
+      <dl class="resumo-valores">
+        <div>
+          <dt>Subtotal</dt>
+          <dd><%= formatarPreco(pedido.total) %></dd>
+        </div>
+        <div>
+          <dt>Frete</dt>
+          <dd>Grátis</dd>
+        </div>
+        <div class="resumo-total">
+          <dt>Total</dt>
+          <dd><%= formatarPreco(pedido.total) %></dd>
+        </div>
+      </dl>
+    </section>
 
-        <dl class="resumo-valores">
-          <div>
-            <dt>Subtotal</dt>
-            <dd data-resumo-subtotal>R$ 0</dd>
-          </div>
-          <div>
-            <dt>Frete</dt>
-            <dd>Grátis</dd>
-          </div>
-          <div class="resumo-total">
-            <dt>Total</dt>
-            <dd data-resumo-total>R$ 0</dd>
-          </div>
-        </dl>
-      </section>
+    <section class="resumo" aria-labelledby="titulo-entrega">
+      <h2 id="titulo-entrega" class="titulo-secao">Entrega e pagamento</h2>
 
-      <section class="resumo" aria-labelledby="titulo-entrega">
-        <h2 id="titulo-entrega" class="titulo-secao">Entrega e pagamento</h2>
+      <dl class="dados-pedido">
+        <dt>Entrega para</dt>
+        <dd><%= pedido.endereco.nome %>: <%= montarEndereco(pedido.endereco) %></dd>
+        <dt>Forma de pagamento</dt>
+        <dd><%= PAGAMENTOS[pedido.pagamento] %></dd>
+      </dl>
+    </section>
 
-        <dl class="dados-pedido">
-          <dt>Entrega para</dt>
-          <dd data-pedido-entrega></dd>
-          <dt>Forma de pagamento</dt>
-          <dd data-pedido-pagamento></dd>
-        </dl>
-      </section>
-
-      <p class="acoes-finais">
-        <a href="/" class="btn">Voltar para a loja</a>
-      </p>
-    </div>
+    <p class="acoes-finais">
+      <a href="/" class="btn">Voltar para a loja</a>
+      <a href="/conta" class="btn btn-secundario">Minhas compras</a>
+    </p>
   </div>
-
-  <!-- Estado "sem pedido": quem abre esta página sem ter finalizado uma compra -->
-  <section class="estado-vazio" data-confirmacao-vazio hidden aria-labelledby="titulo-vazio">
-    <span class="icone-vazio" aria-hidden="true">📦</span>
-    <h2 id="titulo-vazio">Nenhum pedido encontrado</h2>
-    <p>Você ainda não finalizou nenhuma compra neste navegador.</p>
-    <a href="/" class="btn">Ver celulares</a>
-  </section>
 </main>
 
 <%- include('partials/footer', { paginaAtual: 'confirmacao' }) %>

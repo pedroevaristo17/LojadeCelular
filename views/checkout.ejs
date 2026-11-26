@@ -1,8 +1,30 @@
-<%# PÁGINA DE ENTREGA E PAGAMENTO (checkout). Ainda validada e enviada pelo navegador
-    (public/js/pagina-checkout.js). Na Etapa 4 o pedido passa a ser gravado no banco pelo servidor. -%>
+<%# PÁGINA DE ENTREGA E PAGAMENTO (checkout). Só para quem está logado (requireAuth no servidor).
+    O formulário envia POST /checkout; o SERVIDOR valida, calcula o total com o banco e grava o pedido.
+    O servidor passa:
+      resumo  -> itens e total calculados com os preços do banco
+      valores -> o que foi digitado, para voltar no formulário quando há erro
+      erros   -> { idDoCampo: { nome, mensagem } } -%>
+<% const lista = Object.values(erros);
+   // Resumo no topo: o mesmo texto que o JavaScript da tela escreve.
+   const resumoErros = lista.length === 0 ? '' :
+       (lista.length === 1 ? 'Corrija 1 campo' : 'Corrija ' + lista.length + ' campos') +
+       ' para continuar: ' + lista.map(e => e.nome).join(', ') + '.';
+   // aria-invalid avisa "inválido"; aria-describedby liga o campo à dica e ao erro. (Só textos fixos.)
+   const aria = (id, dica) => {
+       const ids = [dica, erros[id] ? 'erro-' + id : ''].filter(Boolean).join(' ');
+       return (erros[id] ? ' aria-invalid="true"' : '') + (ids ? ' aria-describedby="' + ids + '"' : '');
+   };
+   const erroDe = id => include('partials/erro-campo', { id: id, erro: erros[id] });
+   const v = nome => valores[nome] || '';
+   const NOMES_ESTADOS = { AC: 'Acre', AL: 'Alagoas', AP: 'Amapá', AM: 'Amazonas', BA: 'Bahia', CE: 'Ceará',
+       DF: 'Distrito Federal', ES: 'Espírito Santo', GO: 'Goiás', MA: 'Maranhão', MT: 'Mato Grosso',
+       MS: 'Mato Grosso do Sul', MG: 'Minas Gerais', PA: 'Pará', PB: 'Paraíba', PR: 'Paraná', PE: 'Pernambuco',
+       PI: 'Piauí', RJ: 'Rio de Janeiro', RN: 'Rio Grande do Norte', RS: 'Rio Grande do Sul', RO: 'Rondônia',
+       RR: 'Roraima', SC: 'Santa Catarina', SP: 'São Paulo', SE: 'Sergipe', TO: 'Tocantins' };
+-%>
 <!DOCTYPE html>
 <html lang="pt-BR">
-<%- include('partials/head', { titulo: 'Entrega e pagamento | CelStore', scripts: ['produtos', 'carrinho', 'loja', 'formulario', 'pedido', 'pagina-checkout'] }) %>
+<%- include('partials/head', { titulo: 'Entrega e pagamento | CelStore', scripts: ['loja', 'formulario', 'pagina-checkout'] }) %>
 <body>
 <%- include('partials/navbar', { paginaAtual: 'checkout' }) %>
 
@@ -17,113 +39,85 @@
     </ol>
   </nav>
 
-  <noscript>
-    <p class="mensagem-erro">O checkout precisa de JavaScript para funcionar. Ative o JavaScript no seu navegador e recarregue a página.</p>
-  </noscript>
-
-  <!-- Este bloco começa escondido (hidden). O js/pagina-checkout.js mostra ele quando há itens no carrinho. -->
-  <div class="layout-compra" data-checkout-conteudo hidden>
-    <!-- novalidate: desliga os balões de erro do navegador, porque o JS mostra mensagens próprias (mais claras).
-         As marcações "required" continuam aqui para os leitores de tela avisarem que o campo é obrigatório. -->
-    <form class="formulario" data-form-checkout novalidate>
-      <!-- Resumo dos erros: o JS escreve aqui. role="alert" faz o leitor de tela falar a mensagem na hora. -->
-      <div role="alert" class="mensagem-erro"></div>
+<% if (resumo.linhas.length > 0) { -%>
+  <div class="layout-compra">
+    <%# novalidate: as mensagens são as nossas (JavaScript na tela e, de novo, o servidor). -%>
+    <form class="formulario" action="/checkout" method="post" data-form-checkout novalidate>
+      <%# Resumo dos erros. Tem de ficar sem espaços quando vazio, senão o CSS mostra a caixa. -%>
+      <div role="alert" class="mensagem-erro"><%= resumoErros %></div>
 
       <fieldset>
         <legend>Endereço de entrega</legend>
 
         <div class="campo">
           <label for="nome">Nome completo (obrigatório)</label>
-          <input type="text" id="nome" name="nome" required autocomplete="name">
+          <input type="text" id="nome" name="nome" value="<%= v('nome') %>" required autocomplete="name"<%- aria('nome') %>>
+          <%- erroDe('nome') %>
         </div>
 
         <div class="campo">
           <label for="cep">CEP (obrigatório)</label>
-          <input type="text" id="cep" name="cep" required inputmode="numeric" pattern="[0-9]{5}-?[0-9]{3}" title="Digite o CEP no formato 00000-000" autocomplete="postal-code" aria-describedby="dica-cep">
+          <input type="text" id="cep" name="cep" value="<%= v('cep') %>" required inputmode="numeric" autocomplete="postal-code"<%- aria('cep', 'dica-cep') %>>
           <p id="dica-cep" class="dica-campo">Formato: 00000-000</p>
+          <%- erroDe('cep') %>
         </div>
 
         <div class="campo">
           <label for="endereco">Endereço (obrigatório)</label>
-          <input type="text" id="endereco" name="endereco" required autocomplete="address-line1">
+          <input type="text" id="endereco" name="endereco" value="<%= v('endereco') %>" required autocomplete="address-line1"<%- aria('endereco') %>>
+          <%- erroDe('endereco') %>
         </div>
 
         <div class="campos-linha">
           <div class="campo">
             <label for="numero">Número (obrigatório)</label>
-            <input type="text" id="numero" name="numero" required>
+            <input type="text" id="numero" name="numero" value="<%= v('numero') %>" required<%- aria('numero') %>>
+            <%- erroDe('numero') %>
           </div>
 
           <div class="campo">
             <label for="complemento">Complemento (opcional)</label>
-            <input type="text" id="complemento" name="complemento" autocomplete="address-line2">
+            <input type="text" id="complemento" name="complemento" value="<%= v('complemento') %>" autocomplete="address-line2"<%- aria('complemento') %>>
+            <%- erroDe('complemento') %>
           </div>
         </div>
 
         <div class="campo">
           <label for="bairro">Bairro (obrigatório)</label>
-          <input type="text" id="bairro" name="bairro" required>
+          <input type="text" id="bairro" name="bairro" value="<%= v('bairro') %>" required<%- aria('bairro') %>>
+          <%- erroDe('bairro') %>
         </div>
 
         <div class="campos-linha">
           <div class="campo">
             <label for="cidade">Cidade (obrigatório)</label>
-            <input type="text" id="cidade" name="cidade" required autocomplete="address-level2">
+            <input type="text" id="cidade" name="cidade" value="<%= v('cidade') %>" required autocomplete="address-level2"<%- aria('cidade') %>>
+            <%- erroDe('cidade') %>
           </div>
 
           <div class="campo">
             <label for="estado">Estado (obrigatório)</label>
-            <select id="estado" name="estado" required autocomplete="address-level1">
+            <select id="estado" name="estado" required autocomplete="address-level1"<%- aria('estado') %>>
               <option value="">Selecione</option>
-              <option value="AC">Acre</option>
-              <option value="AL">Alagoas</option>
-              <option value="AP">Amapá</option>
-              <option value="AM">Amazonas</option>
-              <option value="BA">Bahia</option>
-              <option value="CE">Ceará</option>
-              <option value="DF">Distrito Federal</option>
-              <option value="ES">Espírito Santo</option>
-              <option value="GO">Goiás</option>
-              <option value="MA">Maranhão</option>
-              <option value="MT">Mato Grosso</option>
-              <option value="MS">Mato Grosso do Sul</option>
-              <option value="MG">Minas Gerais</option>
-              <option value="PA">Pará</option>
-              <option value="PB">Paraíba</option>
-              <option value="PR">Paraná</option>
-              <option value="PE">Pernambuco</option>
-              <option value="PI">Piauí</option>
-              <option value="RJ">Rio de Janeiro</option>
-              <option value="RN">Rio Grande do Norte</option>
-              <option value="RS">Rio Grande do Sul</option>
-              <option value="RO">Rondônia</option>
-              <option value="RR">Roraima</option>
-              <option value="SC">Santa Catarina</option>
-              <option value="SP">São Paulo</option>
-              <option value="SE">Sergipe</option>
-              <option value="TO">Tocantins</option>
+<% ESTADOS.forEach(function (sigla) { -%>
+              <option value="<%= sigla %>"<%= v('estado') === sigla ? ' selected' : '' %>><%= NOMES_ESTADOS[sigla] %></option>
+<% }) -%>
             </select>
+            <%- erroDe('estado') %>
           </div>
         </div>
       </fieldset>
 
-      <fieldset class="pagamento">
+      <fieldset class="pagamento"<%- erros.pagamento ? ' aria-describedby="erro-pagamento"' : '' %>>
         <legend>Forma de pagamento (obrigatório)</legend>
+<% Object.keys(PAGAMENTOS).forEach(function (codigo, i) { -%>
 
         <div class="opcao">
-          <input type="radio" id="pagamento-pix" name="pagamento" value="pix" required>
-          <label for="pagamento-pix">Pix</label>
+          <input type="radio" id="pagamento-<%= codigo %>" name="pagamento" value="<%= codigo %>"<%= i === 0 ? ' required' : '' %><%= v('pagamento') === codigo ? ' checked' : '' %>>
+          <label for="pagamento-<%= codigo %>"><%= PAGAMENTOS[codigo] %></label>
         </div>
-
-        <div class="opcao">
-          <input type="radio" id="pagamento-cartao" name="pagamento" value="cartao">
-          <label for="pagamento-cartao">Cartão de crédito (até 12x sem juros)</label>
-        </div>
-
-        <div class="opcao">
-          <input type="radio" id="pagamento-boleto" name="pagamento" value="boleto">
-          <label for="pagamento-boleto">Boleto bancário</label>
-        </div>
+<% }) -%>
+        <%- erroDe('pagamento') %>
       </fieldset>
 
       <button type="submit" class="btn btn-bloco btn-grande" data-botao-confirmar>Confirmar pedido</button>
@@ -132,12 +126,16 @@
     <section class="resumo" aria-labelledby="titulo-resumo">
       <h2 id="titulo-resumo" class="titulo-secao">Resumo do pedido</h2>
 
-      <ul class="resumo-itens" data-resumo-itens></ul>
+      <ul class="resumo-itens">
+<% resumo.linhas.forEach(function (linha) { -%>
+        <li><span><%= linha.produto.nome %> (<%= linha.quantidade %> un.)</span> <span><%= formatarPreco(linha.subtotal) %></span></li>
+<% }) -%>
+      </ul>
 
       <dl class="resumo-valores">
         <div>
           <dt>Subtotal</dt>
-          <dd data-resumo-subtotal>R$ 0</dd>
+          <dd><%= formatarPreco(resumo.total) %></dd>
         </div>
         <div>
           <dt>Frete</dt>
@@ -145,21 +143,22 @@
         </div>
         <div class="resumo-total">
           <dt>Total</dt>
-          <dd data-resumo-total>R$ 0</dd>
+          <dd><%= formatarPreco(resumo.total) %></dd>
         </div>
       </dl>
 
       <a href="/carrinho" class="btn btn-secundario btn-bloco">Voltar ao carrinho</a>
     </section>
   </div>
-
-  <!-- Estado "carrinho vazio": sem itens não há o que finalizar -->
-  <section class="estado-vazio" data-checkout-vazio hidden aria-labelledby="titulo-vazio">
+<% } else { -%>
+  <%# Estado VAZIO: sem itens não há o que finalizar -%>
+  <section class="estado-vazio" aria-labelledby="titulo-vazio">
     <span class="icone-vazio" aria-hidden="true">🛒</span>
     <h2 id="titulo-vazio">Seu carrinho está vazio</h2>
     <p>Adicione um celular ao carrinho antes de finalizar a compra.</p>
     <a href="/" class="btn">Ver celulares</a>
   </section>
+<% } -%>
 </main>
 
 <%- include('partials/footer', { paginaAtual: 'checkout' }) %>

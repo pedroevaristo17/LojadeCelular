@@ -12,7 +12,7 @@ Banco `MONGODB_DB` (padrão `celstore`), acessado com o driver nativo `mongodb`.
 
 - **`users`:** `{ nome, email, passwordHash, createdAt }`. O e-mail é guardado em minúsculas e tem **índice único**.
 - **`products`:** `{ slug, nome, preco, precoAntigo, imagem, especificacoes, ... }`. O `slug` (ex.: `galaxy-s26`) é o identificador usado nas URLs e tem **índice único**. É populada na primeira subida do servidor, quando a coleção está vazia (seed).
-- **`orders`:** `{ numero, userId, itens: [{ slug, nome, preco, quantidade }], total, pagamento, endereco, createdAt }`. O `numero` é único; `userId` é o `ObjectId` do dono. O nome e o preço dos itens são copiados no momento da compra, para o histórico não mudar se o catálogo mudar.
+- **`orders`:** `{ numero, userId, itens: [{ slug, nome, preco, quantidade, subtotal }], total, pagamento, endereco: { nome, cep, endereco, numero, complemento, bairro, cidade, estado }, createdAt }`. O `numero` é único; `userId` é o `ObjectId` do dono. O nome e o preço dos itens são copiados no momento da compra, para o histórico não mudar se o catálogo mudar.
 
 - **`sessions`:** criada e mantida pelo `connect-mongo` (sessões de quem está logado). O código não grava nela diretamente.
 
