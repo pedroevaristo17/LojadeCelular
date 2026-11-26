@@ -1,7 +1,8 @@
 /* =========================================
-   PRODUTOS: a lista oficial da loja
-   Todas as páginas leem os dados daqui. Se um preço mudar,
-   muda num lugar só (e não em cada página).
+   PRODUTOS: a lista da loja usada pelo NAVEGADOR (carrinho, checkout e avisos)
+   O servidor tem a lista dele em dados/produtos.js, que é a que monta as páginas.
+   Esta cópia continua aqui só enquanto o carrinho funciona no navegador (localStorage);
+   na Etapa 4 o carrinho passa para o servidor e este arquivo deixa de ser necessário.
 ========================================= */
 
 // Garantia de todos os produtos (a home já diz: 12 meses de garantia em todos os smartphones).
@@ -15,7 +16,7 @@ const PRODUTOS = [
         nome: 'Galaxy S26',
         precoAntigo: 3999,
         preco: 3499,
-        imagem: 'img/galaxy-s26.webp',
+        imagem: '/img/galaxy-s26.webp',
         largura: 668,
         altura: 808,
         alt: 'Smartphone Galaxy S26 na cor azul-clara, vista frontal e traseira',
@@ -33,7 +34,7 @@ const PRODUTOS = [
         nome: 'iPhone 17',
         precoAntigo: 6499,
         preco: 5999,
-        imagem: 'img/iphone-17.webp',
+        imagem: '/img/iphone-17.webp',
         largura: 967,
         altura: 1200,
         alt: 'Smartphone iPhone 17 na cor grafite, vista frontal e traseira',
@@ -51,7 +52,7 @@ const PRODUTOS = [
         nome: 'Moto Edge 60',
         precoAntigo: 2799,
         preco: 2299,
-        imagem: 'img/moto-edge-60.webp',
+        imagem: '/img/moto-edge-60.webp',
         largura: 1000,
         altura: 1000,
         alt: 'Smartphone Moto Edge 60 na cor dourada, vista frontal e traseira',
@@ -69,7 +70,7 @@ const PRODUTOS = [
         nome: 'Xiaomi Redmi Note 15',
         precoAntigo: 1899,
         preco: 1599,
-        imagem: 'img/redmi-note-15.webp',
+        imagem: '/img/redmi-note-15.webp',
         largura: 960,
         altura: 1116,
         alt: 'Smartphone Xiaomi Redmi Note 15 na cor azul-arroxeada, vista frontal e traseira',
@@ -87,7 +88,7 @@ const PRODUTOS = [
         nome: 'Galaxy A56',
         precoAntigo: 2199,
         preco: 1899,
-        imagem: 'img/galaxy-a56.webp',
+        imagem: '/img/galaxy-a56.webp',
         largura: 1200,
         altura: 1200,
         alt: 'Smartphone Galaxy A56 na cor lilás, vista frontal e traseira',
@@ -105,7 +106,7 @@ const PRODUTOS = [
         nome: 'iPhone 16e',
         precoAntigo: 4799,
         preco: 4299,
-        imagem: 'img/iphone-16e.webp',
+        imagem: '/img/iphone-16e.webp',
         largura: 987,
         altura: 1200,
         alt: 'Smartphone iPhone 16e na cor branca, vista frontal e traseira',

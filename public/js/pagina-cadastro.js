@@ -1,6 +1,6 @@
 /* =========================================
    PÁGINA DE CADASTRO: validação, carregando, erro e sucesso
-   Só é carregado em cadastro.html.
+   Só é carregado na página /cadastro (views/cadastro.ejs).
    Depende de produtos.js, carrinho.js, loja.js, formulario.js e usuarios.js, carregados antes.
 
    Estados:

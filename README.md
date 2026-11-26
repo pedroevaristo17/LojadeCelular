@@ -17,9 +17,25 @@ Projeto acadêmico de front-end para o desenvolvimento de uma loja virtual de sm
 
 ## 💻 Como Executar Localmente
 
-1. Clone o repositório para a sua máquina.
-2. Certifique-se de que a pasta `img`, com todos os assets visuais, está no mesmo nível dos arquivos HTML.
-3. Dê um duplo clique no arquivo `index.html` para abrir diretamente no seu navegador padrão.
+Desde a Etapa 2 o site é entregue por um **servidor Node.js (Express)**, então não abre mais com dois cliques no `index.html`.
+
+1. Instale o [Node.js](https://nodejs.org/) (versão 20.19 ou mais nova). Confira com `node -v`.
+2. Na pasta do projeto, instale as dependências: `npm install`
+3. Suba o servidor: `npm run dev` (recarrega sozinho quando um arquivo muda) ou `npm start`
+4. Abra no navegador: `http://localhost:3000`
+
+Para parar o servidor, aperte `Ctrl + C` no terminal.
+
+### Onde fica cada coisa
+
+| Pasta / arquivo | O que tem |
+|-----------------|-----------|
+| `index.js` | O servidor: configuração e rotas (qual página responde a cada endereço) |
+| `views/` | As páginas, em EJS (HTML com espaços que o servidor preenche) |
+| `views/partials/` | Pedaços repetidos em todas as páginas: `<head>`, menu e rodapé |
+| `public/` | Arquivos entregues como estão: CSS, imagens e o JavaScript do navegador |
+| `dados/produtos.js` | A lista de celulares usada pelo servidor |
+| `docs/prd/` | Os requisitos do produto (o que o sistema deve fazer) |
 
 ---
 

@@ -1,41 +1,17 @@
+<%# PÁGINA DE ENTREGA E PAGAMENTO (checkout). Ainda validada e enviada pelo navegador
+    (public/js/pagina-checkout.js). Na Etapa 4 o pedido passa a ser gravado no banco pelo servidor. -%>
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Entrega e pagamento | CelStore</title>
-<link rel="stylesheet" href="style.css">
-<script src="js/produtos.js" defer></script>
-<script src="js/carrinho.js" defer></script>
-<script src="js/usuarios.js" defer></script>
-<script src="js/loja.js" defer></script>
-<script src="js/formulario.js" defer></script>
-<script src="js/pedido.js" defer></script>
-<script src="js/pagina-checkout.js" defer></script>
-</head>
+<%- include('partials/head', { titulo: 'Entrega e pagamento | CelStore', scripts: ['produtos', 'carrinho', 'usuarios', 'loja', 'formulario', 'pedido', 'pagina-checkout'] }) %>
 <body>
-<a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
-
-<header class="cabecalho">
-  <a href="index.html" class="logo">
-    <img src="img/logo-celstore.png" alt="CelStore - página inicial" width="160" height="100">
-  </a>
-  <nav class="nav-principal" aria-label="Principal">
-    <ul>
-      <li><a href="index.html#ofertas">Smartphones</a></li>
-      <li><a href="login.html" data-nav-login>Login</a></li>
-      <li data-nav-cadastro><a href="cadastro.html">Cadastro</a></li>
-      <li><a href="carrinho.html">Carrinho<span class="contador" data-contador hidden></span></a></li>
-    </ul>
-  </nav>
-</header>
+<%- include('partials/navbar', { paginaAtual: 'checkout' }) %>
 
 <main id="conteudo">
   <h1>Entrega e pagamento</h1>
 
   <nav class="etapas" aria-label="Etapas da compra">
     <ol>
-      <li class="etapa-concluida"><a href="carrinho.html">Carrinho<span class="sr-only"> (etapa concluída)</span></a></li>
+      <li class="etapa-concluida"><a href="/carrinho">Carrinho<span class="sr-only"> (etapa concluída)</span></a></li>
       <li aria-current="step">Entrega e pagamento</li>
       <li>Confirmação</li>
     </ol>
@@ -173,7 +149,7 @@
         </div>
       </dl>
 
-      <a href="carrinho.html" class="btn btn-secundario btn-bloco">Voltar ao carrinho</a>
+      <a href="/carrinho" class="btn btn-secundario btn-bloco">Voltar ao carrinho</a>
     </section>
   </div>
 
@@ -182,27 +158,10 @@
     <span class="icone-vazio" aria-hidden="true">🛒</span>
     <h2 id="titulo-vazio">Seu carrinho está vazio</h2>
     <p>Adicione um celular ao carrinho antes de finalizar a compra.</p>
-    <a href="index.html" class="btn">Ver celulares</a>
+    <a href="/" class="btn">Ver celulares</a>
   </section>
 </main>
 
-<footer class="rodape">
-  <nav class="nav-rodape" aria-label="Rodapé">
-    <ul>
-      <li><a href="#">Sobre</a></li>
-      <li><a href="#">Contato</a></li>
-      <li><a href="#">Política de privacidade</a></li>
-      <li><a href="design-system.html#acessibilidade">Acessibilidade</a></li>
-      <li><a href="design-system.html">Design system</a></li>
-    </ul>
-  </nav>
-  <address>
-    R. da Harmônia - Farol, Maceió - AL<br>
-    Telefone: (82) 4000-0000<br>
-    E-mail: <a href="mailto:contato@celstore.com.br">contato@celstore.com.br</a>
-  </address>
-  <p>&copy; 2026 CelStore. Todos os direitos reservados.</p>
-</footer>
-
+<%- include('partials/footer', { paginaAtual: 'checkout' }) %>
 </body>
 </html>

@@ -1,40 +1,10 @@
+<%# PÁGINA DO DESIGN SYSTEM: documenta cores, tipografia, espaçamento, componentes e acessibilidade.
+    Os valores e os contrastes são lidos do CSS por public/js/design-system.js. -%>
 <!DOCTYPE html>
-<!--
-  DESIGN SYSTEM DA CELSTORE
-  Esta página é a "vitrine" dos blocos que montam todas as telas do site:
-  cores, tipografia, espaçamento, botões, campos e mensagens.
-  Os valores (cores, tamanhos) NÃO estão escritos aqui: vêm dos tokens do style.css
-  (variáveis --cor-..., --fonte-..., --espaco-...). O js/design-system.js lê os tokens e
-  escreve os valores e o contraste na tela, então esta página nunca fica diferente do site de verdade.
--->
 <html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Design system | CelStore</title>
-<link rel="stylesheet" href="style.css">
-<script src="js/produtos.js" defer></script>
-<script src="js/carrinho.js" defer></script>
-<script src="js/usuarios.js" defer></script>
-<script src="js/loja.js" defer></script>
-<script src="js/design-system.js" defer></script>
-</head>
+<%- include('partials/head', { titulo: 'Design system | CelStore', scripts: ['produtos', 'carrinho', 'usuarios', 'loja', 'design-system'] }) %>
 <body data-sem-link-carrinho>
-<a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
-
-<header class="cabecalho">
-  <a href="index.html" class="logo">
-    <img src="img/logo-celstore.png" alt="CelStore - página inicial" width="160" height="40">
-  </a>
-  <nav class="nav-principal" aria-label="Principal">
-    <ul>
-      <li><a href="index.html#ofertas">Smartphones</a></li>
-      <li><a href="login.html" data-nav-login>Login</a></li>
-      <li data-nav-cadastro><a href="cadastro.html">Cadastro</a></li>
-      <li><a href="carrinho.html">Carrinho<span class="contador" data-contador hidden></span></a></li>
-    </ul>
-  </nav>
-</header>
+<%- include('partials/navbar', { paginaAtual: 'design-system' }) %>
 
 <main id="conteudo">
   <h1>Design system da CelStore</h1>
@@ -298,7 +268,7 @@
       <li>Desabilitado e carregando usam <code>aria-disabled</code> (e não <code>disabled</code>): o botão continua recebendo foco do teclado e os leitores de tela anunciam o estado.</li>
     </ul>
     <pre class="ds-codigo" tabindex="0"><code>&lt;button type="submit" class="btn btn-bloco btn-grande"&gt;Confirmar pedido&lt;/button&gt;
-&lt;a href="carrinho.html" class="btn btn-secundario"&gt;Voltar ao carrinho&lt;/a&gt;</code></pre>
+&lt;a href="/carrinho" class="btn btn-secundario"&gt;Voltar ao carrinho&lt;/a&gt;</code></pre>
   </section>
 
   <!-- ============ CAMPOS ============ -->
@@ -365,7 +335,7 @@
         <h3>Aviso de sucesso</h3>
         <div class="aviso aviso-sucesso ds-aviso-estatico">
           <p class="aviso-texto">Galaxy S26 adicionado ao carrinho.</p>
-          <a href="carrinho.html" class="btn">Ver carrinho</a>
+          <a href="/carrinho" class="btn">Ver carrinho</a>
           <button type="button" class="btn btn-link">Fechar</button>
         </div>
       </div>
@@ -391,7 +361,7 @@
           <span class="icone-vazio" aria-hidden="true">🛒</span>
           <h4>Seu carrinho está vazio</h4>
           <p>Escolha um celular para começar.</p>
-          <a href="index.html" class="btn">Ver celulares</a>
+          <a href="/" class="btn">Ver celulares</a>
         </div>
       </div>
 
@@ -425,22 +395,22 @@
           <tr>
             <th scope="row">Carregando</th>
             <td>Botão cinza com círculo girando e texto novo ("Entrando…", "Criando conta…", "Processando pedido…"). Cliques repetidos são ignorados.</td>
-            <td><a href="login.html">Login</a>, <a href="cadastro.html">Cadastro</a>, <a href="checkout.html">Checkout</a></td>
+            <td><a href="/login">Login</a>, <a href="/cadastro">Cadastro</a>, <a href="/checkout">Checkout</a></td>
           </tr>
           <tr>
             <th scope="row">Sucesso</th>
             <td>Aviso verde com ✓ ao adicionar ao carrinho; tela "Conta criada com sucesso"; página de pedido confirmado.</td>
-            <td><a href="index.html">Início</a>, <a href="cadastro.html">Cadastro</a>, <a href="confirmacao.html">Confirmação</a></td>
+            <td><a href="/">Início</a>, <a href="/cadastro">Cadastro</a>, <a href="/confirmacao">Confirmação</a></td>
           </tr>
           <tr>
             <th scope="row">Erro</th>
             <td>Mensagem vermelha com ⚠ embaixo de cada campo inválido, resumo no topo do formulário e foco levado ao primeiro erro.</td>
-            <td><a href="login.html">Login</a>, <a href="cadastro.html">Cadastro</a>, <a href="checkout.html">Checkout</a></td>
+            <td><a href="/login">Login</a>, <a href="/cadastro">Cadastro</a>, <a href="/checkout">Checkout</a></td>
           </tr>
           <tr>
             <th scope="row">Vazio</th>
             <td>Caixa tracejada com ícone, explicação e botão para seguir em frente.</td>
-            <td><a href="carrinho.html">Carrinho</a> (sem itens), <a href="confirmacao.html">Confirmação</a> (sem pedido), <a href="produto.html?id=inexistente">Produto</a> (inexistente)</td>
+            <td><a href="/carrinho">Carrinho</a> (sem itens), <a href="/confirmacao">Confirmação</a> (sem pedido), <a href="/produto/inexistente">Produto</a> (inexistente)</td>
           </tr>
         </tbody>
       </table>
@@ -464,18 +434,6 @@
   </section>
 </main>
 
-<footer class="rodape">
-  <nav class="nav-rodape" aria-label="Rodapé">
-    <ul>
-      <li><a href="#">Sobre</a></li>
-      <li><a href="#">Contato</a></li>
-      <li><a href="#">Política de privacidade</a></li>
-      <li><a href="design-system.html#acessibilidade">Acessibilidade</a></li>
-      <li><a href="design-system.html" aria-current="page">Design system</a></li>
-    </ul>
-  </nav>
-  <p>&copy; 2026 CelStore. Todos os direitos reservados.</p>
-</footer>
-
+<%- include('partials/footer', { paginaAtual: 'design-system' }) %>
 </body>
 </html>

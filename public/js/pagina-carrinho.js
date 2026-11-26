@@ -1,6 +1,6 @@
 /* =========================================
    PÁGINA DO CARRINHO: desenha o carrinho na tela e trata os cliques
-   Só é carregado em carrinho.html.
+   Só é carregado na página /carrinho (views/carrinho.ejs).
    Depende de produtos.js, carrinho.js e loja.js, carregados antes.
 
    Como funciona: o HTML tem só a "casca" (listas vazias). Este arquivo lê o carrinho

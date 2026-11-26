@@ -1,0 +1,18 @@
+<%# Rodapé de todas as páginas. Na página do design system, o link dela ganha aria-current. -%>
+<footer class="rodape">
+  <nav class="nav-rodape" aria-label="Rodapé">
+    <ul>
+      <li><a href="#">Sobre</a></li>
+      <li><a href="#">Contato</a></li>
+      <li><a href="#">Política de privacidade</a></li>
+      <li><a href="/design-system#acessibilidade">Acessibilidade</a></li>
+      <li><a href="/design-system"<%- locals.paginaAtual === 'design-system' ? ' aria-current="page"' : '' %>>Design system</a></li>
+    </ul>
+  </nav>
+  <address>
+    R. da Harmônia - Farol, Maceió - AL<br>
+    Telefone: (82) 4000-0000<br>
+    E-mail: <a href="mailto:contato@celstore.com.br">contato@celstore.com.br</a>
+  </address>
+  <p>&copy; 2026 CelStore. Todos os direitos reservados.</p>
+</footer>

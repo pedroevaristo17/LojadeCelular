@@ -1,32 +1,10 @@
+<%# PÁGINA DO CARRINHO. Os itens ainda são desenhados no navegador por public/js/pagina-carrinho.js,
+    a partir do localStorage. Na Etapa 4 o carrinho passa para o servidor. -%>
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Carrinho | CelStore</title>
-<link rel="stylesheet" href="style.css">
-<script src="js/produtos.js" defer></script>
-<script src="js/carrinho.js" defer></script>
-<script src="js/usuarios.js" defer></script>
-<script src="js/loja.js" defer></script>
-<script src="js/pagina-carrinho.js" defer></script>
-</head>
+<%- include('partials/head', { titulo: 'Carrinho | CelStore', scripts: ['produtos', 'carrinho', 'usuarios', 'loja', 'pagina-carrinho'] }) %>
 <body data-sem-link-carrinho>
-<a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
-
-<header class="cabecalho">
-  <a href="index.html" class="logo">
-    <img src="img/logo-celstore.png" alt="CelStore - página inicial" width="160" height="100">
-  </a>
-  <nav class="nav-principal" aria-label="Principal">
-    <ul>
-      <li><a href="index.html#ofertas">Smartphones</a></li>
-      <li><a href="login.html" data-nav-login>Login</a></li>
-      <li data-nav-cadastro><a href="cadastro.html">Cadastro</a></li>
-      <li><a href="carrinho.html" aria-current="page">Carrinho<span class="contador" data-contador hidden></span></a></li>
-    </ul>
-  </nav>
-</header>
+<%- include('partials/navbar', { paginaAtual: 'carrinho' }) %>
 
 <main id="conteudo">
   <h1>Seu carrinho</h1>
@@ -73,8 +51,8 @@
 
       <p class="resumo-parcelas" data-resumo-parcelas></p>
 
-      <a href="checkout.html" class="btn btn-bloco">Finalizar compra</a>
-      <a href="index.html" class="btn btn-secundario btn-bloco">Continuar comprando</a>
+      <a href="/checkout" class="btn btn-bloco">Finalizar compra</a>
+      <a href="/" class="btn btn-secundario btn-bloco">Continuar comprando</a>
     </section>
   </div>
 
@@ -83,27 +61,10 @@
     <span class="icone-vazio" aria-hidden="true">🛒</span>
     <h2 id="titulo-vazio" tabindex="-1">Seu carrinho está vazio</h2>
     <p>Que tal dar uma olhada nos celulares da loja?</p>
-    <a href="index.html" class="btn">Ver celulares</a>
+    <a href="/" class="btn">Ver celulares</a>
   </section>
 </main>
 
-<footer class="rodape">
-  <nav class="nav-rodape" aria-label="Rodapé">
-    <ul>
-      <li><a href="#">Sobre</a></li>
-      <li><a href="#">Contato</a></li>
-      <li><a href="#">Política de privacidade</a></li>
-      <li><a href="design-system.html#acessibilidade">Acessibilidade</a></li>
-      <li><a href="design-system.html">Design system</a></li>
-    </ul>
-  </nav>
-  <address>
-    R. da Harmônia - Farol, Maceió - AL<br>
-    Telefone: (82) 4000-0000<br>
-    E-mail: <a href="mailto:contato@celstore.com.br">contato@celstore.com.br</a>
-  </address>
-  <p>&copy; 2026 CelStore. Todos os direitos reservados.</p>
-</footer>
-
+<%- include('partials/footer', { paginaAtual: 'carrinho' }) %>
 </body>
 </html>

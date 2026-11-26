@@ -1,6 +1,6 @@
 /* =========================================
    PÁGINA DO CHECKOUT: resumo do pedido, validação do formulário e finalização
-   Só é carregado em checkout.html.
+   Só é carregado na página /checkout (views/checkout.ejs).
    Depende de produtos.js, carrinho.js, loja.js, formulario.js e pedido.js, carregados antes.
 
    O caminho do formulário tem 3 estados, que a pessoa precisa conseguir ver:
@@ -83,7 +83,7 @@ function finalizarPedido(pedido) {
 
     // Estado SUCESSO: a ordem importa. Primeiro guardamos o pedido, só depois esvaziamos o carrinho.
     limparCarrinho();
-    window.location.href = 'confirmacao.html';
+    window.location.href = '/confirmacao';
 }
 
 formEl.addEventListener('submit', function (evento) {

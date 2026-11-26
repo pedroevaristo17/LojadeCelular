@@ -1,6 +1,6 @@
 /* =========================================
    PÁGINA DE CONFIRMAÇÃO: mostra o pedido que acabou de ser finalizado
-   Só é carregado em confirmacao.html.
+   Só é carregado na página /confirmacao (views/confirmacao.ejs).
    Depende de produtos.js, carrinho.js, loja.js e pedido.js, carregados antes.
 
    Dois estados:

@@ -44,7 +44,7 @@ function criarAviso() {
     avisoEl.hidden = true;
     avisoEl.innerHTML =
         '<p class="aviso-texto"></p>' +
-        '<a href="carrinho.html" class="btn" data-aviso-ver>Ver carrinho</a>' +
+        '<a href="/carrinho" class="btn" data-aviso-ver>Ver carrinho</a>' +
         '<button type="button" class="btn" data-aviso-acao hidden></button>' +
         '<button type="button" class="btn btn-link" data-aviso-fechar>Fechar</button>';
     document.body.appendChild(avisoEl);

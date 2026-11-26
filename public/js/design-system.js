@@ -1,6 +1,6 @@
 /* =========================================
    DESIGN SYSTEM: lê os tokens do CSS e escreve na página
-   Só é carregado em design-system.html.
+   Só é carregado na página /design-system (views/design-system.ejs).
 
    Faz duas coisas:
    1) preenche cada [data-valor="--nome-do-token"] com o valor que o CSS tem para aquele token;

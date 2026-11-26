@@ -1,6 +1,6 @@
 /* =========================================
    PÁGINA DE LOGIN: validação, carregando, erro e sucesso
-   Só é carregado em login.html.
+   Só é carregado na página /login (views/login.ejs).
    Depende de produtos.js, carrinho.js, loja.js, formulario.js e usuarios.js, carregados antes.
 
    Estados:

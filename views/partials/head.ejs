@@ -1,0 +1,14 @@
+<%# Parte <head> de todas as páginas.
+    Quem inclui passa:  titulo  -> texto da aba do navegador
+                        scripts -> nomes dos arquivos de public/js/ que a página usa (sem o ".js")
+    Os caminhos começam com "/" (ex.: /css/style.css) para funcionarem em qualquer endereço,
+    inclusive em /produto/iphone-17. -%>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title><%= titulo %></title>
+<link rel="stylesheet" href="/css/style.css">
+<% scripts.forEach(function (nome) { -%>
+<script src="/js/<%= nome %>.js" defer></script>
+<% }) -%>
+</head>

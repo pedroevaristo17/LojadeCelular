@@ -1,0 +1,21 @@
+<%# PÁGINA DE ERRO (404 "não encontrada" ou 500 "algo deu errado").
+    O servidor passa:  titulo   -> título da mensagem
+                       mensagem -> explicação em linguagem simples -%>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<%- include('partials/head', { titulo: titulo + ' | CelStore', scripts: ['produtos', 'carrinho', 'usuarios', 'loja'] }) %>
+<body data-sem-link-carrinho>
+<%- include('partials/navbar') %>
+
+<main id="conteudo">
+  <section class="estado-vazio" aria-labelledby="titulo-erro">
+    <span class="icone-vazio" aria-hidden="true">🔍</span>
+    <h1 id="titulo-erro"><%= titulo %></h1>
+    <p><%= mensagem %></p>
+    <a href="/" class="btn">Voltar para a loja</a>
+  </section>
+</main>
+
+<%- include('partials/footer') %>
+</body>
+</html>

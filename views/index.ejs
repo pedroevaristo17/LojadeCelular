@@ -1,0 +1,95 @@
+<%# PÁGINA INICIAL
+    O servidor (rota GET / no index.js) passa:
+      produtos -> a lista de celulares a mostrar (já filtrada, se houver busca)
+      busca    -> o texto buscado ('' quando não há busca)
+    Os cartões são criados por um laço (forEach): um <article> para cada produto da lista. -%>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<%- include('partials/head', {
+    titulo: busca ? 'Busca: ' + busca + ' | CelStore' : 'CelStore - Loja de celulares com o melhor preço',
+    scripts: ['produtos', 'carrinho', 'usuarios', 'loja']
+}) %>
+<body>
+<%- include('partials/navbar', { paginaAtual: 'inicio' }) %>
+
+<main id="conteudo">
+  <h1>CelStore: celulares com o melhor preço</h1>
+
+  <section class="destaques">
+    <h2>Destaques</h2>
+    <img class="banner" src="/img/banner-promocao.webp" alt="Promoção de setembro: até 30% de desconto em smartphones selecionados" width="1200" height="400">
+  </section>
+
+  <section class="ofertas" id="ofertas">
+    <h2>Smartphones em oferta</h2>
+<% if (busca && produtos.length > 0) { -%>
+
+    <%# Estado RESULTADO da busca. A tag de saída com "=" escapa o texto: se alguém buscar "<script>", aparece escrito, sem executar. -%>
+    <div class="busca-resultado">
+      <p role="status"><%= produtos.length %> <%= produtos.length === 1 ? 'celular encontrado' : 'celulares encontrados' %> para “<%= busca %>”.</p>
+      <a href="/#ofertas" class="btn btn-secundario">Limpar busca</a>
+    </div>
+<% } -%>
+<% produtos.forEach(function (produto) { -%>
+
+    <article class="produto">
+      <h3><%= produto.nome %></h3>
+      <img src="<%= produto.imagem %>" alt="<%= produto.alt %>" width="<%= produto.largura %>" height="<%= produto.altura %>">
+      <p class="preco">De <del><%= formatarPreco(produto.precoAntigo) %></del> por <ins><%= formatarPreco(produto.preco) %></ins></p>
+      <ul class="especificacoes">
+<% produto.especificacoes.forEach(function (item) { -%>
+        <li><%= item %></li>
+<% }) -%>
+      </ul>
+      <button type="button" class="btn btn-bloco" data-adicionar="<%= produto.id %>">Adicionar ao carrinho<span class="sr-only"> <%= produto.nome %></span></button>
+      <a href="/produto/<%= produto.id %>" class="btn btn-secundario btn-bloco">Ver detalhes<span class="sr-only"> do <%= produto.nome %></span></a>
+    </article>
+<% }) -%>
+<% if (busca && produtos.length === 0) { -%>
+
+    <%# Estado VAZIO da busca: nenhum celular combina com o que a pessoa digitou -%>
+    <section class="estado-vazio" aria-labelledby="titulo-busca-vazio">
+      <span class="icone-vazio" aria-hidden="true">🔍</span>
+      <h3 id="titulo-busca-vazio" role="status">Nenhum celular encontrado para “<%= busca %>”</h3>
+      <p>Tente buscar pelo nome do aparelho, como “iPhone” ou “Galaxy”.</p>
+      <a href="/#ofertas" class="btn">Ver todos os celulares</a>
+    </section>
+<% } -%>
+  </section>
+
+  <section class="vantagens">
+    <h2>Por que comprar na CelStore</h2>
+
+    <article class="vantagem">
+      <img class="icone" src="/img/icone-frete.svg" alt="" width="48" height="48">
+      <h3>Frete grátis</h3>
+      <p>Para compras acima de R$ 299 em todo o Brasil.</p>
+    </article>
+
+    <article class="vantagem">
+      <img class="icone" src="/img/icone-garantia.svg" alt="" width="48" height="48">
+      <h3>Garantia estendida</h3>
+      <p>12 meses de garantia em todos os smartphones.</p>
+    </article>
+
+    <article class="vantagem">
+      <img class="icone" src="/img/icone-parcelamento.svg" alt="" width="48" height="48">
+      <h3>Parcelamento facilitado</h3>
+      <p>Em até 12x sem juros no cartão de crédito.</p>
+    </article>
+  </section>
+
+  <aside class="newsletter">
+    <h2>Assine nossa newsletter</h2>
+    <p>Receba novidades e promoções exclusivas no seu e-mail.</p>
+    <form action="#" method="post" data-form-newsletter>
+      <label for="newsletter-email">E-mail</label>
+      <input type="email" id="newsletter-email" name="newsletter-email" required autocomplete="email">
+      <button type="submit" class="btn">Assinar</button>
+    </form>
+  </aside>
+</main>
+
+<%- include('partials/footer') %>
+</body>
+</html>

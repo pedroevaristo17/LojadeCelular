@@ -1,0 +1,31 @@
+<%# Link "Pular para o conteúdo" + cabeçalho (logo, menu e, na página inicial, a busca).
+    Quem inclui passa:  paginaAtual -> 'inicio', 'login', 'cadastro', 'carrinho'... (marca o item do menu)
+    "locals.xxx" lê uma variável que pode não ter sido passada, sem dar erro.
+    atual('login') escreve aria-current="page" só no item da página atual: o leitor de tela avisa "página atual". -%>
+<% const atual = nome => locals.paginaAtual === nome ? ' aria-current="page"' : ''; -%>
+<a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
+
+<header class="cabecalho">
+  <a href="/" class="logo">
+    <img src="/img/logo-celstore.png" alt="CelStore - página inicial" width="160" height="100">
+  </a>
+
+  <nav class="nav-principal" aria-label="Principal">
+    <ul>
+      <li><a href="/#ofertas">Smartphones</a></li>
+      <li><a href="/login" data-nav-login<%- atual('login') %>>Login</a></li>
+      <li data-nav-cadastro><a href="/cadastro"<%- atual('cadastro') %>>Cadastro</a></li>
+      <li><a href="/carrinho"<%- atual('carrinho') %>>Carrinho<span class="contador" data-contador hidden></span></a></li>
+    </ul>
+  </nav>
+<% if (locals.paginaAtual === 'inicio') { -%>
+
+  <%# A busca é um formulário GET: ao enviar, o navegador abre /?busca=texto#ofertas
+      e o SERVIDOR devolve a página já filtrada. O "#ofertas" leva a tela até os resultados. -%>
+  <form class="busca" role="search" action="/#ofertas" method="get">
+    <label for="busca" class="sr-only">Buscar produtos</label>
+    <input type="search" id="busca" name="busca" value="<%= locals.busca || '' %>" autocomplete="off">
+    <button type="submit" class="btn">Buscar</button>
+  </form>
+<% } -%>
+</header>
