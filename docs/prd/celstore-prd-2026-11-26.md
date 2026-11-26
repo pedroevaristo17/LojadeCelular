@@ -72,7 +72,7 @@ Na versão estática (AV1 e AV2), tudo ficava guardado no navegador e o login er
 
 | ID | Requisito | Prioridade |
 |----|-----------|------------|
-| CART-01 | Qualquer visitante (logado ou não) adiciona produtos ao carrinho, altera quantidades e remove itens. | Alta |
+| CART-01 | Qualquer visitante (logado ou não) adiciona produtos ao carrinho, altera quantidades e remove itens. O limite é de **10 unidades por produto**. | Alta |
 | CART-02 | O carrinho fica guardado na sessão do servidor; sobrevive à navegação, ao login e ao recarregamento da página. | Alta |
 | CART-03 | O contador do menu mostra a quantidade de itens. | Média |
 | CART-04 | Carrinho vazio mostra o estado vazio com link para ver os celulares. | Média |

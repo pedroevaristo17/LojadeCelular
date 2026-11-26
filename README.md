@@ -1,115 +1,225 @@
 # CelStore 📱
 
-Projeto acadêmico de front-end para o desenvolvimento de uma loja virtual de smartphones, com foco especial em **acessibilidade web** seguindo as diretrizes WCAG 2, nível AA.<br>
-**CESMAC** - Sistemas de Informação<br>
-**Alunos:** João Danilo, Pedro Evaristo e Vinícius Vianna
+Loja virtual **fictícia** de smartphones, feita como projeto acadêmico, com foco em **acessibilidade web** (WCAG, nível AA).
 
-## 🎯 Critérios Atendidos
+**CESMAC** - Sistemas de Informação, 3º período<br>
+**Integrantes:** João Danilo, Pedro Evaristo e Vinícius Vianna
 
-- **Estruturação:** HTML5 semântico
-- **Layout:** CSS Grid e Flexbox
-- **Acessibilidade e IHC:** conformidade com as diretrizes WCAG (Web Content Accessibility Guidelines)
+O projeto começou como um site estático (HTML, CSS e JavaScript) e agora é um sistema **fullstack**: dá para ver e buscar celulares, criar conta, entrar, montar o carrinho, finalizar a compra e consultar **Minhas compras**. Contas, produtos e pedidos ficam no banco de dados. Não há pagamento real.
 
-## 👥 Desenvolvimento
+## 🧱 Stack
 
-- **HTML:** estruturação semântica e formulários
-- **CSS:** estilização, layout e versionamento
+| Camada | Tecnologia |
+|--------|------------|
+| Servidor | Node.js e Express 5 |
+| Páginas | EJS (montadas no servidor), CSS e JavaScript puro |
+| Banco de dados | MongoDB, com o driver nativo `mongodb` |
+| Senhas | `bcrypt` (só o hash é guardado) |
+| Sessão | `express-session` e `connect-mongo` |
+| Configuração | `dotenv` (arquivo `.env`) |
 
-## 💻 Como Executar Localmente
+---
 
-Desde a Etapa 2 o site é entregue por um **servidor Node.js (Express)**, então não abre mais com dois cliques no `index.html`.
+## ✅ Pré-requisitos
 
-1. Instale o [Node.js](https://nodejs.org/) (versão 20.19 ou mais nova). Confira com `node -v`.
-2. Na pasta do projeto, instale as dependências: `npm install`
-3. Suba o servidor: `npm run dev` (recarrega sozinho quando um arquivo muda) ou `npm start`
-4. Abra no navegador: `http://localhost:3000`
+1. [Node.js](https://nodejs.org/) **20.19 ou mais novo**. Confira com `node -v`.
+2. [Git](https://git-scm.com/).
+3. [Docker Desktop](https://www.docker.com/products/docker-desktop/) aberto. Se ele não funcionar no seu computador, use o [MongoDB Atlas](#-sem-docker-mongodb-atlas).
 
-Para parar o servidor, aperte `Ctrl + C` no terminal.
+## 💻 Como rodar do zero
 
-### Onde fica cada coisa
+Abra o terminal (no VS Code: menu **Terminal → New Terminal**) e rode um comando de cada vez.
+
+1. Baixe o projeto e entre na pasta:
+
+   ```bash
+   git clone https://github.com/pedroevaristo17/LojadeCelular.git
+   cd LojadeCelular
+   ```
+
+   Se você já tem a pasta, entre nela e rode `git pull`.
+
+2. Instale as dependências:
+
+   ```bash
+   npm install
+   ```
+
+3. Crie o arquivo de configuração. **Faça isso uma vez só**: copiar de novo apaga o que você mudou.
+
+   ```bash
+   copy .env.example .env
+   ```
+
+   No Linux ou Mac: `cp .env.example .env`.
+
+4. Abra o `.env` e troque o valor de `SESSION_SECRET` por um texto longo qualquer. Esse arquivo é secreto e **não vai para o GitHub**.
+
+   | Variável | Para que serve | Valor padrão |
+   |----------|----------------|--------------|
+   | `MONGODB_URI` | Endereço do banco | `mongodb://127.0.0.1:27017` |
+   | `MONGODB_DB` | Nome do banco | `celstore` |
+   | `SESSION_SECRET` | Assina o cookie de sessão | troque |
+   | `PORT` | Porta do site | `3000` |
+
+5. Ligue o banco (com o Docker Desktop aberto):
+
+   ```bash
+   docker compose up -d
+   ```
+
+6. Ligue o servidor:
+
+   ```bash
+   npm run dev
+   ```
+
+   Deve aparecer `CelStore rodando em http://localhost:3000`. Na primeira vez aparece também `Carga inicial: 6 produtos gravados no banco.`
+
+7. Abra no navegador: <http://localhost:3000>
+
+**Para desligar:** `Ctrl + C` no terminal do servidor (se perguntar se deseja finalizar o arquivo em lotes, responda `S`) e `docker compose down` para desligar o banco. Os dados continuam guardados.
+
+`npm start` liga o servidor sem recarregar sozinho. O `npm run dev` recarrega quando o código muda, mas **não** quando o `.env` muda.
+
+### 🌐 Sem Docker: MongoDB Atlas
+
+1. No site do [MongoDB Atlas](https://www.mongodb.com/atlas), crie um cluster gratuito (M0).
+2. Crie um usuário do banco (senha só com letras e números) e libere o seu IP em **Network Access**.
+3. Em **Connect → Drivers**, copie o endereço `mongodb+srv://...` para o `MONGODB_URI` do `.env`.
+4. Pule o `docker compose up -d` e rode `npm run dev`.
+
+Nunca coloque esse endereço no GitHub: ele contém a senha.
+
+---
+
+## 🗺️ Rotas
+
+| Método e endereço | O que faz | Exige login |
+|-------------------|-----------|:-----------:|
+| `GET /` | Página inicial; busca com `/?busca=iphone` | Não |
+| `GET /produto/:slug` | Detalhes de um celular, ex.: `/produto/iphone-17` | Não |
+| `GET /cadastro` | Formulário de cadastro | Não |
+| `POST /cadastro` | Valida e cria a conta | Não |
+| `GET /login` | Formulário de login; aceita `?voltar=/checkout` | Não |
+| `POST /login` | Confere a senha e abre a sessão | Não |
+| `POST /sair` | Encerra a sessão | Não |
+| `GET /conta` | Dados da pessoa e **Minhas compras** | Sim |
+| `GET /carrinho` | Mostra o carrinho | Não |
+| `POST /carrinho/adicionar` | Coloca um produto no carrinho (até 10 de cada) | Não |
+| `POST /carrinho/atualizar` | Muda a quantidade | Não |
+| `POST /carrinho/remover` | Tira um produto (com "Desfazer") | Não |
+| `GET /checkout` | Entrega e pagamento | Sim |
+| `POST /checkout` | Valida e grava o pedido | Sim |
+| `GET /pedido/:numero` | Confirmação do pedido; **só o dono** vê | Sim |
+| `GET /design-system` | Vitrine dos componentes visuais | Não |
+
+Endereço que não existe mostra a página 404; erro inesperado mostra uma mensagem simples (500).
+
+---
+
+## 🗄️ Coleções do banco
+
+| Coleção | O que guarda | Índices |
+|---------|--------------|---------|
+| `users` | `nome`, `email` (minúsculo), `passwordHash`, `createdAt` | `email` único |
+| `products` | `slug`, `nome`, `preco`, `precoAntigo`, `imagem`, `especificacoes`, `ficha` e dados da imagem | `slug` único |
+| `orders` | `numero` (CEL-xxxxxx), `userId`, `itens`, `total`, `pagamento`, `endereco`, `createdAt` | `numero` único; `userId` + `createdAt` |
+| `sessions` | Quem está logado e o carrinho de cada visitante (criada pelo `connect-mongo`) | automáticos |
+
+CPF, telefone e data de nascimento são validados no cadastro e **não são guardados**.
+
+A coleção `products` é preenchida sozinha com a lista de `dados/produtos.js` quando está vazia.
+
+### Como ver os dados
+
+Com o Docker (o servidor pode continuar ligado):
+
+```bash
+docker compose exec mongo mongosh celstore --eval "db.users.find()"
+docker compose exec mongo mongosh celstore --eval "db.orders.find()"
+docker compose exec mongo mongosh celstore --eval "db.products.find({}, { slug: 1, preco: 1 })"
+```
+
+Para abrir o shell do banco: `docker compose exec mongo mongosh celstore` (saia com `exit`).
+No Atlas, use o botão **Browse Collections**.
+
+---
+
+## 📁 Onde fica cada coisa
 
 | Pasta / arquivo | O que tem |
 |-----------------|-----------|
-| `index.js` | O servidor: configuração e rotas (qual página responde a cada endereço) |
-| `views/` | As páginas, em EJS (HTML com espaços que o servidor preenche) |
-| `views/partials/` | Pedaços repetidos em todas as páginas: `<head>`, menu e rodapé |
-| `public/` | Arquivos entregues como estão: CSS, imagens e o JavaScript do navegador |
-| `dados/produtos.js` | A lista de celulares usada pelo servidor |
-| `docs/prd/` | Os requisitos do produto (o que o sistema deve fazer) |
+| `index.js` | O servidor: configuração, sessão, banco, validações e rotas |
+| `views/` | As páginas, em EJS |
+| `views/partials/` | Pedaços repetidos: `<head>`, menu, rodapé, aviso e erro de campo |
+| `public/` | CSS, imagens e o JavaScript do navegador |
+| `dados/produtos.js` | Carga inicial dos produtos |
+| `docs/prd/` | Requisitos do produto |
+| `docs/apresentacao.md` | Roteiro da apresentação e checklist de teste |
+| `.agents/`, `AGENTS.md`, `GEMINI.md` | Instruções (Rules e Skills) para o agente de IA |
+
+### Como o sistema funciona
+
+```text
+Navegador (cliente)  --- pedido HTTP --->  Express (index.js)  --- consulta --->  MongoDB
+Navegador (cliente)  <--- HTML pronto ---  Express + EJS       <--- dados -----   MongoDB
+```
+
+Regra principal: **o servidor não confia no navegador.** Preços e totais vêm do banco, o dono do pedido vem da sessão e toda entrada é validada de novo no servidor.
 
 ---
 
-## ♿ Acessibilidade (WCAG 2, nível AA)
+## 🛠️ Problemas comuns
 
-A WCAG se apoia em quatro princípios, conhecidos pelo acrônimo **POUR**: um site precisa ser **P**erceptível, **O**perável, **U** (Compreensível, na sigla em português) e **R**obusto. Abaixo, cada critério trabalhado neste projeto está explicado em linguagem simples, seguido do trecho de código onde ele foi aplicado.
-
-### 👁️ Perceptível — o conteúdo pode ser percebido por todos
-
-**Estrutura semântica em vez de `div` para tudo.**
-Tags como `<header>`, `<nav>`, `<main>` e `<footer>` funcionam como um mapa da página para quem usa leitor de tela — ele consegue pular direto para o menu ou para o conteúdo principal, em vez de navegar item por item.
-📍 Presente em todas as páginas, ex.: [index.html:26](index.html:26) (`<html lang="pt-BR">`) e [index.html:36-59](index.html:36) (marcos semânticos do cabeçalho).
-
-**Hierarquia de títulos sem "pular degrau".**
-Cada página tem um único `<h1>`, e os subtítulos seguem em ordem (`h2` → `h3`) sem saltos. Isso permite que quem usa leitor de tela navegue pelo conteúdo como um índice.
-📍 [index.html:60-166](index.html:60): `h1` (título da loja) → `h2` (Destaques, Ofertas, Vantagens) → `h3` (cada produto ou vantagem).
-
-**Toda imagem tem texto alternativo.**
-Fotos de produto descrevem o que aparece nelas; ícones puramente decorativos usam `alt=""` para não gerar ruído no leitor de tela.
-📍 Foto de produto: [index.html:72](index.html:72). Ícone decorativo: [index.html:153](index.html:153).
-
-**Erros nunca dependem só de cor.**
-A área de mensagem de erro combina um ícone (⚠️) com texto explicativo, para que quem não distingue vermelho de outras cores também entenda o problema.
-📍 [style.css:235-238](style.css:235).
-
-**Contraste de texto garantido.**
-A paleta de cores foi escolhida para manter contraste mínimo de 4,5:1 em texto normal e 3:1 em texto grande, facilitando a leitura para quem tem baixa visão.
-📍 [style.css:1-14](style.css:1).
-
-**Layout que aguenta zoom de até 200%.**
-Em vez de pixels fixos, o CSS usa `rem`/`em`/`%`, então a página continua legível e organizada mesmo quando o usuário aumenta bastante o zoom do navegador.
-📍 Uso consistente em todo o [style.css](style.css), ex.: [style.css:133](style.css:133).
-
-### ⌨️ Operável — dá para usar tudo pelo teclado
-
-**Nada de clique em `div`.**
-Todo botão e link usa elementos nativos (`<button>`, `<a href>`), que já vêm com foco e ativação por teclado prontos. Nenhum `tabindex` positivo foi usado — a ordem de navegação segue a ordem natural do HTML.
-📍 [login.html:67](login.html:67), [index.html:79](index.html:79).
-
-**Skip link — atalho para o conteúdo.**
-O primeiro elemento da página é um link invisível até receber foco, que permite pular o menu repetitivo e ir direto ao conteúdo principal.
-📍 [index.html:34](index.html:34) (HTML) e [style.css:53-69](style.css:53) (comportamento visual ao focar).
-
-**O foco do teclado nunca desaparece.**
-Em vez de remover o contorno de foco (`outline: none`) sem repor nada, o CSS usa `:focus-visible` para destacar com clareza qual elemento está selecionado — essencial para quem navega sem mouse.
-📍 [style.css:40-47](style.css:40).
-
-**Sem movimento forçado.**
-Quem ativa "reduzir movimento" no sistema operacional recebe transições quase instantâneas em vez de animações que podem causar desconforto.
-📍 [style.css:297-306](style.css:297).
-
-### 🧠 Compreensível — textos e interações são claros e previsíveis
-
-**Todo campo tem um rótulo de verdade.**
-Cada `<input>` está ligado ao seu `<label>` pelo par `for`/`id`. Isso significa que clicar no texto do rótulo já foca o campo, e o leitor de tela sempre anuncia o que está sendo preenchido — o placeholder nunca faz esse papel sozinho.
-📍 [login.html:52-53](login.html:52), [cadastro.html:55-107](cadastro.html:55).
-
-**Dicas de preenchimento conectadas ao campo.**
-Textos de ajuda (como o formato esperado do CPF) são associados ao input via `aria-describedby`, para que o leitor de tela leia a dica junto com o rótulo.
-📍 Senha: [login.html:58](login.html:58). CPF e telefone: [cadastro.html:61](cadastro.html:61) e [cadastro.html:72](cadastro.html:72).
-
-**Campos relacionados agrupados.**
-O formulário de cadastro usa `<fieldset>` + `<legend>` para separar visualmente e semanticamente "Dados pessoais", "Dados de acesso" e "Preferências".
-📍 [cadastro.html:51-108](cadastro.html:51).
-
-### 🤖 Robusto — funciona bem com tecnologias assistivas
-
-**ARIA usado com moderação, não por padrão.**
-A primeira regra do ARIA é: não usar ARIA quando uma tag nativa já resolve. Por isso ele aparece só onde agrega algo real — identificando cada `<nav>` (`aria-label`), marcando o link da página atual (`aria-current`) e sinalizando a área de erros como uma região que deve ser anunciada (`role="alert"`).
-📍 `nav` com `aria-label`: [index.html:41](index.html:41). Página atual: [index.html:43](index.html:43). Erros: [login.html:49](login.html:49).
-
-**Texto extra só para quem usa leitor de tela.**
-A classe `.sr-only` esconde visualmente um texto sem removê-lo da árvore de acessibilidade — diferente de `display: none`, que apaga o conteúdo para todo mundo. É assim que o rótulo do campo de busca e a diferenciação entre botões "Adicionar ao carrinho" de produtos diferentes ficam claros só para quem precisa.
-📍 Rótulo da busca: [index.html:53](index.html:53). Diferenciação de produtos: [index.html:79-80](index.html:79). Implementação CSS: [style.css:72-82](style.css:72).
+| Problema | O que fazer |
+|----------|-------------|
+| `Falha ao iniciar` ou `ECONNREFUSED 127.0.0.1:27017` | O banco está desligado: abra o Docker Desktop, rode `docker compose up -d` e confira com `docker compose ps`. Confira o `MONGODB_URI`. |
+| `Falta o SESSION_SECRET` | Crie o `.env` (passos 3 e 4). |
+| Docker Desktop não abre (erro de WSL ou virtualização) | Use o MongoDB Atlas. |
+| Atlas: `bad auth` | Usuário ou senha errados no `MONGODB_URI`. |
+| Atlas: `Server selection timed out` | Libere seu IP em **Network Access**. |
+| `EADDRINUSE` na porta 3000 | Já há um servidor ligado: pare o outro com `Ctrl + C`. |
+| PowerShell não deixa rodar o `npm` ("execução de scripts foi desabilitada") | Use `npm.cmd install` e `npm.cmd run dev`, ou o terminal **Command Prompt**. |
+| Mudei o `.env` e nada mudou | Reinicie o servidor. |
+| `Cannot find module` | Rode `npm install`. |
+| Página sem estilo ou com `<%` na tela | Abra por `http://localhost:3000`, não pelo arquivo. |
+| Todo mundo foi deslogado | Normal depois de trocar o `SESSION_SECRET`: entre de novo. |
+| `git push` recusado | Rode `git pull` e tente de novo. Em caso de conflito, avise o grupo e não use `--force`. |
+| Avisos de `vulnerabilities` ou `install-scripts` no `npm install` | Podem ser ignorados. **Não** rode `npm audit fix --force`. |
 
 ---
 
+## ♿ Acessibilidade (WCAG, nível AA)
+
+A WCAG se apoia em quatro princípios, o acrônimo **POUR**: um site precisa ser **P**erceptível, **O**perável, compreensível (**U**, de *understandable*) e **R**obusto. Abaixo, o que o projeto faz em cada um, com o lugar do código.
+
+### 👁️ Perceptível
+
+- **Estrutura semântica:** `<header>`, `<nav>`, `<main>` e `<footer>` funcionam como um mapa da página para o leitor de tela. 📍 [navbar.ejs](views/partials/navbar.ejs), [index.ejs](views/index.ejs#L15)
+- **Títulos em ordem:** um único `<h1>` por página, depois `h2` e `h3`. 📍 [index.ejs](views/index.ejs#L16)
+- **Texto alternativo:** fotos de produto são descritas; ícones decorativos usam `alt=""`. 📍 [foto](views/index.ejs#L37), [ícone](views/index.ejs#L69)
+- **Erros não dependem só de cor:** ícone ⚠️ e texto. 📍 [style.css](public/css/style.css#L349)
+- **Contraste:** cores com no mínimo 4,5:1 para texto comum. 📍 [tokens do CSS](public/css/style.css#L8)
+- **Zoom de até 200%:** medidas em `rem`, `em` e `%`. 📍 [style.css](public/css/style.css)
+
+### ⌨️ Operável
+
+- **Elementos nativos:** `<button>` e `<a href>`, que já funcionam com o teclado. 📍 [index.ejs](views/index.ejs#L48)
+- **Pular para o conteúdo:** primeiro link da página. 📍 [navbar.ejs](views/partials/navbar.ejs#L6), [style.css](public/css/style.css#L132)
+- **Foco sempre visível** com `:focus-visible`. 📍 [style.css](public/css/style.css#L114)
+- **Movimento reduzido** respeitado. 📍 [style.css](public/css/style.css#L441)
+- **Alvos de toque** de pelo menos 44×44 px (token `--alvo-minimo`).
+
+### 🧠 Compreensível
+
+- **Rótulo visível** ligado a cada campo (`for`/`id`). 📍 [login.ejs](views/login.ejs#L23)
+- **Dicas e erros ligados ao campo** com `aria-describedby`. 📍 [login.ejs](views/login.ejs#L29), [cadastro.ejs](views/cadastro.ejs)
+- **Grupos de campos** com `<fieldset>` e `<legend>`. 📍 [cadastro.ejs](views/cadastro.ejs#L48)
+- **Erro sem perder o preenchimento:** o servidor devolve o que foi digitado, menos as senhas.
+
+### 🤖 Robusto
+
+- **ARIA só quando agrega:** `aria-label` nas navegações, `aria-current` na página atual, `role="alert"` nos erros e `role="status"` nos avisos. 📍 [navbar.ejs](views/partials/navbar.ejs#L5), [login.ejs](views/login.ejs#L20), [aviso.ejs](views/partials/aviso.ejs)
+- **Texto só para leitor de tela** (`.sr-only`), como o nome do produto em cada botão. 📍 [index.ejs](views/index.ejs#L48), [style.css](public/css/style.css#L151)
+- **Funciona sem JavaScript:** busca, cadastro, login, carrinho e checkout são formulários HTML comuns.
